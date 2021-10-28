@@ -1,0 +1,160 @@
+PODS:
+  - Alamofire (5.4.4)
+  - Cache (6.0.0)
+  - Differentiator (5.0.0)
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - HandyJSON (5.0.2)
+  - HLUIKit (1.0.1):
+    - JGProgressHUD
+    - MJRefresh
+    - MYTableViewIndex
+    - RxCocoa (~> 6.2.0)
+    - RxDataSources
+    - RxGesture
+    - RxSwift (~> 6.2.0)
+    - SDCycleScrollView
+    - SnapKit
+    - Then
+  - HLUIKit_Bluetooth (1.0.1):
+    - RxBluetoothKit
+    - RxCocoa (~> 6.2.0)
+    - RxSwift (~> 6.2.0)
+    - Then
+  - HLUIKit_Moya (1.0.1):
+    - Alamofire
+    - Cache
+    - HandyJSON
+    - Moya/RxSwift (~> 15.0)
+    - ReachabilitySwift
+    - Result
+    - RxCocoa (~> 6.2.0)
+    - RxSwift (~> 6.2.0)
+  - HLUIKit_Realm (1.0.1):
+    - RealmSwift
+    - RxCocoa (~> 6.2.0)
+    - RxSwift (~> 6.2.0)
+  - JGProgressHUD (2.2)
+  - MJRefresh (3.7.2)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
+  - Moya/RxSwift (15.0.0):
+    - Moya/Core
+    - RxSwift (~> 6.0)
+  - MYTableViewIndex (0.8.0)
+  - ReachabilitySwift (5.0.0)
+  - Realm (10.18.0):
+    - Realm/Headers (= 10.18.0)
+  - Realm/Headers (10.18.0)
+  - RealmSwift (10.18.0):
+    - Realm (= 10.18.0)
+  - Result (5.0.0)
+  - RxBluetoothKit (7.0.0):
+    - RxSwift (~> 6.0)
+  - RxCocoa (6.2.0):
+    - RxRelay (= 6.2.0)
+    - RxSwift (= 6.2.0)
+  - RxDataSources (5.0.0):
+    - Differentiator (~> 5.0)
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxGesture (4.0.2):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxRelay (6.2.0):
+    - RxSwift (= 6.2.0)
+  - RxSwift (6.2.0)
+  - SDCycleScrollView (1.82):
+    - SDWebImage (>= 5.0.0)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
+  - SnapKit (5.0.1)
+  - Then (2.7.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase (~> 2.1.4)
+  - HLUIKit (from `../`)
+  - HLUIKit_Bluetooth (from `../HLUIKit_Bluetooth.podspec`)
+  - HLUIKit_Moya (from `../HLUIKit_Moya.podspec`)
+  - HLUIKit_Realm (from `../HLUIKit_Realm.podspec`)
+  - RxBluetoothKit (from `https://github.com/i-mobility/RxBluetoothKit.git`, tag `7.0.2`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Cache
+    - Differentiator
+    - FBSnapshotTestCase
+    - HandyJSON
+    - JGProgressHUD
+    - MJRefresh
+    - Moya
+    - MYTableViewIndex
+    - ReachabilitySwift
+    - Realm
+    - RealmSwift
+    - Result
+    - RxCocoa
+    - RxDataSources
+    - RxGesture
+    - RxRelay
+    - RxSwift
+    - SDCycleScrollView
+    - SDWebImage
+    - SnapKit
+    - Then
+
+EXTERNAL SOURCES:
+  HLUIKit:
+    :path: "../"
+  HLUIKit_Bluetooth:
+    :path: "../HLUIKit_Bluetooth.podspec"
+  HLUIKit_Moya:
+    :path: "../HLUIKit_Moya.podspec"
+  HLUIKit_Realm:
+    :path: "../HLUIKit_Realm.podspec"
+  RxBluetoothKit:
+    :git: https://github.com/i-mobility/RxBluetoothKit.git
+    :tag: 7.0.2
+
+CHECKOUT OPTIONS:
+  RxBluetoothKit:
+    :git: https://github.com/i-mobility/RxBluetoothKit.git
+    :tag: 7.0.2
+
+SPEC CHECKSUMS:
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
+  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
+  HLUIKit: c4e80ed0748977af6bcbd785bcf52d554fec6718
+  HLUIKit_Bluetooth: 3173a1782654b9465bed198d332f4e38b17fe7dc
+  HLUIKit_Moya: d86203b69d7303fd3ae2ca4221f8ba9e3b1ace58
+  HLUIKit_Realm: 83eb1a7c1d457f6bc2c04955662262403ea60a56
+  JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  MYTableViewIndex: 55d5d8557b3f2a4de270d8c0260b41f3918ba4e3
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
+  RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
+  Result: ed341d2f236af425b803e690e9bd8fd0a0cb7c5a
+  RxBluetoothKit: be7acb92b3eaaa3a15c3813c2c12648ad7f49010
+  RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42
+  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
+  RxGesture: f059f2aeef966fb17dad56ee440e76410f10e55f
+  RxRelay: e72dbfd157807478401ef1982e1c61c945c94b2f
+  RxSwift: d356ab7bee873611322f134c5f9ef379fa183d8f
+  SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Then: acfe0be7e98221c6204e12f8161459606d5d822d
+
+PODFILE CHECKSUM: fb2069291d0074e4f9b0eab210a506446bd76adb
+
+COCOAPODS: 1.11.2

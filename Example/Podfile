@@ -1,0 +1,18 @@
+
+
+use_frameworks!
+platform :ios, '12.0'
+
+target 'HLUIKit_Example' do
+  pod 'HLinUIKit', :path => '../'
+  pod 'HLinUIKit_Moya', :path => '../HLinUIKit_Moya.podspec'
+  pod 'HLinUIKit_Bluetooth', :path => '../HLinUIKit_Bluetooth.podspec'
+  pod 'HLinUIKit_Realm', :path => '../HLinUIKit_Realm.podspec'
+  pod 'RxBluetoothKit', :git => 'https://github.com/i-mobility/RxBluetoothKit.git', :tag => '7.0.2'
+
+  target 'HLUIKit_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase' , '~> 2.1.4'
+  end
+end
