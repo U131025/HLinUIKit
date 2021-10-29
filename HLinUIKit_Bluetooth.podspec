@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'RxBluetoothKit'
-  s.dependency 'RxSwift', '~> 6.2.0'
-  s.dependency 'RxCocoa', '~> 6.2.0'
+  s.dependency 'RxSwift'
+  s.dependency 'RxCocoa'
   s.dependency 'Then'
 end
