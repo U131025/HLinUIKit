@@ -45,7 +45,7 @@ extension String {
     }
 }
 
-public class TextCellConfig: NSObject {
+public class HLTextCellConfig: NSObject {
 
     public var tag: Int = 1000
     public var text: String?
@@ -80,9 +80,11 @@ public class TextCellConfig: NSObject {
 
     /// 输入时的提示信息
     public var tip: String?
+    /// Cell的高度
+    public var height: CGFloat?
 }
 
-extension TextCellConfig {
+extension HLTextCellConfig {
 
     public func calculateTextHeight(_ maxWidth: CGFloat) -> CGFloat {
 
@@ -92,7 +94,7 @@ extension TextCellConfig {
     }
 }
 
-open class DefaultTextFieldCell: HLTableViewCell {
+open class HLTextFieldCell: HLTableViewCell {
 
     public let textField = HLTextField().then { (textField) in
 //        textField.layer.borderColor = UIColor.cellBorderColor.cgColor
@@ -137,7 +139,7 @@ open class DefaultTextFieldCell: HLTableViewCell {
         /// 输入格式化
         textField.rx.text.orEmpty.subscribe(onNext: {[unowned self] (text) in
 
-            guard let config = self.data as? TextCellConfig else {
+            guard let config = self.data as? HLTextCellConfig else {
                 return
             }
 
@@ -194,7 +196,7 @@ open class DefaultTextFieldCell: HLTableViewCell {
     override open func updateData() {
         super.updateData()
 
-        if let config = data as? TextCellConfig {
+        if let config = data as? HLTextCellConfig {
             tag = config.tag
             textField.tag = config.tag
             textField.keyboardType = config.keyboardType

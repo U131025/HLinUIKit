@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class HorListTableViewCell: HLCollectionsTableViewCell {
+open class HLHorListTableViewCell: HLCollectionsTableViewCell {
 
     /// 布局
     override open func generateFlowLayout() -> UICollectionViewFlowLayout? {

@@ -50,7 +50,7 @@ open class IconStyleCollectionViewCell: HLCollectionViewCell {
     }
 
     open override func updateData() {
-        if let config = data as? TextCellConfig {
+        if let config = data as? HLTextCellConfig {
 
             iconImageView.image = config.icon
             titleLabel.text = config.text

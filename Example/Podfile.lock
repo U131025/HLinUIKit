@@ -8,7 +8,7 @@ PODS:
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
   - HandyJSON (5.0.2)
-  - HLUIKit (1.0.1):
+  - HLinUIKit (1.0.1):
     - JGProgressHUD
     - MJRefresh
     - MYTableViewIndex
@@ -19,12 +19,12 @@ PODS:
     - SDCycleScrollView
     - SnapKit
     - Then
-  - HLUIKit_Bluetooth (1.0.1):
+  - HLinUIKit_Bluetooth (1.0.1):
     - RxBluetoothKit
-    - RxCocoa (~> 6.2.0)
-    - RxSwift (~> 6.2.0)
+    - RxCocoa
+    - RxSwift
     - Then
-  - HLUIKit_Moya (1.0.1):
+  - HLinUIKit_Moya (1.0.1):
     - Alamofire
     - Cache
     - HandyJSON
@@ -33,7 +33,7 @@ PODS:
     - Result
     - RxCocoa (~> 6.2.0)
     - RxSwift (~> 6.2.0)
-  - HLUIKit_Realm (1.0.1):
+  - HLinUIKit_Realm (1.0.1):
     - RealmSwift
     - RxCocoa (~> 6.2.0)
     - RxSwift (~> 6.2.0)
@@ -77,10 +77,10 @@ PODS:
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
-  - HLUIKit (from `../`)
-  - HLUIKit_Bluetooth (from `../HLUIKit_Bluetooth.podspec`)
-  - HLUIKit_Moya (from `../HLUIKit_Moya.podspec`)
-  - HLUIKit_Realm (from `../HLUIKit_Realm.podspec`)
+  - HLinUIKit (from `../`)
+  - HLinUIKit_Bluetooth (from `../HLinUIKit_Bluetooth.podspec`)
+  - HLinUIKit_Moya (from `../HLinUIKit_Moya.podspec`)
+  - HLinUIKit_Realm (from `../HLinUIKit_Realm.podspec`)
   - RxBluetoothKit (from `https://github.com/i-mobility/RxBluetoothKit.git`, tag `7.0.2`)
 
 SPEC REPOS:
@@ -109,14 +109,14 @@ SPEC REPOS:
     - Then
 
 EXTERNAL SOURCES:
-  HLUIKit:
+  HLinUIKit:
     :path: "../"
-  HLUIKit_Bluetooth:
-    :path: "../HLUIKit_Bluetooth.podspec"
-  HLUIKit_Moya:
-    :path: "../HLUIKit_Moya.podspec"
-  HLUIKit_Realm:
-    :path: "../HLUIKit_Realm.podspec"
+  HLinUIKit_Bluetooth:
+    :path: "../HLinUIKit_Bluetooth.podspec"
+  HLinUIKit_Moya:
+    :path: "../HLinUIKit_Moya.podspec"
+  HLinUIKit_Realm:
+    :path: "../HLinUIKit_Realm.podspec"
   RxBluetoothKit:
     :git: https://github.com/i-mobility/RxBluetoothKit.git
     :tag: 7.0.2
@@ -132,10 +132,10 @@ SPEC CHECKSUMS:
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
-  HLUIKit: c4e80ed0748977af6bcbd785bcf52d554fec6718
-  HLUIKit_Bluetooth: 3173a1782654b9465bed198d332f4e38b17fe7dc
-  HLUIKit_Moya: d86203b69d7303fd3ae2ca4221f8ba9e3b1ace58
-  HLUIKit_Realm: 83eb1a7c1d457f6bc2c04955662262403ea60a56
+  HLinUIKit: e4317c4feb3b6000997ade4f9e906dff070ea525
+  HLinUIKit_Bluetooth: 57b54c25ab701fe0f6d1eb7ac64d80681672eb3d
+  HLinUIKit_Moya: a2220a4f2283cc6a95c9d6706f43c672b25fbd4b
+  HLinUIKit_Realm: 9eee99f69e0f0b214232db2df0eb5e47477204c5
   JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
@@ -155,6 +155,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Then: acfe0be7e98221c6204e12f8161459606d5d822d
 
-PODFILE CHECKSUM: fb2069291d0074e4f9b0eab210a506446bd76adb
+PODFILE CHECKSUM: 15a4e55424b6171a2d45f50aed0c9d65c66d708a
 
 COCOAPODS: 1.11.2

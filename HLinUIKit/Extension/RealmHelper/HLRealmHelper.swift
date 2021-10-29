@@ -13,7 +13,7 @@ import RxCocoa
 
 let realmIdentifier = "MyInMemoryRealm"
 
-public class RealmHelper {
+public class HLRealmHelper {
     
     /* Realm 数据库配置，用于数据库的迭代更新 */
     public static var schemaVersion: UInt64 = 1 {
@@ -198,6 +198,6 @@ public class RealmHelper {
 extension Object {
 
     public func save() {
-        RealmHelper.update([self])
+        HLRealmHelper.update([self])
     }
 }

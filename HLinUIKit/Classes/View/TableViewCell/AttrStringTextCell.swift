@@ -40,7 +40,7 @@ open class HLAttrStringTextCell: HLTableViewCell {
         if let (attrStr, fontSize) = data as? (NSAttributedString, CGFloat) {
             label.attributedText = attrStr
             label.font = UIFont.systemFont(ofSize: fontSize)
-        } else if let config = data as? TextCellConfig {
+        } else if let config = data as? HLTextCellConfig {
             if let attributedText = config.attributedText {
                 label.attributedText = attributedText
             } else {
@@ -69,7 +69,7 @@ extension HLAttrStringTextCell {
     static public func calculateCellHeight(_ data: Any?, _ maxWidth: CGFloat = kScreenW - HLTableViewCell.defaultCellMarginValue*2, minHeight: CGFloat = 44, margin: CGFloat = 0) -> CGFloat {
         if let attrStr = data as? NSAttributedString {
             return calculateAttrStringHeight(attrStr, maxWidth, minHeight: minHeight, margin: margin)
-        } else if let config = data as? TextCellConfig {
+        } else if let config = data as? HLTextCellConfig {
             if let attrStr = config.attributedText {
                 return calculateAttrStringHeight(attrStr, maxWidth, minHeight: minHeight, margin: margin)
             }

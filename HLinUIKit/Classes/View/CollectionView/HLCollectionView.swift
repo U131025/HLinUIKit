@@ -288,18 +288,18 @@ extension HLCollectionView {
     }
 
     /// 设置刷新头部
-    public func setRefreshHeader(block: CompleteBlock?, config: TextCellConfig? = nil) -> Self {
+    public func setRefreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
         self.collectionView.mj_header = refreshHeader(block: block, config: config)
         return self
     }
     // 设置加载更多footer
-    public func setLoardMoreFooter(block: CompleteBlock?, config: TextCellConfig? = nil) -> Self {
+    public func setLoardMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
 
         self.collectionView.mj_footer = loadMoreFooter(block: block, config: config)
         return self
     }
 
-    func refreshHeader(block: CompleteBlock?, config: TextCellConfig? = nil) -> MJRefreshStateHeader {
+    func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
 
             let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
 
@@ -326,7 +326,7 @@ extension HLCollectionView {
             return header
         }
 
-        func loadMoreFooter(block: CompleteBlock?, config: TextCellConfig? = nil) -> MJRefreshAutoFooter {
+        func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
 
             return MJRefreshAutoNormalFooter.init(refreshingBlock: {
                 block?()

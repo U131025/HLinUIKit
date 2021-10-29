@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class DefaultStyleTableViewCell: HLTableViewCell {
+open class HLStyleTableViewCell: HLTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value1, reuseIdentifier: reuseIdentifier)
@@ -25,14 +25,14 @@ open class DefaultStyleTableViewCell: HLTableViewCell {
 
     override open func updateData() {
 
-        if let (icon, config) = data as? (UIImage?, TextCellConfig) {
+        if let (icon, config) = data as? (UIImage?, HLTextCellConfig) {
 
             self.tag = config.tag
             self.imageView?.image = icon
             self.textLabel?.text = config.text
             self.textLabel?.textColor = config.textColor
             self.textLabel?.font = config.font
-        } else if let config = data as? TextCellConfig {
+        } else if let config = data as? HLTextCellConfig {
 
             self.tag = config.tag
             self.textLabel?.text = config.text

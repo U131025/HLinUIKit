@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class DefaultTextTableViewCell: HLTableViewCell {
+open class HLTextTableViewCell: HLTableViewCell {
 
     public let leftLabel = UILabel().then { (label) in
         label.font = UIFont.systemFont(ofSize: 15)
@@ -63,7 +63,7 @@ open class DefaultTextTableViewCell: HLTableViewCell {
             leftLabel.text = title
             rightLabel.text = detail
 
-        } else if let (titileConfig, detailConfig) = data as? (TextCellConfig, TextCellConfig?) {
+        } else if let (titileConfig, detailConfig) = data as? (HLTextCellConfig, HLTextCellConfig?) {
             tag = titileConfig.tag
             
             leftLabel.textColor = titileConfig.textColor
@@ -87,7 +87,7 @@ open class DefaultTextTableViewCell: HLTableViewCell {
             rightLabel.textColor = detailConfig?.textColor
             rightLabel.font = detailConfig?.font
 
-        } else if let config = data as? TextCellConfig {
+        } else if let config = data as? HLTextCellConfig {
             tag = config.tag
             leftLabel.text = config.text
             leftLabel.textColor = config.textColor
@@ -97,7 +97,7 @@ open class DefaultTextTableViewCell: HLTableViewCell {
 
 }
 
-extension DefaultTextTableViewCell {
+extension HLTextTableViewCell {
 
     open func showArrow(_ image: UIImage?) {
 

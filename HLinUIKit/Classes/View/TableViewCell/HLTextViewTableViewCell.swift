@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-open class TextViewTableViewCell: HLTableViewCell {
+open class HLTextViewTableViewCell: HLTableViewCell {
 
     public let textView = UITextView()
     public let hintLabel = UILabel()
@@ -112,7 +112,7 @@ open class TextViewTableViewCell: HLTableViewCell {
     }
 
     override open func updateData() {
-        if let config = data as? TextCellConfig {
+        if let config = data as? HLTextCellConfig {
 
             if config.textColor != nil { textView.textColor = config.textColor }
             if config.font != nil { textView.font = config.font }
@@ -130,7 +130,7 @@ open class TextViewTableViewCell: HLTableViewCell {
 
 }
 
-extension TextViewTableViewCell: UITextViewDelegate {
+extension HLTextViewTableViewCell: UITextViewDelegate {
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 

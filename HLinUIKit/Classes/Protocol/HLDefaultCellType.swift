@@ -8,9 +8,9 @@
 
 import Foundation
 
-public enum DefaultTableViewCellType {
-    case text(TextCellConfig?, TextCellConfig?)
-    case textFiled(TextCellConfig)
+public enum HLTableViewCellType {
+    case text(HLTextCellConfig?, HLTextCellConfig?)
+    case textFiled(HLTextCellConfig)
     case attrText(Any?)
 
     case list(Any?)
@@ -20,18 +20,18 @@ public enum DefaultTableViewCellType {
     case collections(Any?, CGFloat)
 }
 
-extension DefaultTableViewCellType: HLCellType {
+extension HLTableViewCellType: HLCellType {
     
     public var cellClass: AnyClass {
         switch self {
         case .list:
-            return ListTableViewCell.self
+            return HLListTableViewCell.self
         case .horizontalList:
-            return HorListTableViewCell.self
+            return HLHorListTableViewCell.self
         case .text:
-            return DefaultTextTableViewCell.self
+            return HLTextTableViewCell.self
         case .textFiled:
-            return DefaultTextFieldCell.self
+            return HLTextFieldCell.self
         case .separator, .line:
             return HLSeparatorCell.self
         case .attrText:
@@ -44,7 +44,7 @@ extension DefaultTableViewCellType: HLCellType {
     public var cellHeight: CGFloat {
         switch self {
         case .list(let datas):
-            return ListTableViewCell.calculateCellHeight(datas)
+            return HLListTableViewCell.calculateCellHeight(datas)
         case .text:
             return 57
         case .textFiled:

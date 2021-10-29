@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class ListTableViewCell: HLTableViewCell {
+open class HLListTableViewCell: HLTableViewCell {
     
     public var cellConfigBlock: HLTableViewCellConfigBlock?
 
@@ -63,7 +63,7 @@ open class ListTableViewCell: HLTableViewCell {
     }
 }
 
-extension ListTableViewCell {
+extension HLListTableViewCell {
 
     static public func calculateCellHeight(_ datas: Any?) -> CGFloat {
 

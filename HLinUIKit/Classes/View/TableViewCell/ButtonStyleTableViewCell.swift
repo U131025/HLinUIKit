@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct ButtonCellConfig {
+public struct HLButtonCellConfig {
     public var title: String?
     public var titleColor: UIColor = .white
     public var backgroundColor: UIColor?
@@ -26,7 +26,7 @@ public struct ButtonCellConfig {
     }
 }
 
-extension ButtonCellConfig: HLCellType {
+extension HLButtonCellConfig: HLCellType {
     public var cellClass: AnyClass {
         return ButtonStyleTableViewCell.self
     }
@@ -70,7 +70,7 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
 
     open override func updateData() {
 
-        if let config = data as? ButtonCellConfig {
+        if let config = data as? HLButtonCellConfig {
 
             tag = config.tag
 
