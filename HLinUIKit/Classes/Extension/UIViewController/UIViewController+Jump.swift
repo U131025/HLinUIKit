@@ -51,6 +51,12 @@ extension UIViewController {
     public func push(_ viewController: UIViewController, _ animated: Bool = true) {
         self.navigationController?.pushViewController(viewController, animated: animated)
     }
+    
+    public func present(_ viewController: UIViewController, animated: Bool, style: UIModalPresentationStyle) {
+
+        viewController.modalPresentationStyle = style
+        self.present(viewController, animated: animated, completion: nil)
+    }
 
     public func present(_ viewController: UIViewController, animated: Bool = true) {
 

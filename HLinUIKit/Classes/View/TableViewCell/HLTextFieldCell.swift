@@ -94,6 +94,11 @@ extension HLTextCellConfig {
     }
 }
 
+extension HLTextCellConfig: HLCellType {
+    public var cellClass: AnyClass { return HLTextFieldCell.self }
+    public var cellHeight: CGFloat { return height ?? calculateTextHeight(kScreenW - 30) }
+}
+
 open class HLTextFieldCell: HLTableViewCell {
 
     public let textField = HLTextField().then { (textField) in

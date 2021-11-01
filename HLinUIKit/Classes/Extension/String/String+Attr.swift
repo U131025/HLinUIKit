@@ -10,7 +10,7 @@ import Foundation
 
 extension String {
 
-    public func toAttrText(_ color: UIColor, _ font: UIFont = .systemFont(ofSize: 15), lineSpacing: CGFloat? = nil) -> NSMutableAttributedString {
+    public func toAttrText(_ color: UIColor = .black, _ font: UIFont = .systemFont(ofSize: 15), lineSpacing: CGFloat? = nil) -> NSMutableAttributedString {
         
         if let lineSpacing = lineSpacing {
             

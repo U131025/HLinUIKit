@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct HLButtonCellConfig {
+public class HLButtonCellConfig: NSObject {
     public var title: String?
     public var titleColor: UIColor = .white
     public var backgroundColor: UIColor?
@@ -21,9 +21,9 @@ public struct HLButtonCellConfig {
     public var tag: Int = 0
     
     public var height: CGFloat = 45
-    
-    public init() {
-    }
+    public var width: CGFloat?
+//    public init() {
+//    }
 }
 
 extension HLButtonCellConfig: HLCellType {
@@ -44,7 +44,7 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
                 make.center.equalToSuperview()
                 make.left.equalTo(marginValue)
                 make.right.equalTo(-marginValue)
-                make.height.equalTo(44)
+                make.height.equalToSuperview()
             }
         }
     }
@@ -64,7 +64,7 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             make.center.equalToSuperview()
             make.left.equalTo(marginValue)
             make.right.equalTo(-marginValue)
-            make.height.equalTo(44)
+            make.height.equalToSuperview()
         }
     }
 
@@ -82,9 +82,18 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
                 .setTitle(config.title)
                 .setTitleColor(config.titleColor)
                 .setFont(config.font)
+            
+            let width = config.width ?? kScreenW - HLTableViewCell.defaultCellMarginValue*2
+            if let width = config.width {
+                commitButton.snp.remakeConstraints { (make) in
+                    make.center.equalToSuperview()
+                    make.width.equalTo(width)
+                    make.height.equalToSuperview()
+                }
+            }
 
             if let image = config.icon {
-                commitButton.frame = CGRect(origin: .zero, size: CGSize(width: kScreenW - HLTableViewCell.defaultCellMarginValue*2, height: 44))
+                commitButton.frame = CGRect(origin: .zero, size: CGSize(width: width, height: 44))
                 commitButton.setImage(image).layoutButton(with: config.iconLayoutType, imageTitleSpace: 10)
             } else {
                 commitButton.setImage(nil).layoutButton(with: config.iconLayoutType, imageTitleSpace: 10)

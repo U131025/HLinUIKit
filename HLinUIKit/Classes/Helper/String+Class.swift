@@ -20,8 +20,8 @@ extension String {
         if let clsType = cls {
             return clsType
         } else {
-            // HLUIKit命名空间
-            guard let clsType = NSClassFromString("HLUIKit" + "." + self) else {
+            // HLinUIKit命名空间
+            guard let clsType = NSClassFromString("HLinUIKit" + "." + self) else {
                 assert(false, "无法通过类名转换成成类: \(self)")
                 return nil
             }

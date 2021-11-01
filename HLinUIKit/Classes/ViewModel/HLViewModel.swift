@@ -141,6 +141,10 @@ open class HLViewModel {
 }
 
 extension HLViewModel {
+    
+    public func getItemValue(with ip: IndexPath) -> HLCellType? {
+        return items.value[safe: ip.section]?.items[safe: ip.row]
+    }
 
     public func setItems(_ datas: [HLCellType]) -> Self {
         items.accept([SectionModel(model: "list", items: datas)])
