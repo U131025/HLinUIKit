@@ -8,7 +8,7 @@
 
 import UIKit
 
-@_exported import HLUIKit
+@_exported import HLinUIKit
 @_exported import RxCocoa
 @_exported import RxSwift
 

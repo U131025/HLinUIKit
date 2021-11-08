@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import HLUIKit
+import HLinUIKit
 
 class ListViewModel: HLViewModel {
     

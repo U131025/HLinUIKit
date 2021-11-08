@@ -68,14 +68,28 @@ extension UIViewController {
 
         let bgImage = themeType.isTranslucent ? UIImage() : createImageWithColor(color: navBarColor)
 
-        self.navigationController?.navigationBar.setBackgroundImage(bgImage, for: .default)
+        if #available(iOS 15, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithDefaultBackground()
+            appearance.backgroundColor = navBarColor
+            appearance.backgroundImage = bgImage
+            appearance.shadowColor = .clear
+            appearance.titleTextAttributes = [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: textColor
+            ]
+
+            self.navigationItem.standardAppearance = appearance
+            self.navigationItem.scrollEdgeAppearance = appearance
+        } else {
+            self.navigationController?.navigationBar.setBackgroundImage(bgImage, for: .default)
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: textColor
+            ]
+        }
 
         self.navigationController?.navigationBar.isTranslucent = themeType.isTranslucent
-
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
-            NSAttributedString.Key.foregroundColor: textColor
-        ]
     }
 
     public func setBackImage(_ image: UIImage?) -> Self {

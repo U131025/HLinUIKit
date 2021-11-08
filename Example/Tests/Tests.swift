@@ -1,5 +1,5 @@
 import XCTest
-import HLUIKit
+import HLinUIKit
 
 class Tests: XCTestCase {
     

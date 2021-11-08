@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HLUIKit
+import HLinUIKit
 
 class ViewController: HLTableViewController {
 

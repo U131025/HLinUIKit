@@ -90,6 +90,16 @@ open class HLViewModel {
     open func itemDeselected(indexPath: IndexPath) {
 
     }
+    
+    public func setSelectedCell(_ ip: IndexPath) {
+        guard let vc = viewController as? HLTableViewController else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            vc.listView.selectRow(at: ip, animated: false, scrollPosition: .none)
+        }
+    }
 
     /// 刷新
     open func refresh() {

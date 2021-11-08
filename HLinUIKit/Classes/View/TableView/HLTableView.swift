@@ -152,7 +152,10 @@ open class HLTableView: UITableView, UITableViewDelegate {
         estimatedRowHeight = 0
         estimatedSectionHeaderHeight = 0
         estimatedSectionFooterHeight = 0
-               
+           
+        if #available(iOS 15, *) {
+            sectionHeaderTopPadding = 0
+        }
     }
 
     open func bindConfig() {

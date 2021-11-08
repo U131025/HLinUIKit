@@ -82,6 +82,8 @@ public class HLTextCellConfig: NSObject {
     public var tip: String?
     /// Cell的高度
     public var height: CGFloat?
+    /// 自定义Cell类型，需要继承HLTableViewCell或HLCollectionViewCell
+    public var cell: AnyClass?
 }
 
 extension HLTextCellConfig {
@@ -95,23 +97,25 @@ extension HLTextCellConfig {
 }
 
 extension HLTextCellConfig: HLCellType {
-    public var cellClass: AnyClass { return HLTextFieldCell.self }
+    public var cellClass: AnyClass { return cell ?? HLTextFieldCell.self }
     public var cellHeight: CGFloat { return height ?? calculateTextHeight(kScreenW - 30) }
 }
 
 open class HLTextFieldCell: HLTableViewCell {
+    
+    public var inputBackgroundColor: UIColor? {
+        didSet {
+            if let color = inputBackgroundColor {
+                contentView.backgroundColor = color
+                textField.backgroundColor = color
+            }
+        }
+    }
 
     public let textField = HLTextField().then { (textField) in
-//        textField.layer.borderColor = UIColor.cellBorderColor.cgColor
-//        textField.layer.borderWidth = 0.5
-//        textField.layer.cornerRadius = 4
-
-//        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 40))
-//        textField.leftView = leftView
-//        textField.leftViewMode = .always
-
         textField.textColor = UIColor.white
         textField.placeholderTextColor = UIColor.systemGray
+        textField.clearButtonMode = .whileEditing
     }
 
     lazy public var verificationCodeButton = UIButton().then {
@@ -175,26 +179,34 @@ open class HLTextFieldCell: HLTableViewCell {
     }
 
     override open func initConfig() {
-
         backgroundColor = .white
+        contentView.layer.cornerRadius = 4
     }
 
     override open func layoutConfig() {
-
-        contentView.addSubview(textField)
-        textField.snp.makeConstraints { (make) in
+        
+        contentView.snp.remakeConstraints { make in
             make.center.equalToSuperview()
             make.height.equalTo(50)
             make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
             make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
         }
 
-        contentView.addSubview(tipLabel)
+        contentView.addSubview(textField)
+        textField.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+//            make.center.equalToSuperview()
+//            make.height.equalTo(50)
+//            make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
+//            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
+        }
+
+        addSubview(tipLabel)
         tipLabel.snp.makeConstraints { (make) in
             make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
             make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
+            make.top.equalTo(textField.snp.bottom)
             make.bottom.equalToSuperview()
-            make.height.equalTo(15)
         }
     }
 
@@ -216,7 +228,7 @@ open class HLTextFieldCell: HLTableViewCell {
             
             if let offsetX = config.offsetX {
                 textField.textOffset = offsetX
-            }            
+            }
 
             if case .password = config.constraint {
                 textField.isSecureTextEntry = true
@@ -240,16 +252,17 @@ open class HLTextFieldCell: HLTableViewCell {
             }
 
             if let backgroudColor = config.backgroundColor {
+                contentView.backgroundColor = backgroudColor
                 textField.backgroundColor = backgroudColor
             }
 
-            if config.useVerificationCode {
-                textField.rightView = verificationCodeButton
-                textField.rightViewMode = .always
-            } else {
-                textField.rightView = nil
-                textField.rightViewMode = .never
-            }
+//            if config.useVerificationCode {
+//                textField.rightView = verificationCodeButton
+//                textField.rightViewMode = .always
+//            } else {
+//                textField.rightView = nil
+//                textField.rightViewMode = .never
+//            }
             
             if let icon = config.icon {
                 textField.leftView = UIImageView(image: icon)
@@ -262,6 +275,22 @@ open class HLTextFieldCell: HLTableViewCell {
             if let tip = config.tip {
                 tipLabel.text = tip
             }
+        }
+    }
+    
+    open func setupVerificationCode() {
+        
+        verificationCodeButton.removeFromSuperview()
+        contentView.addSubview(verificationCodeButton)
+        verificationCodeButton.snp.makeConstraints { make in
+            make.right.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(100)
+        }
+        
+        textField.snp.remakeConstraints { make in
+            make.left.top.bottom.equalToSuperview()
+            make.right.equalTo(verificationCodeButton.snp.left).offset(-8)
         }
     }
 }
