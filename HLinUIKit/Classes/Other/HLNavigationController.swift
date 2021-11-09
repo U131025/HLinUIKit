@@ -70,7 +70,11 @@ extension UIViewController {
 
         if #available(iOS 15, *) {
             let appearance = UINavigationBarAppearance()
-            appearance.configureWithDefaultBackground()
+            if themeType.isTranslucent {
+                appearance.configureWithOpaqueBackground()
+            } else {
+                appearance.configureWithDefaultBackground()
+            }
             appearance.backgroundColor = navBarColor
             appearance.backgroundImage = bgImage
             appearance.shadowColor = .clear
