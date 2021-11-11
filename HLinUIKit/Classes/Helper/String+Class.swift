@@ -22,7 +22,7 @@ extension String {
         var clsNames = [String]()
         clsNames += String.sdkNames
         clsNames.append(clsName)
-        clsNames.append("HLUIKit")
+        clsNames.append("HLinUIKit")
         
         // 命名空间
         for clsName in clsNames {
