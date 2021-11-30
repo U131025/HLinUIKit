@@ -16,6 +16,22 @@ extension UIViewController {
         guard let count = self.navigationController?.viewControllers.count else { return nil }
         return self.navigationController?.viewControllers[safe: count - 2]
     }
+    
+    public func pop(filter aClassList: [AnyClass]) {
+
+        if let viewcontrollers = self.navigationController?.viewControllers {
+            for vc in viewcontrollers.reversed() {
+                for aClass in aClassList {
+                    if vc.isKind(of: aClass) == false {
+                        self.navigationController?.popToViewController(vc, animated: true)
+                        return
+                    }
+                }
+            }
+        }
+
+        self.pop()
+    }
 
     public func pop(to aClassList: [AnyClass], _ isToRoot: Bool = false) {
 

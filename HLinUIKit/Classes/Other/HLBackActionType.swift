@@ -18,6 +18,11 @@ extension String {
     }
 }
 
+enum HLNavItemDirectionType {
+    case left
+    case right
+}
+
 extension UIViewController {
 
     public func setBackButton(_ icon: UIImage?, _ text: String? = nil) -> Observable<()> {
@@ -44,20 +49,36 @@ extension UIViewController {
 
         return leftButton.rx.tap.asObservable()
     }
+    
+    public func setNavLeftItem(_ button: UIButton) -> Observable<()> {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: button)
+        return button.rx.tap.asObservable()
+    }
 
     public func setNavRightItem(_ button: UIButton) -> Observable<()> {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: button)
         return button.rx.tap.asObservable()
     }
     
-    public func setNavRightItems(_ buttons: [UIButton]) -> Observable<Int> {
+    public func setNavLeftItems(_ buttons: [UIButton]) -> Observable<Int> {
+        return setNavItems(buttons, direction: .left)
+    }
         
+    public func setNavRightItems(_ buttons: [UIButton]) -> Observable<Int> {
+        return setNavItems(buttons, direction: .right)
+    }
+    
+    func setNavItems(_ buttons: [UIButton], direction: HLNavItemDirectionType) -> Observable<Int> {
         var items = [UIBarButtonItem]()
         for btn in buttons {
             items.append(UIBarButtonItem.init(customView: btn))
         }
+        if direction == .left {
+            self.navigationItem.leftBarButtonItems = items
+        } else {
+            self.navigationItem.rightBarButtonItems = items
+        }
         
-        self.navigationItem.rightBarButtonItems = items
         return Observable.create { (obs) -> Disposable in
             
             var disArray = [Disposable]()
