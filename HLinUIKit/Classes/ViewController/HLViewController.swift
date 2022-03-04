@@ -87,7 +87,7 @@ extension HLViewController {
     public func setPopAction(to aClassList: [AnyClass], _ backImage: UIImage? = "back".image) -> Self {
 
         _ = setBackButton(backImage)
-            .takeUntil(self.rx.deallocated)
+            .take(until:self.rx.deallocated)
             .subscribe(onNext: { (_) in
                 self.pop(to: aClassList)
             })
@@ -98,7 +98,7 @@ extension HLViewController {
     public func setPopAction(isToRoot: Bool = false, _ backImage: UIImage? = "back".image) -> Self {
 
         _ = setBackButton(backImage)
-            .takeUntil(self.rx.deallocated)
+            .take(until:self.rx.deallocated)
             .subscribe(onNext: { (_) in
                 self.pop(isToRoot)
             })

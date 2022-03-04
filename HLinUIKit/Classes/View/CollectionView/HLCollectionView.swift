@@ -92,19 +92,12 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
             .do(onNext: {[unowned self] (_) in
                 self.endRefreshing()
             })
-            .takeUntil(self.rx.deallocated)
+            .take(until:self.rx.deallocated)
             .bind(to: collectionView.rx.items(dataSource: self.dataSource))
-        
-//        _ = collectionView.rx
-//            .modelSelected(RxBaseCellType.self)
-//            .takeUntil(self.rx.deallocated)
-//            .subscribe(onNext: {[unowned self] (type) in
-//                self.itemSelectedBlock?(type)
-//            })
 
         _ = collectionView.rx
             .itemSelected
-            .takeUntil(self.rx.deallocated)
+            .take(until:self.rx.deallocated)
             .subscribe(onNext: {[unowned self] (indexPath) in
 
                 let type = self.dataSource[indexPath]
@@ -115,7 +108,7 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
         
         _ = collectionView.rx
             .itemDeselected
-            .takeUntil(self.rx.deallocated)
+            .take(until: self.rx.deallocated)
             .subscribe(onNext: {[unowned self] (indexPath) in
                 self.itemDeselectedIndexPathBlock?(indexPath)
             })
@@ -173,24 +166,26 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
 
 extension HLCollectionView {
 
-    public func register(_ datas: [HLCellType]) -> Self {
+    public func register(_ datas: [HLCellType], complete: CompleteBlock?) {
 
         let classTypeNames = datas.map { $0.identifier }
         let names = Set(classTypeNames)
         let cellTypes = Array(names).map { $0.identity.toClass()! }
 
-        return register(cellTypes: cellTypes)
+        register(cellTypes: cellTypes, complete: complete)
     }
 
-    public func register(cellTypes: [AnyClass]) -> Self {
-        cellTypes.forEach { (type) in
-            self.collectionView.register(type, forCellWithReuseIdentifier: String(describing: type))
+    public func register(cellTypes: [AnyClass], complete: CompleteBlock?) {
+
+        DispatchQueue.main.async {
+            for type in cellTypes {
+                self.collectionView.register(type, forCellWithReuseIdentifier: String(describing: type))
+            }
+            complete?()
         }
-        
-        return self
     }
 
-    public func register(_ sections: [SectionModel<String, HLCellType>]) -> Self {
+    public func register(_ sections: [SectionModel<String, HLCellType>], complete: CompleteBlock? = nil) {
         /// 注册Cell
         var classTypeNames = [String]()
         sections.forEach { (_) in
@@ -202,22 +197,22 @@ extension HLCollectionView {
         /// 去重
         let names = Set(classTypeNames)
         let cellTypes = Array(names).map { $0.identity.toClass()! }
-        _ = register(cellTypes: cellTypes)
-        return self
+        register(cellTypes: cellTypes, complete: complete)
     }
 
     public func setItems(_ datas: [HLCellType]) -> Self {
 
-        _ = register(datas)
-        items.accept([SectionModel(model: "list", items: datas)])
-//        collectionView.reloadData()
+        register(datas, complete: {
+            self.items.accept([SectionModel(model: "list", items: datas)])
+        })
         return self
     }
 
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {
 
-        _ = register(sections)
-        items.accept(sections)
+        register(sections, complete: {
+            self.items.accept(sections)
+        })
 
         return self
     }

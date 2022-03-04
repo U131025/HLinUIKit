@@ -67,27 +67,31 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
 
     override open var viewModel: HLViewModel? {
         didSet {
+            self.setupViewModel()
+            self.viewModel?.refresh()
+        }
+    }
+    
+    public var vmDisposeBag = DisposeBag()
+    open func setupViewModel() {
+        if let viewModel = self.viewModel {
+           
+            bindConfig()
 
-            if let viewModel = self.viewModel {
+            vmDisposeBag = DisposeBag()
+            cellEvent
+                .bind(to: viewModel.event)
+                .disposed(by: vmDisposeBag)
 
-                bindConfig()
+            listView.cellEvent
+                .bind(to: viewModel.event)
+                .disposed(by: vmDisposeBag)
 
-                _ = cellEvent
-                    .takeUntil(self.rx.deallocated)
-                    .bind(to: viewModel.event)
-
-                _ = listView.cellEvent
-                    .takeUntil(self.rx.deallocated)
-                    .bind(to: viewModel.event)
-
-                _ = viewModel.items
-                    .takeUntil(self.rx.deallocated)
-                    .subscribe(onNext: {[weak self] (sections) in
-                        _ = self?.listView.setSections(sections: sections)
-                    })
-
-                viewModel.refresh()
-            }
+            viewModel.items
+                .subscribe(onNext: {[weak self] (sections) in
+                    _ = self?.listView.setSections(sections: sections)
+                })
+                .disposed(by: vmDisposeBag)
         }
     }
     
@@ -132,9 +136,22 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
     }
 
     /// 无数据界面，需要添加到ViewModel初始化后
+    var _emptyView: UIView?
     open var noDataView: UIView? {
-        didSet {
+        set {
+            _emptyView?.removeFromSuperview()
+            _emptyView = newValue
             initNoDataView()
+        }
+        get {
+            return _emptyView
+        }
+    }
+    
+    public lazy var emptyInset: UIEdgeInsets = .zero {
+        didSet {
+            let view = noDataView
+            self.noDataView = view
         }
     }
 
@@ -142,38 +159,28 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
         self.noDataView = view
         return self
     }
-
+    var emptyViewDisposable: Disposable?
     open func initNoDataView() {
 
-        noDataView?.removeFromSuperview()
-        guard let emptyView = noDataView else { return }
-
-//        view.addSubview(emptyView)
-//        emptyView.snp.makeConstraints { (make) in
-//            make.edges.equalTo(listView)
-//        }
-
+        _emptyView?.removeFromSuperview()
+        guard let emptyView = _emptyView else { return }
         guard let viewModel = viewModel else {
             return
         }
 
-        _ = viewModel
+        emptyViewDisposable?.dispose()
+        emptyViewDisposable = viewModel
             .items
-            .takeUntil(self.rx.deallocated)
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[unowned self] (sections) in
                 
                 emptyView.removeFromSuperview()
                 if sections.count == 0 || (sections.count == 1 && sections[0].items.count == 0) {
-//                    self.view.bringSubviewToFront(emptyView)
     
                     self.view.insertSubview(emptyView, aboveSubview: self.listView)
                     emptyView.snp.remakeConstraints { (make) in
-                        make.edges.equalTo(self.listView)
+                        make.edges.equalTo(self.listView).inset(emptyInset)
                     }
-                    
-                } else {
-//                    self.view.sendSubviewToBack(emptyView)
                 }
             })
     }

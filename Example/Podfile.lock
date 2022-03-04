@@ -8,7 +8,7 @@ PODS:
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
   - HandyJSON (5.0.2)
-  - HLinUIKit (1.0.1):
+  - HLinUIKit (1.0.4):
     - JGProgressHUD
     - MJRefresh
     - MYTableViewIndex
@@ -19,38 +19,36 @@ PODS:
     - SDCycleScrollView
     - SnapKit
     - Then
-  - HLinUIKit_Bluetooth (1.0.1):
+  - HLinUIKit_Bluetooth (1.0.3):
     - RxBluetoothKit
     - RxCocoa
     - RxSwift
     - Then
-  - HLinUIKit_Moya (1.0.1):
+  - HLinUIKit_Moya (1.0.4):
     - Alamofire
     - Cache
     - HandyJSON
     - Moya/RxSwift (~> 15.0)
-    - ReachabilitySwift
     - Result
     - RxCocoa (~> 6.2.0)
     - RxSwift (~> 6.2.0)
-  - HLinUIKit_Realm (1.0.1):
+  - HLinUIKit_Realm (1.0.3):
     - RealmSwift
     - RxCocoa (~> 6.2.0)
     - RxSwift (~> 6.2.0)
   - JGProgressHUD (2.2)
-  - MJRefresh (3.7.2)
+  - MJRefresh (3.7.3)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
   - Moya/RxSwift (15.0.0):
     - Moya/Core
     - RxSwift (~> 6.0)
   - MYTableViewIndex (0.8.0)
-  - ReachabilitySwift (5.0.0)
-  - Realm (10.18.0):
-    - Realm/Headers (= 10.18.0)
-  - Realm/Headers (10.18.0)
-  - RealmSwift (10.18.0):
-    - Realm (= 10.18.0)
+  - Realm (10.20.0):
+    - Realm/Headers (= 10.20.0)
+  - Realm/Headers (10.20.0)
+  - RealmSwift (10.20.0):
+    - Realm (= 10.20.0)
   - Result (5.0.0)
   - RxBluetoothKit (7.0.0):
     - RxSwift (~> 6.0)
@@ -94,7 +92,6 @@ SPEC REPOS:
     - MJRefresh
     - Moya
     - MYTableViewIndex
-    - ReachabilitySwift
     - Realm
     - RealmSwift
     - Result
@@ -132,17 +129,16 @@ SPEC CHECKSUMS:
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
-  HLinUIKit: e4317c4feb3b6000997ade4f9e906dff070ea525
-  HLinUIKit_Bluetooth: 57b54c25ab701fe0f6d1eb7ac64d80681672eb3d
-  HLinUIKit_Moya: a2220a4f2283cc6a95c9d6706f43c672b25fbd4b
-  HLinUIKit_Realm: 9eee99f69e0f0b214232db2df0eb5e47477204c5
+  HLinUIKit: 17f8e8db2c5ce7cb0f5833d9cba87bbc37be3b95
+  HLinUIKit_Bluetooth: ff4e5d5aaba4f373fecc4dba6b30a5d976c893de
+  HLinUIKit_Moya: 4d4f615505ce2ce2f23207e378d11ea2c1ef1dd0
+  HLinUIKit_Realm: 0f65af1e53b0ac071bcefbfbfb45ecb44b92ca99
   JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
-  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
+  MJRefresh: ec9c53ff4abf3a9237b4283862f1bd51c2ee3fdb
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   MYTableViewIndex: 55d5d8557b3f2a4de270d8c0260b41f3918ba4e3
-  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
-  RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
+  Realm: ae32bdc1da7d19c7617e0400201a77acd4a211b9
+  RealmSwift: c95eec6a712924870b2e36c4c081d63ec07e5414
   Result: ed341d2f236af425b803e690e9bd8fd0a0cb7c5a
   RxBluetoothKit: be7acb92b3eaaa3a15c3813c2c12648ad7f49010
   RxCocoa: 4baf94bb35f2c0ab31bc0cb9f1900155f646ba42

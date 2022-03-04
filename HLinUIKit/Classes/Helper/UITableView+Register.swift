@@ -11,14 +11,16 @@ import UIKit
 
 extension UITableView {
     public func registerCell(cellTypes: [AnyClass]) {
-        for cellType in cellTypes {
-            let typeString = String(describing: cellType)
-            let xibPath = Bundle.init(for: cellType).path(forResource: typeString, ofType: "nib")
-            if xibPath == nil {
-                self.register(cellType, forCellReuseIdentifier: typeString)
-            } else {
-                self.register(UINib.init(nibName: typeString, bundle: nil), forCellReuseIdentifier: typeString)
+        DispatchQueue.main.async {
+            for cellType in cellTypes {
+                let typeString = String(describing: cellType)
+                let xibPath = Bundle.init(for: cellType).path(forResource: typeString, ofType: "nib")
+                if xibPath == nil {
+                    self.register(cellType, forCellReuseIdentifier: typeString)
+                } else {
+                    self.register(UINib.init(nibName: typeString, bundle: nil), forCellReuseIdentifier: typeString)
+                }
             }
-        }
+        }        
     }
 }

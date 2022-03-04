@@ -8,9 +8,13 @@
 import Foundation
 
 public class HLCustomTableViewConfig: NSObject, HLCellType {
-    
+    public var tag: Int = 0
     public var customView: UIView?
     public var height: CGFloat = 44
+    public var alignment: NSTextAlignment = .left
+    public var viewSize: CGSize?
+    public var backgroundColor: UIColor?
+    public var offset: CGFloat = 0
     
     public var cellClass: AnyClass { return HLCustomTableViewCell.self }
     public var cellHeight: CGFloat { return height }
@@ -27,7 +31,25 @@ open class HLCustomTableViewCell: HLTableViewCell {
                 customView = view
                 contentView.addSubview(view)
                 view.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
+                    if let size = config.viewSize {
+                        make.width.equalTo(size.width)
+                        make.height.equalTo(size.height)
+                        make.centerY.equalToSuperview()
+                        
+                        switch config.alignment {
+                        case .left:
+                            make.left.equalToSuperview().offset(config.offset)
+                        case .right:
+                            make.right.equalToSuperview().offset(config.offset)
+                        case .center:
+                            make.centerX.equalToSuperview().offset(config.offset)
+                        default:
+                            break
+                        }
+                        
+                    } else {
+                        make.edges.equalToSuperview()
+                    }
                 }
             }
         }

@@ -55,15 +55,15 @@ open class HLCollectionViewController: HLViewController {
             if let viewModel = viewModel {
 
                 _ = cellEvent
-                    .takeUntil(self.rx.deallocated)
+                    .take(until:self.rx.deallocated)
                     .bind(to: viewModel.event)
 
                 _ = listView.cellEvent
-                    .takeUntil(self.rx.deallocated)
+                    .take(until:self.rx.deallocated)
                     .bind(to: viewModel.event)
 
                 _ = viewModel.items
-                    .takeUntil(self.rx.deallocated)
+                    .take(until:self.rx.deallocated)
                     .subscribe(onNext: {[unowned self] (sections) in
                         _ = self.listView.setSections(sections: sections)
                     })
@@ -130,7 +130,7 @@ open class HLCollectionViewController: HLViewController {
 
         _ = viewModel
             .items
-            .takeUntil(self.rx.deallocated)
+            .take(until:self.rx.deallocated)
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: {[unowned self] (sections) in
 

@@ -75,12 +75,6 @@ open class HLTableView: UITableView, UITableViewDelegate {
         bindConfig()
     }
 
-//    lazy public var tableView = UITableView().then({ (tableView) in
-//        tableView.backgroundColor = UIColor.clear
-//        tableView.separatorStyle = .none
-//        tableView.showsVerticalScrollIndicator = false
-//    })
-
     // MARK: DataSource
     lazy public var hlDataSource: RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>> = {
 
@@ -170,19 +164,19 @@ open class HLTableView: UITableView, UITableViewDelegate {
             .do(onNext: {[unowned self] (_) in
                 self.endRefreshing()
             })
-            .takeUntil(rx.deallocated)
+            .take(until: rx.deallocated)
             .bind(to: rx.items(dataSource: hlDataSource))
 
 //        _ = tableView.rx
 //            .modelSelected(RxBaseCellType.self)
-//            .takeUntil(self.rx.deallocated)
+//            .take(until:self.rx.deallocated)
 //            .subscribe(onNext: {[unowned self] (type) in
 //                self.itemSelectedBlock?(type)
 //            })
 //
         _ = rx
             .itemSelected
-            .takeUntil(self.rx.deallocated)
+            .take(until: self.rx.deallocated)
             .subscribe(onNext: {[unowned self] (indexPath) in
 
                 let type = self.hlDataSource[indexPath]
@@ -193,7 +187,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
         
         _ = rx
             .itemDeselected
-            .takeUntil(self.rx.deallocated)
+            .take(until: self.rx.deallocated)
             .subscribe(onNext: {[unowned self] (indexPath) in
 
                 let type = self.hlDataSource[indexPath]
@@ -382,14 +376,51 @@ extension HLTableView {
 
 extension HLTableView {
 
+    public func register(datas: [HLCellType], complete: CompleteBlock?) {
+
+        let classTypeNames = datas.map { $0.identifier }
+        let names = Set(classTypeNames)
+        let cellTypes = Array(names).map { $0.identity.toClass()! }
+
+        DispatchQueue.main.async {
+            self.registerCell(cellTypes: cellTypes)
+            complete?()
+        }
+    }
+    
+    public func register(sections: [SectionModel<String, HLCellType>], complete: CompleteBlock? = nil) {
+        /// 注册Cell
+        var classTypeNames = [String]()
+        sections.forEach { (_) in
+            sections.forEach({ (item) in
+                classTypeNames += item.items.map { $0.identifier }
+            })
+        }
+
+        /// 去重
+        let names = Set(classTypeNames)
+        let cellTypes = Array(names).map { $0.identity.toClass()! }
+        DispatchQueue.main.async {
+            self.registerCell(cellTypes: cellTypes)
+            complete?()
+        }
+    }
+
     public func setItems(_ datas: [HLCellType]) -> Self {
-        items.accept([SectionModel(model: "list", items: datas)])
+        
+        register(datas: datas) {
+            self.items.accept([SectionModel(model: "list", items: datas)])
+        }
+        
         return self
     }
 
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {
 
-        items.accept(sections)
+        register(sections: sections, complete: {
+            self.items.accept(sections)
+        })
+        
         return self
     }
 
@@ -401,5 +432,22 @@ extension HLTableView {
     public func setEditingActions(_ block: HLTableViewEditingActionsConfigBlock?) -> Self {
         editingActionsBlock = block
         return self
+    }
+    
+    /// 获取选中的Items
+    public func getSelectedRows() -> [HLCellType] {
+        
+        guard let array = indexPathsForSelectedRows else {
+            return []
+            
+        }
+        var selItems = [HLCellType]()
+        for ip in array {
+            if let item = items.value[safe: ip.section]?.items[safe: ip.row] {
+                selItems.append(item)
+            }
+        }
+        
+        return selItems
     }
 }

@@ -25,7 +25,7 @@ public protocol HLCellType {
     // 原数据
     var content: Any? { get }
 
-    var tag: Int { get }
+    var tag: Int { get }  
 }
 
 extension HLCellType {
@@ -51,8 +51,7 @@ extension HLCellType {
     public var content: Any? { return self }
 
     public var tag: Int { return 0 }
-    
-    
+   
 }
 
 extension String: HLCellType {
