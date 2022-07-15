@@ -42,11 +42,14 @@ public enum HLTextFieldConstraint {
     case chinesePhone
     case sellerPartnerAccount
     case text(maxLen: Int)
+    case chineseName(maxLen: Int)
 
     public var regularExpressions: String {
         switch self {
         case .sellerPartnerAccount:
             return "[^(\\u4E00-\\u9FA5)|(a-zA-Z0-9)]"
+        case .chineseName:
+            return "[^(\\u4E00-\\u9FA5)]"
 
         case .username,
              .email,
@@ -112,7 +115,7 @@ public enum HLTextFieldConstraint {
         case .identify:
             return 18
         case .nickName:
-            return 40
+            return 6
         case .realName:
             return 40
 
@@ -134,6 +137,8 @@ public enum HLTextFieldConstraint {
              .coinNumber:
             return -1
         case .text(let maxLen):
+            return maxLen
+        case let .chineseName(maxLen):
             return maxLen
         }
     }
@@ -233,7 +238,7 @@ open class HLTextField: UITextField {
     open func bindConfig() {
         self.rx.controlEvent(UIControl.Event.editingChanged)
             .asObservable()
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[unowned self] (_) in
 
                 let toBeString = self.text
@@ -314,7 +319,7 @@ open class HLTextField: UITextField {
     }
 
     private var updatedClearImage = false
-    var clearImage: UIImage?
+    public var clearImage: UIImage?
     open func updateClearImage() {
         if updatedClearImage { return }
         if let button = self.value(forKey: "clearButton") as? UIButton,

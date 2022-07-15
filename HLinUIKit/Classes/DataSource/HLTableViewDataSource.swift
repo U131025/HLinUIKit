@@ -11,7 +11,7 @@ import Foundation
 import RxDataSources
 
 extension String {
-    func toCell() -> HLTableViewCell? {
+    public func toHLCell() -> HLTableViewCell? {
         if let clsType = self.toClass() as? HLTableViewCell.Type {
             return clsType.init(reuseIdentifier: self)
         }
@@ -26,7 +26,15 @@ class HLTableViewDataSource {
         return RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>>(
             configureCell: { _, tableView, indexPath, item in
                 let identifier = style == .normal ? item.identifier : "\(item.identifier)_\(indexPath.section)_\(indexPath.row)"
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HLTableViewCell ?? item.identifier.toCell() else {
+                
+                var cell: HLTableViewCell?
+                if item.isReuse == false {
+                    cell = item.identifier.toHLCell()
+                } else {
+                    cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HLTableViewCell ?? item.identifier.toHLCell()
+                }
+                
+                guard let cell = cell else {
                     print("Error: 没有注册BaseCell(\(item.identifier))")
                     return UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: item.identifier)
                 }

@@ -91,15 +91,15 @@ open class HLViewModel {
 
     }
     
-    public func setSelectedCell(_ ip: IndexPath) {
-        guard let vc = viewController as? HLTableViewController else {
-            return
-        }
-        
-        DispatchQueue.main.async {
-            vc.listView.selectRow(at: ip, animated: false, scrollPosition: .none)
-        }
-    }
+//    public func setSelectedCell(_ ip: IndexPath) {
+//        guard let vc = viewController as? HLTableViewController else {
+//            return
+//        }
+//
+//        DispatchQueue.main.async {
+//            vc.listView.selectRow(at: ip, animated: false, scrollPosition: .none)
+//        }
+//    }
 
     /// 刷新
     open func refresh() {
@@ -112,20 +112,33 @@ open class HLViewModel {
         self.refreshType = type
     }
     
-    /// 预加载处理
-    public lazy var isLoadFinish: Bool = false {
-        didSet {
-            if isLoadFinish == true {
-                if let vc = viewController as? HLTableViewController {
-                    vc.listView.mj_footer?.endRefreshingWithNoMoreData()
-                }
-                if let vc = viewController as? HLCollectionViewController {
-                    vc.listView.collectionView.mj_footer?.endRefreshingWithNoMoreData()
-                }
-            }
+    public func endEditing(_ force: Bool = true) {
+        DispatchQueue.main.async {
+            self.viewController?.view.endEditing(force)
+        }        
+    }
+    
+    public func beginRefreshing() {
+        if let vc = viewController as? HLTableViewController, vc.listView.mj_header?.isRefreshing == false {
+            
+            vc.listView.mj_header?.beginRefreshing()
         }
     }
     
+    public lazy var isLoadFinish: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                if self.isLoadFinish == true {
+                    if let vc = self.viewController as? HLTableViewController {
+                        vc.listView.mj_footer?.endRefreshingWithNoMoreData()
+                    } else if let vc = self.viewController as? HLCollectionViewController {
+                        vc.listView.collectionView.mj_footer?.endRefreshingWithNoMoreData()
+                    }
+                }
+            }            
+        }
+    }
+    /// 预加载处理
     open func preload(indexPath: IndexPath) {
         
     }
@@ -169,8 +182,64 @@ extension HLViewModel {
     public func reloadItemsAtIndexPaths(_ ips: [IndexPath]) {
         
         if let vc = viewController as? HLTableViewController {
-            
             vc.listView.reloadItemsAtIndexPaths(ips, animationStyle: .none)
+        }
+    }
+}
+// MARK: 列表选中
+extension HLViewModel {
+
+    public func getSelectedItems() -> [HLCellType] {
+        if let vc = viewController as? HLTableViewController {
+            return vc.listView.getSelectedRows()
+        }
+        return []
+    }
+    
+    public func setSelectedIndexPath(_ indexPath: IndexPath, isSelected: Bool = true) {
+        guard let vc = viewController as? HLTableViewController else {
+            return
+        }
+        DispatchQueue.main.async {
+            if isSelected {
+                vc.listView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else {
+                vc.listView.deselectRow(at: indexPath, animated: false)
+            }
+        }
+    }
+    
+    public func setSelectedIndexPaths(_ indexPaths: [IndexPath]) {
+        for ip in indexPaths {
+            setSelectedIndexPath(ip)
+        }
+    }
+    
+    public func getSelectedIndexPath() -> IndexPath? {
+        guard let vc = viewController as? HLTableViewController else {
+            return nil
+        }
+        
+        return vc.listView.indexPathForSelectedRow
+    }
+    
+    public func getIndexPathsForSelectedRows() -> [IndexPath] {
+        guard let vc = viewController as? HLTableViewController else {
+            return []
+        }
+        
+        return vc.listView.indexPathsForSelectedRows ?? []
+    }
+    
+    public func reloadRows(_ indexPaths: [IndexPath]) {
+        guard let vc = viewController as? HLTableViewController else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            vc.listView.beginUpdates()
+            vc.listView.reloadRows(at: indexPaths, with: .none)
+            vc.listView.endUpdates()
         }
     }
 }

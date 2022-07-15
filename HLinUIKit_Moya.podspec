@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HLinUIKit_Moya'
-  s.version          = '1.0.4'
+  s.version          = '1.0.6'
   s.summary          = '基于RxSwift的界面库'
 
 # This description is used to generate tags and improve search results.
@@ -34,11 +34,11 @@ HLinUIKit网络库
   s.requires_arc = true
 
   # s.dependency 'ReachabilitySwift'
-  s.dependency 'Moya/RxSwift', '~> 15.0'
+  s.dependency 'Moya/RxSwift'
   s.dependency 'Alamofire'
   s.dependency 'HandyJSON'
-  s.dependency 'RxSwift', '~> 6.2.0'
-  s.dependency 'RxCocoa', '~> 6.2.0'
+  s.dependency 'RxSwift'
+  s.dependency 'RxCocoa'
   s.dependency 'Cache'
   s.dependency 'Result'
 

@@ -84,7 +84,7 @@ open class HLAnimTableView: HLTableView {
                                                                    deleteAnimation: .left),
             configureCell: { _, tableView, indexPath, item in
                 let identifier = "\(item.identity)"
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HLTableViewCell ?? item.identifier.toCell() else {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? HLTableViewCell ?? item.identifier.toHLCell() else {
                     print("Error: 没有注册BaseCell(\(item.identifier))")
                     return UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: item.identifier)
                 }

@@ -14,10 +14,13 @@ open class HLListTableViewCell: HLTableViewCell {
     
     public var cellConfigBlock: HLTableViewCellConfigBlock?
 
-    public lazy var list = HLTableView()
+    public lazy var listView = HLTableView()
         .selectedAction(action: {[unowned self] (type) in
             self.cellEvent.onNext((tag: 0, value: type))
             self.selectedAction(type)
+        })
+        .selectedIndexPathAction(action: { ip in
+            self.selectedIndexPathAction(ip)
         })
         .setCellConfig(config: { (cell, indexPath) in
             self.cellConfig(cell: cell, indexPath: indexPath)
@@ -32,12 +35,17 @@ open class HLListTableViewCell: HLTableViewCell {
     open func selectedAction(_ type: HLCellType) {
         
     }
+    
+    open func selectedIndexPathAction(_ ip: IndexPath) {
+        
+    }
 
     override open func initConfig() {
         super.initConfig()
 
-        contentView.addSubview(list)
-        list.snp.makeConstraints { (make) in
+        listView.bounces = false
+        contentView.addSubview(listView)
+        listView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
@@ -45,19 +53,19 @@ open class HLListTableViewCell: HLTableViewCell {
     open override func bindConfig() {
         super.bindConfig()
         
-        list.cellEvent.bind(to: event).disposed(by: disposeBag)
+        listView.cellEvent.bind(to: event).disposed(by: disposeBag)
     }
 
     override open func updateData() {
 
         if let datas = data as? [HLCellType] {
-            _ = list.setItems(datas)
+            _ = listView.setItems(datas)
         }
     }
 
     public func setItemInsert(insert: UIEdgeInsets) {
 
-        list.snp.remakeConstraints { (make) in
+        listView.snp.remakeConstraints { (make) in
             make.edges.equalToSuperview().inset(insert)
         }
     }

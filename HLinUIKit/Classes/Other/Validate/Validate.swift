@@ -38,6 +38,7 @@ public enum Validate {
     case bankCardNum(_: String)
     case allAreaPhone(_: String)
     case loginPassword(_: String)
+    case pureLetter(_: String)
 
     func createRule() -> (predicateStr: String, currObject: String) {
         var predicateStr: String!
@@ -47,7 +48,8 @@ public enum Validate {
             predicateStr = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$"
             currObject = str.lowercased()
         case let .phoneNum(str):
-            predicateStr = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$"
+            predicateStr = "^((1[0-9]))\\d{9}$"          
+//            predicateStr = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$"
             currObject = str
         case let .phoneOrEmail(str):
 
@@ -97,6 +99,9 @@ public enum Validate {
             currObject = str
         case let .allAreaPhone(str):
             predicateStr = "^[A-Za-z0-9]{6,20}+$"
+            currObject = str
+        case let .pureLetter(str):
+            predicateStr = "^[A-Za-z]+$"
             currObject = str
         }
         return (predicateStr, currObject)

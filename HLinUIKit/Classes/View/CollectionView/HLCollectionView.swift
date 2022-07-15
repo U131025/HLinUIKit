@@ -25,7 +25,7 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
     public var style: HLTableViewStyle = .normal
     public var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
 
-    public var flowlayout: UICollectionViewFlowLayout?
+    public var flowlayout: UICollectionViewLayout?
     public lazy var collectionView: UICollectionView = {
         return generateCollectionView()
     }()
@@ -43,7 +43,7 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
     var headerHeightInSectionBlock: HLCollectionViewSizeInSectionConfigBlock?
     var footerHeightInSectionBlock: HLCollectionViewSizeInSectionConfigBlock?
 
-    open func generateFlowLayout() -> UICollectionViewFlowLayout {
+    open func generateFlowLayout() -> UICollectionViewLayout {
 
         return UICollectionViewFlowLayout().then { (layout) in
             layout.scrollDirection = .vertical
@@ -122,7 +122,11 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
         if let item = self.items.value[safe: indexPath.section]?.items[safe: indexPath.row] {
 
             if item.cellSize.equalTo(.zero) {
-                return self.flowlayout?.itemSize ?? .zero
+                if let flowlayout = flowlayout as? UICollectionViewFlowLayout {
+                    return flowlayout.itemSize
+                }
+                
+                return .zero
             } else {
                 return item.cellSize
             }
@@ -216,12 +220,21 @@ extension HLCollectionView {
 
         return self
     }
+    
+    public func selectItem(_ ip: IndexPath) {
+        
+        if items.value[safe: ip.section]?.items[safe: ip.row] == nil {
+            return
+        }
+        
+        collectionView.selectItem(at: ip, animated: true, scrollPosition: .top)
+    }
 
 }
 
 extension HLCollectionView {
 
-    public func setFlowLayout(config: (() -> (UICollectionViewFlowLayout?))) -> Self {
+    public func setFlowLayout(config: (() -> (UICollectionViewLayout?))) -> Self {
         flowlayout = config()
         return self
     }
@@ -310,7 +323,7 @@ extension HLCollectionView {
                 $0.lastUpdatedTimeLabel?.isHidden = true
                 $0.stateLabel?.isHidden = false
 
-                $0.stateLabel?.textColor = config?.textColor ?? UIColor.black
+                $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
                 $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
 
     //            let images = UIImage.getLoadingImages()
@@ -327,7 +340,7 @@ extension HLCollectionView {
                 block?()
             }).then {
 
-                $0.stateLabel?.textColor = UIColor.black
+                $0.stateLabel?.textColor = config?.textColor ?? .lightGray
                 $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
                 $0.isRefreshingTitleHidden = false
                 $0.isAutomaticallyRefresh = false

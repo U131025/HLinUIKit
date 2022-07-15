@@ -67,6 +67,7 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
 
     override open var viewModel: HLViewModel? {
         didSet {
+            self.viewModel?.viewController = self
             self.setupViewModel()
             self.viewModel?.refresh()
         }
@@ -183,6 +184,18 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
                     }
                 }
             })
+    }
+    // 添加刷新
+    public func addRefresh(isFooterEnable: Bool = true) {
+        _ = listView.setRefreshHeader(block: {[weak self] in
+            self?.viewModel?.refresh(type: .reload)
+        })
+        
+        if isFooterEnable {
+            _ = listView.setLoardMoreFooter(block: { [weak self] in
+                self?.viewModel?.refresh(type: .loadMore)
+            })
+        }
     }
 }
 

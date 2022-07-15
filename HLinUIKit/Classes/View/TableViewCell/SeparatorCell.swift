@@ -10,7 +10,7 @@ import UIKit
 
 public struct HLSeparatorConfig {
 
-    public var backgroundColor: UIColor = .white
+    public var backgroundColor: UIColor = .clear
     public var color: UIColor = .lightGray
     public var offset: CGFloat = 0
     public var height: CGFloat = 1
@@ -18,6 +18,18 @@ public struct HLSeparatorConfig {
     
     public init() {
         
+    }
+    
+    public init(offset: CGFloat) {
+        self.init()
+        self.offset = offset
+    }
+    
+    public init(offset: CGFloat, color: UIColor, height: CGFloat) {
+        self.init()
+        self.offset = offset
+        self.color = color
+        self.height = height
     }
 }
 

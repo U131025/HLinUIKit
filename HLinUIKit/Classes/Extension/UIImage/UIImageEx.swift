@@ -44,4 +44,24 @@ extension UIImage {
 
         return grayImage
     }
+    
+    public func byTintColor(_ tintColor: UIColor, _ blendMode: CGBlendMode = .destinationIn) -> UIImage? {
+                
+        UIGraphicsBeginImageContextWithOptions(self.size, false, 0.0)
+        tintColor.setFill()
+
+        let bounds = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
+        UIRectFill(bounds)
+
+        self.draw(in: bounds, blendMode: blendMode, alpha: 1.0)
+
+        if blendMode != .destinationIn {
+            self.draw(in: bounds, blendMode: .destinationIn, alpha: 1.0)
+
+        }
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return tintedImage
+    }
 }

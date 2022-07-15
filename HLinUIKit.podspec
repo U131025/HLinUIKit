@@ -42,8 +42,8 @@ Pod::Spec.new do |s|
   s.dependency 'JGProgressHUD'
 
   s.dependency 'RxDataSources'
-  s.dependency 'RxSwift', '~> 6.2.0'
-  s.dependency 'RxCocoa', '~> 6.2.0'
+  s.dependency 'RxSwift'
+  s.dependency 'RxCocoa'
   s.dependency 'RxGesture'
   s.dependency 'SDCycleScrollView'
 end

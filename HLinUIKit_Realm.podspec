@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HLinUIKit_Realm'
-  s.version          = '1.0.3'
+  s.version          = '1.0.6'
   s.summary          = '基于RxSwift的界面库'
 
 # This description is used to generate tags and improve search results.
@@ -35,7 +35,7 @@ HLinUIKit Realm数据库封装
   s.requires_arc = true
 
   s.dependency 'RealmSwift'
-  s.dependency 'RxSwift', '~> 6.2.0'
-  s.dependency 'RxCocoa', '~> 6.2.0'
+  s.dependency 'RxSwift'
+  s.dependency 'RxCocoa'
 
 end

@@ -86,7 +86,11 @@ open class HLTextTableViewCell: HLTableViewCell {
             rightLabel.text = detailConfig?.text
             rightLabel.textColor = detailConfig?.textColor
             rightLabel.font = detailConfig?.font
-
+            
+            if let bgColor = titileConfig.backgroundColor {
+                backgroundColor = bgColor
+            }
+            
         } else if let config = data as? HLTextCellConfig {
             tag = config.tag
             leftLabel.text = config.text

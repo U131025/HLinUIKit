@@ -18,14 +18,22 @@ extension UIViewController {
     }
     
     public func pop(filter aClassList: [AnyClass]) {
-
+        
         if let viewcontrollers = self.navigationController?.viewControllers {
             for vc in viewcontrollers.reversed() {
+                if vc == self {
+                    continue
+                }
+                
+                var isFilter: Bool = false
                 for aClass in aClassList {
-                    if vc.isKind(of: aClass) == false {
-                        self.navigationController?.popToViewController(vc, animated: true)
-                        return
+                    if vc.isKind(of: aClass) == true {
+                        isFilter = true
                     }
+                }
+                if isFilter == false {
+                    self.navigationController?.popToViewController(vc, animated: true)
+                    return
                 }
             }
         }
@@ -78,6 +86,13 @@ extension UIViewController {
 
         viewController.modalPresentationStyle = .fullScreen        
         self.present(viewController, animated: true, completion: nil)
+    }
+    
+    public func presentWithNav(_ viewController: UIViewController, style: UIModalPresentationStyle = .pageSheet) {
+        
+        let nav = HLNavigationController(rootViewController: viewController)
+        nav.modalPresentationStyle = style
+        self.present(nav, animated: true, completion: nil)
     }
 
     public func dissmiss() {

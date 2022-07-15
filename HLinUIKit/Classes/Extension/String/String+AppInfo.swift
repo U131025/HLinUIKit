@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    
+        
     static public var appVersion: String {
         let infoDic = Bundle.main.infoDictionary
 
@@ -31,4 +31,9 @@ extension String {
 
         return infoDic?["CFBundleDisplayName"] as? String ?? ""
     }
+    
+    public var appStoreUrl: URL? {
+        let url = URL(string: "itms-apps://itunes.apple.com/cn/app/\(self)")
+        return url
+    }    
 }

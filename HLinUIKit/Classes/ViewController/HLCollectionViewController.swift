@@ -14,7 +14,7 @@ import RxCocoa
 open class HLCollectionViewController: HLViewController {
 
     lazy public var listView = HLCollectionView()
-        .setFlowLayout(config: {[weak self] () -> (UICollectionViewFlowLayout?) in
+        .setFlowLayout(config: {[weak self] () -> (UICollectionViewLayout?) in
             return self?.generateFlowLayout()
         })
         .setCollectionViewConfig(config: {[weak self] (collectionView) in
@@ -35,7 +35,7 @@ open class HLCollectionViewController: HLViewController {
         .build()
 
     /// 布局
-    open func generateFlowLayout() -> UICollectionViewFlowLayout? {
+    open func generateFlowLayout() -> UICollectionViewLayout? {
         return nil
     }
 
@@ -69,6 +69,7 @@ open class HLCollectionViewController: HLViewController {
                     })
 
                 viewModel.refresh()
+                initNoDataView()
             }
         }
     }
@@ -116,6 +117,7 @@ open class HLCollectionViewController: HLViewController {
         return self
     }
 
+    var noDataViewDis: Disposable?
     open func initNoDataView() {
 
         noDataView?.removeFromSuperview()
@@ -128,15 +130,17 @@ open class HLCollectionViewController: HLViewController {
 
         guard let viewModel = viewModel else { return }
 
-        _ = viewModel
+        noDataViewDis?.dispose()
+        noDataViewDis = viewModel
             .items
-            .take(until:self.rx.deallocated)
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[unowned self] (sections) in
 
                 if sections.count == 0 || (sections.count == 1 && sections[0].items.count == 0) {
+                    emptyView.isHidden = false
                     self.view.bringSubviewToFront(emptyView)
                 } else {
+                    emptyView.isHidden = true
                     self.view.sendSubviewToBack(emptyView)
                 }
             })

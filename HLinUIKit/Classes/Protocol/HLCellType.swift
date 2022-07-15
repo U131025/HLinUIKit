@@ -9,8 +9,6 @@
 import Foundation
 import RxDataSources
 
-
-
 public protocol HLCellType {
     // Cell的类名
     var cellClass: AnyClass { get }
@@ -25,7 +23,10 @@ public protocol HLCellType {
     // 原数据
     var content: Any? { get }
 
-    var tag: Int { get }  
+    var tag: Int { get }
+    
+    // cell 是否支持重用
+    var isReuse: Bool { get }    
 }
 
 extension HLCellType {
@@ -52,6 +53,7 @@ extension HLCellType {
 
     public var tag: Int { return 0 }
    
+    public var isReuse: Bool { return true }
 }
 
 extension String: HLCellType {

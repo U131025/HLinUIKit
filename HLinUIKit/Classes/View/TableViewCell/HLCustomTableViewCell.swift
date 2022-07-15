@@ -18,6 +18,7 @@ public class HLCustomTableViewConfig: NSObject, HLCellType {
     
     public var cellClass: AnyClass { return HLCustomTableViewCell.self }
     public var cellHeight: CGFloat { return height }
+    public var isReuse: Bool { return false }
 }
 
 open class HLCustomTableViewCell: HLTableViewCell {
@@ -26,6 +27,9 @@ open class HLCustomTableViewCell: HLTableViewCell {
     
     open override func updateData() {
         if let config = data as? HLCustomTableViewConfig {
+            if let color = config.backgroundColor {
+                backgroundColor = color
+            }
             customView?.removeFromSuperview()
             if let view = config.customView {
                 customView = view

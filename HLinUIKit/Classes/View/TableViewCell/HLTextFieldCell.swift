@@ -24,36 +24,75 @@ extension UIColor {
     }
 }
 
+extension NSAttributedString {
+    public
+    func calcHeight(for width: CGFloat) -> CGFloat {
+        guard self.string.count > 0 else { return 0 }
+        let maxHeight: CGFloat = 10000
+        let path: CGPath = CGPath(rect: .init(x: 0, y: 0, width: width, height: maxHeight), transform: nil)
+        let frame: CTFrame = ctFrame(for: path)
+        let lines: [CTLine] = CTFrameGetLines(frame) as! [CTLine]
+
+        var ascent: CGFloat = .zero
+        var descent: CGFloat = .zero
+        var leading: CGFloat = .zero
+        CTLineGetTypographicBounds(lines[lines.count - 1], &ascent, &descent, &leading)
+        
+        var origins: [CGPoint] = [CGPoint](repeating: .zero, count: lines.count)
+        CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), &origins)
+        let last: CGPoint = origins[lines.count - 1]
+
+        return ceil(maxHeight - last.y + descent) + 1
+    }
+
+    private
+    func ctFrame(for path: CGPath) -> CTFrame {
+        let cgpath: CGMutablePath = CGMutablePath()
+        let rect: CGRect = path.boundingBox
+
+        var tran: CGAffineTransform = CGAffineTransform.identity
+        tran = tran.translatedBy(x: rect.origin.x, y: rect.origin.y)
+        tran = tran.scaledBy(x: 1, y: -1)
+        tran = tran.translatedBy(x: rect.origin.x, y: -rect.height)
+        cgpath.addPath(path, transform: tran)
+        cgpath.move(to: .zero)
+        cgpath.closeSubpath()
+
+        return CTFramesetterCreateFrame(
+            CTFramesetterCreateWithAttributedString(self),
+            CFRangeMake(0, self.length),
+            CGPath(rect: rect, transform: nil),
+            nil
+        )
+    }
+}
+
 extension String {
 
     public func calculateHeight(_ font: UIFont?, _ maxWidth: CGFloat = CGFloat(MAXFLOAT)) -> CGFloat {
-
-        let lable = UILabel.init()
-        lable.font = font ?? UIFont.systemFont(ofSize: 15)
-        lable.numberOfLines = 0
-        lable.text = self
-
-        return lable.sizeThatFits(CGSize(width: maxWidth, height: CGFloat(MAXFLOAT))).height
+        
+        return calculateSize(font, maxWidth).height
     }
     
-    public func calculateSize(_ font: UIFont?) -> CGSize {
-        let lable = UILabel.init()
-        lable.font = font ?? UIFont.systemFont(ofSize: 15)
-        lable.text = self
-        lable.sizeToFit()
-        return lable.frame.size
+    public func calculateSize(_ font: UIFont?, _ maxWidth: CGFloat = CGFloat(MAXFLOAT)) -> CGSize {
+        
+        let font = font ?? .pingfang(ofSize: 15)
+        let rect = (self as NSString).boundingRect(with: CGSize(width: maxWidth, height: CGFloat(MAXFLOAT)), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+
+        return rect.size
     }
 }
 
 public class HLTextCellConfig: NSObject {
 
-    public var tag: Int = 1000
+    public var tag: Int = 0
     public var text: String?
     public var attributedText: NSAttributedString?
     public var placeholder: String?
     public var constraint: HLTextFieldConstraint = .text(maxLen: 50) // 默认支持中英特殊字符
     public var keyboardType: UIKeyboardType = .default
     public var textAlignment = NSTextAlignment.left
+    public var clearButtonModel = UITextField.ViewMode.whileEditing
 
     public var useVerificationCode: Bool = false
 
@@ -63,6 +102,7 @@ public class HLTextCellConfig: NSObject {
     public var textColor: UIColor?
     public var placeholderColor: UIColor? = .systemGray
     public var backgroundColor: UIColor?
+    public var inputBackgroundColor: UIColor? /// 输入框背景色
 
     public var font: UIFont?
     /// 缩进
@@ -74,6 +114,8 @@ public class HLTextCellConfig: NSObject {
 
     /// 最大输入限制
     public var maxInputCount = 100
+    /// 是否显示分隔线
+    public var isShowSeparatedLine: Bool = false
 
     /// 图标
     public var icon: UIImage?
@@ -82,16 +124,21 @@ public class HLTextCellConfig: NSObject {
     public var tip: String?
     /// Cell的高度
     public var height: CGFloat?
+    public var size: CGSize?
     /// 自定义Cell类型，需要继承HLTableViewCell或HLCollectionViewCell
     public var cell: AnyClass?
+    public var reuseEnable: Bool = true
 }
 
 extension HLTextCellConfig {
 
     public func calculateTextHeight(_ maxWidth: CGFloat) -> CGFloat {
+        
+        if let attrText = attributedText {
+            return attrText.calcHeight(for: maxWidth)
+        }
 
         let height = text?.calculateHeight(font, maxWidth) ?? 44
-
         return height
     }
 }
@@ -99,6 +146,8 @@ extension HLTextCellConfig {
 extension HLTextCellConfig: HLCellType {
     public var cellClass: AnyClass { return cell ?? HLTextFieldCell.self }
     public var cellHeight: CGFloat { return height ?? calculateTextHeight(kScreenW - 30) }
+    public var cellSize: CGSize { return size ?? .zero }
+    public var isReuse: Bool { return reuseEnable }
 }
 
 open class HLTextFieldCell: HLTableViewCell {
@@ -116,6 +165,7 @@ open class HLTextFieldCell: HLTableViewCell {
         textField.textColor = UIColor.white
         textField.placeholderTextColor = UIColor.systemGray
         textField.clearButtonMode = .whileEditing
+        textField.textOffset = 15
     }
 
     lazy public var verificationCodeButton = UIButton().then {
@@ -128,6 +178,13 @@ open class HLTextFieldCell: HLTableViewCell {
         $0.setTitleColor(UIColor.systemBlue, for: .normal)
         $0.setTitleColor(UIColor.gray, for: .disabled)
     }
+    
+    public typealias InputValueLimitBlock = (String) -> String
+    public var inputLimitBlock: InputValueLimitBlock?
+    public func setInputLimitBlock(_ block: InputValueLimitBlock?) -> Self {
+        self.inputLimitBlock = block
+        return self
+    }
 
     /// 提示信息
     lazy public var tipLabel = UILabel().then { (label) in
@@ -135,7 +192,7 @@ open class HLTextFieldCell: HLTableViewCell {
         label.textColor = .systemRed
         label.isHidden = true
     }
-
+    
     override open func bindConfig() {
         super.bindConfig()
 
@@ -146,35 +203,45 @@ open class HLTextFieldCell: HLTableViewCell {
         }).disposed(by: disposeBag)
 
         /// 输入格式化
-        textField.rx.text.orEmpty.subscribe(onNext: {[unowned self] (text) in
+        textField.rx.controlEvent(.editingChanged)
+            .subscribe(onNext: {[unowned self] _ in
 
-            guard let config = self.data as? HLTextCellConfig else {
-                return
-            }
+                var text = self.textField.text ?? ""
+                if let inputLimitBlock = self.inputLimitBlock {
+                    text = inputLimitBlock(text)
+                    
+                    self.textField.text = text
+                    self.textField.sendActions(for: .valueChanged)
+                    return
+                }
+                                
+                guard let config = self.data as? HLTextCellConfig else {
+                    return
+                }
 
-            if case .password = config.constraint, config.tip != nil, text.count > 0 {
-                self.tipLabel.isHidden = Validate.password(text).isRight
-            } else {
-                self.tipLabel.isHidden = true
-            }
+                if case .password = config.constraint, config.tip != nil, text.count > 0 {
+                    self.tipLabel.isHidden = Validate.password(text).isRight
+                } else {
+                    self.tipLabel.isHidden = true
+                }
 
-            /// 不自动格式化则直接返回
-            if config.autoFormat == false {
-                return
-            }
+                /// 不自动格式化则直接返回
+                if config.autoFormat == false {
+                    return
+                }
 
-            switch config.constraint {
-            case .decimal:
+                switch config.constraint {
+                case .decimal:
 
-                self.textField.text = text.formatCoinNumberString(decimalLen: 8)
-            case .money:
-                self.textField.text = text.formatPriceString()
+                    self.textField.text = text.formatCoinNumberString(decimalLen: 8)
+                case .money:
+                    self.textField.text = text.formatPriceString()
 
-            default:
-                break
-            }
+                default:
+                    break
+                }
 
-        }).disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
 
     }
 
@@ -182,23 +249,23 @@ open class HLTextFieldCell: HLTableViewCell {
         backgroundColor = .white
         contentView.layer.cornerRadius = 4
     }
+    
+    // 分割线
+    public var line: UIView?
 
     override open func layoutConfig() {
         
         contentView.snp.remakeConstraints { make in
-            make.center.equalToSuperview()
-            make.height.equalTo(50)
-            make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
-            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
+//            make.center.equalToSuperview()
+//            make.height.equalTo(50)
+//            make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
+//            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
+            make.edges.equalToSuperview()
         }
 
         contentView.addSubview(textField)
         textField.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-//            make.center.equalToSuperview()
-//            make.height.equalTo(50)
-//            make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
-//            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
         }
 
         addSubview(tipLabel)
@@ -207,6 +274,15 @@ open class HLTextFieldCell: HLTableViewCell {
             make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
             make.top.equalTo(textField.snp.bottom)
             make.bottom.equalToSuperview()
+        }
+        
+        line = textField.addBorderLine(direction: .bottom, color: .systemGray)
+        line?.isHidden = true
+    }
+    
+    public func updateConfigValue(_ value: String?) {
+        if let config = data as? HLTextCellConfig {
+            config.text = value
         }
     }
 
@@ -218,6 +294,7 @@ open class HLTextFieldCell: HLTableViewCell {
             textField.tag = config.tag
             textField.keyboardType = config.keyboardType
             textField.constraint = config.constraint
+            textField.clearButtonMode = config.clearButtonModel
 
             textField.placeholder = config.placeholder
             textField.placeholderTextColor = config.placeholderColor
@@ -253,16 +330,13 @@ open class HLTextFieldCell: HLTableViewCell {
 
             if let backgroudColor = config.backgroundColor {
                 contentView.backgroundColor = backgroudColor
-                textField.backgroundColor = backgroudColor
+            }
+            
+            if let color = config.inputBackgroundColor {
+                textField.backgroundColor = color
             }
 
-//            if config.useVerificationCode {
-//                textField.rightView = verificationCodeButton
-//                textField.rightViewMode = .always
-//            } else {
-//                textField.rightView = nil
-//                textField.rightViewMode = .never
-//            }
+            line?.isHidden = !config.isShowSeparatedLine
             
             if let icon = config.icon {
                 textField.leftView = UIImageView(image: icon)

@@ -41,15 +41,15 @@ open class HLAttrStringTextCell: HLTableViewCell {
             label.attributedText = attrStr
             label.font = UIFont.systemFont(ofSize: fontSize)
         } else if let config = data as? HLTextCellConfig {
+            tag = config.tag
+            if let color = config.textColor { label.textColor = color }
+            if let font = config.font { label.font = font }
+
             if let attributedText = config.attributedText {
                 label.attributedText = attributedText
             } else {
                 label.text = config.text
-            }
-            if let color = config.textColor { label.textColor = color }
-            if let font = config.font { label.font = font }
-
-            tag = config.tag
+            }            
             label.textAlignment = config.textAlignment
             
             if let bgColor = config.backgroundColor {
@@ -70,6 +70,10 @@ extension HLAttrStringTextCell {
         if let attrStr = data as? NSAttributedString {
             return calculateAttrStringHeight(attrStr, maxWidth, minHeight: minHeight, margin: margin)
         } else if let config = data as? HLTextCellConfig {
+            if let height = config.height {
+                return height
+            }
+            
             if let attrStr = config.attributedText {
                 return calculateAttrStringHeight(attrStr, maxWidth, minHeight: minHeight, margin: margin)
             }

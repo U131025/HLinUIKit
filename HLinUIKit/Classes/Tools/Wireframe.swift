@@ -23,6 +23,7 @@ public enum RetryResult {
 
 public let defaultHUDShowTime: TimeInterval = 2
 public typealias CompleteBlock = () -> Void
+public typealias HLErrorBlock = (String?) -> Void
 
 public protocol Wireframe {
     func open(url: URL?) -> Bool
@@ -220,7 +221,7 @@ extension DefaultWireframe {
                 return
             }
             self.juhua.indicatorView = JGProgressHUDIndeterminateIndicatorView.init()
-            self.juhua.interactionType = .blockAllTouches
+            self.juhua.interactionType = interactionType
 
             self.juhua.textLabel.text = message ?? ""
             self.juhua.show(in: window)
@@ -231,6 +232,14 @@ extension DefaultWireframe {
         DispatchQueue.main.async {
             if self.juhua.isVisible {
                 self.juhua.dismiss()
+            }
+        }
+    }
+    
+    public func dismissJuhua(afterDelay: TimeInterval) {
+        DispatchQueue.main.async {
+            if self.juhua.isVisible {
+                self.juhua.dismiss(afterDelay: afterDelay)
             }
         }
     }

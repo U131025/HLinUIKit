@@ -12,7 +12,12 @@ import Foundation
 //数据类型转换
 extension String {
     public var doubleValue: Double {
-        return Double(priceValue) ?? 0.00
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        
+        return formatter.number(from: priceValue)?.doubleValue ?? 0.00
     }
 
     public var floatValue: CGFloat {
@@ -90,12 +95,16 @@ extension String {
         }
 
         if values.count > 0 {
-
+            
+            if values.count == 1, input.count > 0 {
+                return "\(input.decimalValue)"
+            }
+            
             //整数位长度校验
             if values[0].count > maxLen {
                 return input.substring(to: maxLen - 1)
             }
-
+            
             //小数点后两位
             if values.count > 1 && decimalLen == 0 {
                 return values[0]

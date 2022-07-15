@@ -12,12 +12,28 @@ import RxCocoa
 
 open class HLHorListTableViewCell: HLCollectionsTableViewCell {
 
+    public var minimumLineSpacing: CGFloat = 15 {
+        didSet {
+            
+            if oldValue == minimumLineSpacing {
+                return
+            }
+            
+            if let flowLayout = generateFlowLayout() {
+                DispatchQueue.main.async {
+                    self.listView.collectionView.setCollectionViewLayout(flowLayout, animated: false)
+                }
+            }
+        }
+    }
+    
     /// 布局
-    override open func generateFlowLayout() -> UICollectionViewFlowLayout? {
+    override open func generateFlowLayout() -> UICollectionViewLayout? {
         return UICollectionViewFlowLayout().then { (layout) in
             layout.scrollDirection = .horizontal
             layout.minimumInteritemSpacing = 0
-            layout.minimumLineSpacing = 15
+            layout.minimumLineSpacing = minimumLineSpacing
+//            layout.sectionInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         }
     }
 
@@ -25,7 +41,7 @@ open class HLHorListTableViewCell: HLCollectionsTableViewCell {
         super.initConfig()
 
         listView.snp.remakeConstraints { (make) in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: HLTableViewCell.defaultCellMarginValue, bottom: 0, right: HLTableViewCell.defaultCellMarginValue))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
         }
     }
 }

@@ -10,17 +10,19 @@ import UIKit
 public class HLButtonCellConfig: NSObject {
     public var title: String?
     public var titleColor: UIColor = .white
+    public var alignment: NSTextAlignment = .center
     public var backgroundColor: UIColor?
     public var backgroundImage: UIImage?
-    public var cornerRate: CGFloat?
+    public var cornerRate: CGFloat? = 4
     public var icon: UIImage?
     public var iconLayoutType: UPButtonEdgeInsetsStyle = .left
+    public var isEnable: Bool = true
     
     public var font: UIFont = .pingfang(ofSize: 15)
     public var borderColor: UIColor = .clear
     public var tag: Int = 0
     
-    public var height: CGFloat = 45
+    public var height: CGFloat = 44
     public var width: CGFloat?
 //    public init() {
 //    }
@@ -37,7 +39,7 @@ extension HLButtonCellConfig: HLCellType {
 }
 
 open class ButtonStyleTableViewCell: HLTableViewCell {
-    
+    public var customView: UIView?
     public var marginValue: CGFloat = 30 {
         didSet {
             commitButton.snp.remakeConstraints { (make) in
@@ -77,6 +79,8 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             if let color = config.backgroundColor {
                 _ = commitButton.setBackgroundImage(color.image, .normal)
             }
+            
+            commitButton.isEnabled = config.isEnable
 
             _ = commitButton
                 .setTitle(config.title)
@@ -86,7 +90,17 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             let width = config.width ?? kScreenW - HLTableViewCell.defaultCellMarginValue*2
             if let width = config.width {
                 commitButton.snp.remakeConstraints { (make) in
-                    make.center.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                    
+                    switch config.alignment {
+                    case .left:
+                        make.left.equalToSuperview().offset(marginValue)
+                    case .right:
+                        make.right.equalToSuperview().offset(-marginValue)
+                    default:
+                        make.centerX.equalToSuperview()
+                    }
+                    
                     make.width.equalTo(width)
                     make.height.equalToSuperview()
                 }

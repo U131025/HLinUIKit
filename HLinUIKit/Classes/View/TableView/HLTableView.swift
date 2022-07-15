@@ -106,7 +106,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
             $0.lastUpdatedTimeLabel?.isHidden = true
             $0.stateLabel?.isHidden = false
 
-            $0.stateLabel?.textColor = config?.textColor ?? UIColor.black
+            $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
             $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
 
 //            let images = UIImage.getLoadingImages()
@@ -123,7 +123,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
             block?()
         }).then {
 
-            $0.stateLabel?.textColor = config?.textColor ?? .black
+            $0.stateLabel?.textColor = config?.textColor ?? .lightGray
             $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
             $0.isRefreshingTitleHidden = false
             $0.isAutomaticallyRefresh = false
@@ -413,6 +413,10 @@ extension HLTableView {
         }
         
         return self
+    }
+    
+    public func getItem(with ip: IndexPath) -> HLCellType? {
+        return items.value[safe: ip.section]?.items[safe: ip.row]
     }
 
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {

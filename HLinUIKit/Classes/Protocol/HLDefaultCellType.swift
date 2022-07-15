@@ -45,13 +45,13 @@ extension HLTableViewCellType: HLCellType {
         switch self {
         case .list(let datas):
             return HLListTableViewCell.calculateCellHeight(datas)
-        case .text:
-            return 57
+        case .text(let config, _):
+            return config?.height ?? 57
         case .textFiled:
             return 56
         case .separator(_, let height):
             return height
-        case .attrText(let text):
+        case .attrText(let text):            
             return HLAttrStringTextCell.calculateCellHeight(text, kScreenW - HLTableViewCell.defaultCellMarginValue*2)
         case .line(let config):
             return config.height
