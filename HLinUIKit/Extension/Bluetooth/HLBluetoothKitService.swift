@@ -146,7 +146,7 @@ public class HLBluetoothKitService {
             .observeState()
             .startWith(centralManager.state)
             .filter { $0 == .poweredOn }
-            .subscribeOn(MainScheduler.instance)
+            .subscribe(on: MainScheduler.instance)
             .flatMap({ [weak self] _ -> Observable<ScannedPeripheral> in
                 guard let `self` = self else {
                     return Observable.empty()
@@ -294,7 +294,7 @@ public class HLBluetoothKitService {
     public func readValueFrom(_ characteristic: Characteristic) {
         characteristic.readValue().subscribe(onSuccess: { [unowned self] characteristic in
             self.readValueSubject.onNext(HLBluetoothResult.success(characteristic))
-        }, onError: { [unowned self] error in
+        }, onFailure: { [unowned self] error in
             self.readValueSubject.onNext(HLBluetoothResult.error(error))
         }).disposed(by: disposeBag)
     }
@@ -308,8 +308,8 @@ public class HLBluetoothKitService {
             .writeValue(data, type: writeType)
             .subscribe(onSuccess: { [unowned self] characteristic in
                 self.writeValueSubject.onNext(HLBluetoothResult.success(characteristic))
-
-                }, onError: { [unowned self] error in
+                
+            }, onFailure: { [unowned self] error in
                     self.writeValueSubject.onNext(HLBluetoothResult.error(error))
 
             }).disposed(by: disposeBag)

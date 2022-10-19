@@ -23,6 +23,7 @@ public enum RetryResult {
 
 public let defaultHUDShowTime: TimeInterval = 2
 public typealias CompleteBlock = () -> Void
+public typealias HLResultBlock = (Bool) -> Void
 public typealias HLErrorBlock = (String?) -> Void
 
 public protocol Wireframe {

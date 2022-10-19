@@ -13,12 +13,25 @@ open class HLTabBarController: UITabBarController, UITabBarControllerDelegate {
     public static var foregroundColor: UIColor? = nil
     public static var foregroundColorSelected: UIColor? = nil
     
+    public var curForegroundColor: UIColor? = nil
+    public var curForegroundColorSelected: UIColor? = nil
+    
     public typealias TabBarShouldSelectBlock = (UITabBarItem?) -> Bool
      
     public var shouldSelectBlock: TabBarShouldSelectBlock?
     public func setShouldSelectBlock(_ block: TabBarShouldSelectBlock?) -> Self {
         self.shouldSelectBlock = block
         return self
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.updateForegroundColor()
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.recoverForegroundColor()
     }
       
     open override func viewDidLoad() {
@@ -31,15 +44,32 @@ open class HLTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         delegate = self
         
+        self.selectedIndex = 0
+    }
+    
+    func updateForegroundColor() {
+        
+        if let color = curForegroundColor ?? HLTabBarController.foregroundColor {
+            updateForegroundColor(color: color, for: .normal)
+        }
+        
+        if let color = curForegroundColorSelected ?? HLTabBarController.foregroundColorSelected {
+            updateForegroundColor(color: color, for: .selected)
+        }
+    }
+    
+    func recoverForegroundColor() {
         if let color = HLTabBarController.foregroundColor {
-            UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: .normal)
+            updateForegroundColor(color: color, for: .normal)
         }
         
         if let color = HLTabBarController.foregroundColorSelected {
-            UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: .selected)
+            updateForegroundColor(color: color, for: .selected)
         }
-     
-        self.selectedIndex = 0
+    }
+    
+    func updateForegroundColor(color: UIColor, for state: UIControl.State) {
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: state)
     }
     
     public func clearShadow() -> Self {
@@ -50,7 +80,14 @@ open class HLTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     public func setTitleColor(color: UIColor, for state: UIControl.State) -> Self {
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: state)
+        
+        if state == .normal {
+            curForegroundColor = color
+        } else if state == .selected {
+            curForegroundColorSelected = color
+        }
+        
+        updateForegroundColor(color: color, for: state)
         return self
     }
 

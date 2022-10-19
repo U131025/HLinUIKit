@@ -125,6 +125,14 @@ open class HLViewModel {
         }
     }
     
+    public func endRefreshing() {
+        if let vc = viewController as? HLTableViewController {
+            
+            vc.listView.mj_header?.endRefreshing()
+            vc.listView.mj_footer?.endRefreshing()
+        }
+    }
+    
     public lazy var isLoadFinish: Bool = false {
         didSet {
             DispatchQueue.main.async {

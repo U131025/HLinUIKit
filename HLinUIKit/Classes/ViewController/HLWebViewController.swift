@@ -149,6 +149,12 @@ extension HLWebViewController: WKNavigationDelegate {
     }
     
     open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
+        #if DEBUG
+        if let urlString = navigationAction.request.url?.absoluteString {
+            print("🥳 === \(urlString)")
+        }
+        #endif
 
 //        if navigationAction.targetFrame == nil || navigationAction.targetFrame?.isMainFrame != true {
 //            if let strRequest = navigationAction.request.url?.absoluteString.removingPercentEncoding, strRequest.contains("about:blank") == false {

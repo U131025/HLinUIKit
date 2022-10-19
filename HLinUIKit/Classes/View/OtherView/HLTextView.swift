@@ -13,8 +13,8 @@ import RxSwift
 import RxCocoa
 
 public class HLTextView: UITextView {
-
-    open var expression = "[<>\"”“/]"
+//    open var expression = "[<>\"”“/]"
+    open var expression = ""
     open var maxTextCount: Int = 0  /// 备注内容的最大值
 
     private var disposeBag = DisposeBag()

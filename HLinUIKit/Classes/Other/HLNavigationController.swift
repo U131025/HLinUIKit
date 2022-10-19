@@ -105,7 +105,7 @@ extension UIViewController {
     }
 }
 
-@objc(CustomNavigationController)
+@objc(HLNavigationController)
 open class HLNavigationController: UINavigationController {
 
     @IBInspectable public var backImage: UIImage?
@@ -116,7 +116,7 @@ open class HLNavigationController: UINavigationController {
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // 手势代理
         self.interactivePopGestureRecognizer?.delegate = self
 

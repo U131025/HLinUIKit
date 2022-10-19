@@ -24,6 +24,8 @@ public class HLButtonCellConfig: NSObject {
     
     public var height: CGFloat = 44
     public var width: CGFloat?
+    public var marginValue: CGFloat?
+    
 //    public init() {
 //    }
 }
@@ -120,6 +122,10 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             if let corner = config.cornerRate {
                 commitButton.layer.cornerRadius = corner
                 commitButton.layer.masksToBounds = true
+            }
+            
+            if let margin = config.marginValue {
+                self.marginValue = margin
             }
 
             commitButton.layer.borderColor = config.borderColor.cgColor

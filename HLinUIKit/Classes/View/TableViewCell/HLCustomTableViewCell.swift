@@ -25,16 +25,22 @@ open class HLCustomTableViewCell: HLTableViewCell {
     
     public var customView: UIView?
     
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        if let customView = customView {
+            customView.removeFromSuperview()
+        }
+    }
+    
     open override func updateData() {
         if let config = data as? HLCustomTableViewConfig {
             if let color = config.backgroundColor {
                 backgroundColor = color
             }
-            customView?.removeFromSuperview()
             if let view = config.customView {
                 customView = view
                 contentView.addSubview(view)
-                view.snp.makeConstraints { make in
+                view.snp.remakeConstraints { make in
                     if let size = config.viewSize {
                         make.width.equalTo(size.width)
                         make.height.equalTo(size.height)

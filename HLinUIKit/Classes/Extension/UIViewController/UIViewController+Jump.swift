@@ -96,11 +96,13 @@ extension UIViewController {
     }
 
     public func dissmiss() {
-        if isPresentMode {
-            self.dismiss(animated: true, completion: nil)
-        } else {
-            self.pop()
-        }        
+        DispatchQueue.main.async {
+            if self.isPresentMode {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                self.pop()
+            }
+        }                
     }
     
     public var isPresentMode: Bool {        

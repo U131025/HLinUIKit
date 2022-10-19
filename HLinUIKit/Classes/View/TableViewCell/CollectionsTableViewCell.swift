@@ -27,6 +27,9 @@ open class HLCollectionsTableViewCell: HLTableViewCell {
             self?.itemSelected(type)
             self?.cellEvent.onNext((tag: 0, value: type))
         })
+        .selectedIndexPathAction(action: {[weak self] ip in
+            self?.selectedIndexPathAction(ip)
+        })
         .build()
     
     public var cellConfigBlock: HLCollectionCellConfigBlock?
@@ -38,7 +41,12 @@ open class HLCollectionsTableViewCell: HLTableViewCell {
     open func itemSelected(_ type: HLCellType) {
         self.itemSelectedSubject.onNext(type)
     }
-
+    
+    public let selectedIndexSubject = PublishSubject<IndexPath>()
+    open func selectedIndexPathAction(_ ip: IndexPath) {
+        self.selectedIndexSubject.onNext(ip)
+    }
+    
     /// 布局
     open func generateFlowLayout() -> UICollectionViewLayout? {
         return UICollectionViewFlowLayout().then { (layout) in
@@ -66,8 +74,11 @@ open class HLCollectionsTableViewCell: HLTableViewCell {
 
     override open func updateData() {
 
-        if let datas = data as? [HLCellType] {
-            _ = listView.setItems(datas)
+        if let datas = self.data as? [HLCellType] {
+            _ = self.listView.setItems(datas)
+        } else if let (datas, tag) = self.data as? ([HLCellType], Int) {
+            self.tag = tag
+            _ = self.listView.setItems(datas)
         }
     }
 }

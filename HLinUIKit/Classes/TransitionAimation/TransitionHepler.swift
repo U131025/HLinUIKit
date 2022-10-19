@@ -25,7 +25,7 @@ public class TransitionHelper: NSObject, UIViewControllerAnimatedTransitioning, 
 
     // 转场持续时间
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.5
+        return 0.25
     }
 
     // 过场动画实现

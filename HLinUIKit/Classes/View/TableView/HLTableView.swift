@@ -33,7 +33,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
 
     var hlStyle: HLTableViewStyle = .normal
     var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
-    var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
+    public var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
 
     var itemSelectedBlock: HLItemSelectedBlock?
     var itemSelectedIndexPathBlock: HLItemSelectedIndexPathBlock?
@@ -427,18 +427,17 @@ extension HLTableView {
         
         return self
     }
-
+    // MARK: 左滑事件
     public func setEditingStye(_ block: HLTableViewEditingStyleConfigBlock?) -> Self {
         editingStyeBlock = block
         return self
     }
-    
     public func setEditingActions(_ block: HLTableViewEditingActionsConfigBlock?) -> Self {
         editingActionsBlock = block
         return self
     }
     
-    /// 获取选中的Items
+    // MARK: 获取选中的Items
     public func getSelectedRows() -> [HLCellType] {
         
         guard let array = indexPathsForSelectedRows else {
@@ -453,5 +452,16 @@ extension HLTableView {
         }
         
         return selItems
+    }
+    
+    public func setSelectedIndexPath(indexPath: IndexPath, isSelected: Bool = true) {
+        
+        DispatchQueue.main.async {
+            if isSelected {
+                self.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            } else {
+                self.deselectRow(at: indexPath, animated: false)
+            }
+        }
     }
 }

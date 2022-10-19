@@ -128,6 +128,8 @@ public class HLTextCellConfig: NSObject {
     /// 自定义Cell类型，需要继承HLTableViewCell或HLCollectionViewCell
     public var cell: AnyClass?
     public var reuseEnable: Bool = true
+    
+    public var data: Any?
 }
 
 extension HLTextCellConfig {
@@ -246,8 +248,8 @@ open class HLTextFieldCell: HLTableViewCell {
     }
 
     override open func initConfig() {
-        backgroundColor = .white
-        contentView.layer.cornerRadius = 4
+        contentView.backgroundColor = .white
+//        contentView.layer.cornerRadius = 4
     }
     
     // 分割线

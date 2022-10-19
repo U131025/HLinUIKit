@@ -15,6 +15,7 @@ public enum HLTableViewCellType {
 
     case list(Any?)
     case horizontalList(Any?, CGFloat)
+    case horizontalListWithTag(datas: Any?, height: CGFloat, tag: Int)
     case separator(UIColor, CGFloat)
     case line(HLSeparatorConfig)
     case collections(Any?, CGFloat)
@@ -26,7 +27,7 @@ extension HLTableViewCellType: HLCellType {
         switch self {
         case .list:
             return HLListTableViewCell.self
-        case .horizontalList:
+        case .horizontalList, .horizontalListWithTag:
             return HLHorListTableViewCell.self
         case .text:
             return HLTextTableViewCell.self
@@ -52,10 +53,12 @@ extension HLTableViewCellType: HLCellType {
         case .separator(_, let height):
             return height
         case .attrText(let text):            
-            return HLAttrStringTextCell.calculateCellHeight(text, kScreenW - HLTableViewCell.defaultCellMarginValue*2)
+            return HLAttrStringTextCell.calculateCellHeight(text, kScreenW - HLTableViewCell.defaultCellMarginValue*2, margin: 40)
         case .line(let config):
             return config.height
         case .horizontalList(_, let height):
+            return height
+        case .horizontalListWithTag(datas: _, height: let height, tag: _):
             return height
         case .collections(_, let height):
             return height
@@ -68,6 +71,8 @@ extension HLTableViewCellType: HLCellType {
             return datas
         case .horizontalList(let datas, _):
             return datas
+        case .horizontalListWithTag(datas: let datas, height: _, tag: let tag):
+            return (datas, tag)
         case let .text(title, detail):
             return (title, detail)
         case .textFiled(let config):

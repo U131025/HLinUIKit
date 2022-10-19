@@ -10,6 +10,7 @@ import UIKit
 import RxDataSources
 import RxSwift
 import RxCocoa
+import MJRefresh
 
 open class HLCollectionViewController: HLViewController {
 
@@ -152,5 +153,64 @@ extension HLCollectionViewController {
     public func setItems(_ datas: [HLCellType]) -> Self {
         _ = listView.setItems(datas)
         return self
+    }
+    
+    // 添加刷新
+    public func addRefresh(isFooterEnable: Bool = true) {
+        _ = listView.collectionView.mj_header = refreshHeader(block: {[weak self] in
+            self?.viewModel?.refresh(type: .reload)
+        })
+        
+        if isFooterEnable {
+            _ = listView.collectionView.mj_footer = loadMoreFooter(block: {[weak self] in
+                self?.viewModel?.refresh(type: .loadMore)
+            })
+        }
+    }
+    
+    func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
+
+        let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
+
+            if (self?.listView.collectionView.mj_footer) != nil {
+                self?.listView.collectionView.mj_footer?.resetNoMoreData()
+            }
+
+            self?.listView.collectionView.mj_footer?.resetNoMoreData()
+            block?()
+
+        }).then {
+
+            $0.lastUpdatedTimeLabel?.isHidden = true
+            $0.stateLabel?.isHidden = false
+
+            $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+
+//            let images = UIImage.getLoadingImages()
+//            $0.setImages(images, duration: 1, for: .refreshing)
+//            $0.setImages(images, duration: 1, for: .pulling)
+        }
+
+        return header
+    }
+
+    func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
+
+        return MJRefreshAutoNormalFooter.init(refreshingBlock: {
+            block?()
+        }).then {
+
+            $0.stateLabel?.textColor = config?.textColor ?? .lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+            $0.isRefreshingTitleHidden = false
+            $0.isAutomaticallyRefresh = false
+
+//            $0.setTitle(LocalizedString(""), for: .idle)
+//            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
+//            $0.setTitle(LocalizedString("正在加载更多数据"), for: .refreshing)
+//            $0.setTitle(LocalizedString("暂无更多数据"), for: .noMoreData)
+
+        }
     }
 }

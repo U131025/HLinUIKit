@@ -211,6 +211,10 @@ extension HLCollectionView {
         })
         return self
     }
+    
+    public func getItem(with ip: IndexPath) -> HLCellType? {
+        return items.value[safe: ip.section]?.items[safe: ip.row]
+    }
 
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {
 
@@ -223,11 +227,12 @@ extension HLCollectionView {
     
     public func selectItem(_ ip: IndexPath) {
         
-        if items.value[safe: ip.section]?.items[safe: ip.row] == nil {
-            return
+        DispatchQueue.main.async {
+            if self.items.value[safe: ip.section]?.items[safe: ip.row] == nil {
+                return
+            }            
+            self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .top)
         }
-        
-        collectionView.selectItem(at: ip, animated: true, scrollPosition: .top)
     }
 
 }
@@ -309,48 +314,47 @@ extension HLCollectionView {
 
     func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
 
-            let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
+        let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
 
-                if (self?.collectionView.mj_footer) != nil {
-                    self?.collectionView.mj_footer?.resetNoMoreData()
-                }
-
+            if (self?.collectionView.mj_footer) != nil {
                 self?.collectionView.mj_footer?.resetNoMoreData()
-                block?()
-
-            }).then {
-
-                $0.lastUpdatedTimeLabel?.isHidden = true
-                $0.stateLabel?.isHidden = false
-
-                $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
-                $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
-
-    //            let images = UIImage.getLoadingImages()
-    //            $0.setImages(images, duration: 1, for: .refreshing)
-    //            $0.setImages(images, duration: 1, for: .pulling)
             }
 
-            return header
+            self?.collectionView.mj_footer?.resetNoMoreData()
+            block?()
+
+        }).then {
+
+            $0.lastUpdatedTimeLabel?.isHidden = true
+            $0.stateLabel?.isHidden = false
+
+            $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+
+//            let images = UIImage.getLoadingImages()
+//            $0.setImages(images, duration: 1, for: .refreshing)
+//            $0.setImages(images, duration: 1, for: .pulling)
         }
 
-        func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
+        return header
+    }
 
-            return MJRefreshAutoNormalFooter.init(refreshingBlock: {
-                block?()
-            }).then {
+    func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
 
-                $0.stateLabel?.textColor = config?.textColor ?? .lightGray
-                $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
-                $0.isRefreshingTitleHidden = false
-                $0.isAutomaticallyRefresh = false
+        return MJRefreshAutoNormalFooter.init(refreshingBlock: {
+            block?()
+        }).then {
 
-    //            $0.setTitle(LocalizedString(""), for: .idle)
-    //            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
-    //            $0.setTitle(LocalizedString("正在加载更多数据"), for: .refreshing)
-    //            $0.setTitle(LocalizedString("暂无更多数据"), for: .noMoreData)
+            $0.stateLabel?.textColor = config?.textColor ?? .lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+            $0.isRefreshingTitleHidden = false
+            $0.isAutomaticallyRefresh = false
 
-            }
+//            $0.setTitle(LocalizedString(""), for: .idle)
+//            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
+//            $0.setTitle(LocalizedString("正在加载更多数据"), for: .refreshing)
+//            $0.setTitle(LocalizedString("暂无更多数据"), for: .noMoreData)
+
         }
-
+    }
 }
