@@ -54,8 +54,7 @@ public class HLTextView: UITextView {
 
     func bindConfig() {
         disposeBag = DisposeBag()
-
-        self.delegate = self
+//        self.delegate = self
     }
 }
 

@@ -112,7 +112,7 @@ open class HLNavigationController: UINavigationController {
     static public var backArrowImage: UIImage?
 
     // 是否支持侧滑手势
-    fileprivate var isEnableEdegePan = true
+    fileprivate var isEnableEdegePan = false
 
     override open func viewDidLoad() {
         super.viewDidLoad()

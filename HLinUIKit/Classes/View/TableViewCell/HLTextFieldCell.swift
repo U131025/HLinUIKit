@@ -103,6 +103,7 @@ public class HLTextCellConfig: NSObject {
     public var placeholderColor: UIColor? = .systemGray
     public var backgroundColor: UIColor?
     public var inputBackgroundColor: UIColor? /// 输入框背景色
+    public var cornerRadius: CGFloat?
 
     public var font: UIFont?
     /// 缩进

@@ -19,6 +19,13 @@ public class HLCustomTableViewConfig: NSObject, HLCellType {
     public var cellClass: AnyClass { return HLCustomTableViewCell.self }
     public var cellHeight: CGFloat { return height }
     public var isReuse: Bool { return false }
+    
+    public func setViewSize(size: CGSize, isSyncHeight: Bool = true) {
+        viewSize = size
+        if isSyncHeight {
+            height = size.height
+        }
+    }
 }
 
 open class HLCustomTableViewCell: HLTableViewCell {

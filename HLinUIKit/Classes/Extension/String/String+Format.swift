@@ -40,6 +40,12 @@ extension String {
 
 //格式化
 extension String {
+    
+    // 过滤Emoji表情
+    public var disableEmojis: String {
+        let result = unicodeScalars.filter{ !$0.properties.isEmojiPresentation }
+        return String(result)
+    }
 
     //使用正则表达式替换
 //    常用的一些正则表达式：

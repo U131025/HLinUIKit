@@ -98,7 +98,10 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
 //                         mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 //                         textEncodingName: "UTF-8",
 //                         baseURL: URL(fileURLWithPath: filePath))
-            webView.load(fileData, mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", characterEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: filePath))
+            DispatchQueue.main.async {
+                self.webView.load(fileData, mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", characterEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: filePath))
+            }
+            
         } catch {
         }
 
@@ -107,11 +110,10 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
 
     open func loadRequest(url: URL) -> Self {
         
+        let request = URLRequest(url: url)
         DispatchQueue.main.async {
-            let request = URLRequest(url: url)
             self.webView.load(request)
         }
-        
         return self
     }
 
@@ -124,10 +126,11 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
     
     func getTitle() {
         if autoGetWebViewTitle == false { return }
-        
-        webView.evaluateJavaScript("document.title") { (result, error) -> Void in
+        self.webView.evaluateJavaScript("document.title") { (result, error) -> Void in
             if error == nil, let string = result as? String {
-                self.title = string
+                DispatchQueue.main.async {
+                    self.title = string
+                }
             }
         }
     }

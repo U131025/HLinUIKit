@@ -139,7 +139,6 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
         preloadBlock?(indexPath)
     }
     
-    
     // MARK: UICollectionViewDelegate
 //    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 //        return headerHeightInSectionBlock?(section) ?? CGSize(width: kScreenW, height: 0.001)

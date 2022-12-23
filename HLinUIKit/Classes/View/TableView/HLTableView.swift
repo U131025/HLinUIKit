@@ -32,7 +32,7 @@ public typealias HLPreloadConfigBlock = (IndexPath) -> Void
 open class HLTableView: UITableView, UITableViewDelegate {
 
     var hlStyle: HLTableViewStyle = .normal
-    var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
+    public var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
     public var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
 
     var itemSelectedBlock: HLItemSelectedBlock?
