@@ -208,6 +208,10 @@ extension DefaultWireframe {
             juhua.dismiss(afterDelay: hideAfter)
         }
     }
+    
+    public var isVisible: Bool {
+        return self.juhua.isVisible
+    }
 
     public func showWaitingJuhua(message: String? = nil, in view: UIView? = nil, interactionType: JGProgressHUDInteractionType = .blockAllTouches) {
 

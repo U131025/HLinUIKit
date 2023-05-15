@@ -12,6 +12,24 @@ import RxSwift
 import RxCocoa
 import MJRefresh
 
+public extension UICollectionView {
+    func isValid(indexPath: IndexPath) -> Bool {
+        if indexPath.section >= numberOfSections {
+          return false
+        }
+        if indexPath.row >= numberOfItems(inSection: indexPath.section) {
+          return false
+        }
+        return true
+    }
+}
+
+public extension HLCollectionView {
+    func isValid(indexPath: IndexPath) -> Bool {
+        return collectionView.isValid(indexPath: indexPath)
+    }
+}
+
 open class HLCollectionViewController: HLViewController {
 
     lazy public var listView = HLCollectionView()
@@ -34,6 +52,10 @@ open class HLCollectionViewController: HLViewController {
             self?.itemDeselected(indexPath)
         })
         .build()
+    
+    func isValid(indexPath: IndexPath) -> Bool {
+        return listView.collectionView.isValid(indexPath: indexPath)
+    }
 
     /// 布局
     open func generateFlowLayout() -> UICollectionViewLayout? {

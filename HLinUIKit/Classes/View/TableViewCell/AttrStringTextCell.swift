@@ -53,7 +53,7 @@ open class HLAttrStringTextCell: HLTableViewCell {
             label.textAlignment = config.textAlignment
             
             if let bgColor = config.backgroundColor {
-                backgroundColor = bgColor
+                contentView.backgroundColor = bgColor
             }            
             
         } else if let text = data as? String {

@@ -32,4 +32,13 @@ extension UIView {
 
         self.layer.mask = maskLayer
     }
+    
+    public func createRoundCorner(frame: CGRect, type: UIRectCorner, cornerRadii: CGSize = CGSize(width: 5, height: 5)) {
+
+        layoutIfNeeded()
+
+        let maskLayer = CAShapeLayer.createRoundCorner(frame: frame, cornerRadii: cornerRadii, type: type)
+
+        self.layer.mask = maskLayer
+    }
 }
