@@ -10,6 +10,9 @@ import UIKit
 public class HLButtonCellConfig: NSObject {
     public var title: String?
     public var titleColor: UIColor = .white
+    public var title_disable: String?
+    public var titleColor_disable: UIColor?
+    
     public var alignment: NSTextAlignment = .center
     public var backgroundColor: UIColor?
     public var backgroundImage: UIImage?
@@ -42,7 +45,7 @@ extension HLButtonCellConfig: HLCellType {
 
 open class ButtonStyleTableViewCell: HLTableViewCell {
     public var customView: UIView?
-    public var marginValue: CGFloat = 30 {
+    public var marginValue: CGFloat = 16 {
         didSet {
             commitButton.snp.remakeConstraints { (make) in
                 make.center.equalToSuperview()
@@ -87,6 +90,7 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             _ = commitButton
                 .setTitle(config.title)
                 .setTitleColor(config.titleColor)
+                .setTitle(config.title_disable, .disabled)
                 .setFont(config.font)
             
             let width = config.width ?? kScreenW - HLTableViewCell.defaultCellMarginValue*2

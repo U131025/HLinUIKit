@@ -69,6 +69,7 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
         didSet {
             self.viewModel?.viewController = self
             self.setupViewModel()
+            self.initNoDataView()
             self.viewModel?.refresh()
         }
     }

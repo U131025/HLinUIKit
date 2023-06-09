@@ -138,12 +138,14 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
     // 弹窗
     public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         
-        let alert = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
-        let action = UIAlertAction.init(title: "关闭", style: .default, handler: {_ in
-            completionHandler()
-        })
-        alert.addAction(action)
-        self.present(alert, animated: true, style: .pageSheet)
+        DispatchQueue.main.async {
+            let alert = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
+            let action = UIAlertAction.init(title: "关闭", style: .default, handler: {_ in
+                completionHandler()
+            })
+            alert.addAction(action)
+            self.present(alert, animated: true, style: .pageSheet)
+        }
     }
 }
 

@@ -325,7 +325,7 @@ public class HLBluetoothKitService {
         } else {
             let disposable = characteristic.observeValueUpdateAndSetNotification()
             .subscribe(onNext: { [weak self] (characteristic) in
-                print("\n===== 🚖 ble respond data: \(String(describing: characteristic.value))")
+//                print("\n===== 🚖 ble respond data: \(String(describing: characteristic.value))")
                 self?.updatedValueAndNotificationSubject.onNext(HLBluetoothResult.success(characteristic))
             }, onError: { [weak self] (error) in
                 self?.updatedValueAndNotificationSubject.onNext(HLBluetoothResult.error(error))

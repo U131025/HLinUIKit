@@ -158,7 +158,13 @@ open class HLViewModel {
 
     //cell内部控件绑定扩展
     open func cellConfig(_ cell: HLTableViewCell, _ indexPath: IndexPath) {
-      
+        if let cell = cell as? HLListTableViewCell {
+            _ = cell.listView.selectedAction {[weak self] type in
+                self?.itemSelected(type)
+            }.setCellConfig { c, ip in
+                self.cellConfig(c, ip)
+            }
+        }
     }
     
     /// cell内部控件绑定扩展

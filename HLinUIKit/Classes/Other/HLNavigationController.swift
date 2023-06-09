@@ -156,6 +156,9 @@ open class HLNavigationController: UINavigationController {
                 let leftButton = UIButton(type: .custom)
                 leftButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
                 leftButton.imageView?.contentMode = .scaleAspectFit
+//                leftButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
+//                leftButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+                
                 leftButton.setImage(image, for: .normal)
                 leftButton.addTarget(self, action: #selector(backAtion), for: .touchUpInside)
 
