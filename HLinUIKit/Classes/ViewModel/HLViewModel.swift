@@ -102,6 +102,7 @@ open class HLViewModel {
 //    }
 
     /// 刷新
+    public let refreshEvent = PublishSubject<HLRefreshType>()
     open func refresh() {
         
         refresh(type: .reload)
@@ -110,6 +111,11 @@ open class HLViewModel {
 
     open func refresh(type: HLRefreshType) {
         self.refreshType = type
+        self.refreshEvent.onNext(type)
+    }
+    // 新增防抖
+    open func refreshAction(type: HLRefreshType) {
+        
     }
     
     public func endEditing(_ force: Bool = true) {
@@ -154,6 +160,12 @@ open class HLViewModel {
     /// 绑定处理
     open func bindConfig() {
         disposeBag = DisposeBag()
+        
+        refreshEvent
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .subscribe(onNext: {[weak self] type in
+                self?.refreshAction(type: type)
+            }).disposed(by: disposeBag)
     }
 
     //cell内部控件绑定扩展
@@ -161,9 +173,11 @@ open class HLViewModel {
         if let cell = cell as? HLListTableViewCell {
             _ = cell.listView.selectedAction {[weak self] type in
                 self?.itemSelected(type)
-            }.setCellConfig { c, ip in
-                self.cellConfig(c, ip)
             }
+            
+            cell.listView.cellConfigSubject.subscribe(onNext: {[weak self] c, ip in
+                self?.cellConfig(c, ip)
+            }).disposed(by: cell.disposeBag)
         }
     }
     

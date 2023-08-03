@@ -57,6 +57,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
     
     public var disposeBag = DisposeBag()
     
+    public let cellConfigSubject = PublishSubject<(HLTableViewCell, IndexPath)>()
+    
     public override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         initConfig()
@@ -80,7 +82,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
 
         return HLTableViewDataSource.generateDataSource(style: .normal, eventBlock: {[unowned self] (cell, indexPath) in
 
-            self.cellConfigBlock?(cell, indexPath)
+            self.cellConfig(cell: cell, indexPath: indexPath)
 
             // cell内部事件
             cell.cellEvent
@@ -89,6 +91,11 @@ open class HLTableView: UITableView, UITableViewDelegate {
                 }).disposed(by: cell.disposeBag)
         })
     }()
+    
+    open func cellConfig(cell: HLTableViewCell, indexPath: IndexPath) {
+        self.cellConfigBlock?(cell, indexPath)
+        self.cellConfigSubject.onNext((cell, indexPath))
+    }
 
     func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
 

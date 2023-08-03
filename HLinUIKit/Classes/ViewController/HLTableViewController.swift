@@ -22,26 +22,26 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
 
     lazy public var listView = HLTableView()
         .setStyle(self.style)
-        .setTableViewConfig(config: {(tableView) in
-            self.setTableViewConfig(tableView)
+        .setTableViewConfig(config: {[weak self](tableView) in
+            self?.setTableViewConfig(tableView)
         })
-        .setCellConfig(config: {(cell, indexPath) in
-            self.cellConfig(cell, indexPath)
+        .setCellConfig(config: {[weak self](cell, indexPath) in
+            self?.cellConfig(cell, indexPath)
         })
-        .selectedAction(action: {(type) in
-            self.itemSelected(type)
+        .selectedAction(action: {[weak self](type) in
+            self?.itemSelected(type)
         })
-        .selectedIndexPathAction(action: {(indexPath) in
-            self.itemSelected(indexPath: indexPath)
+        .selectedIndexPathAction(action: {[weak self](indexPath) in
+            self?.itemSelected(indexPath: indexPath)
         })
-        .setCalculateCellHeight({ (ip) -> CGFloat? in
-            return self.calculateCellHeight(ip)
+        .setCalculateCellHeight({[weak self] (ip) -> CGFloat? in
+            return self?.calculateCellHeight(ip)
         })
-        .deselectedAction(action: {[unowned self] (type) in
-            self.itemDeselected(type)
+        .deselectedAction(action: {[weak self] (type) in
+            self?.itemDeselected(type)
         })
-        .deselectedIndexPathAction(action: {[unowned self] (indexPath) in
-            self.itemDeselected(indexPath: indexPath)
+        .deselectedIndexPathAction(action: {[weak self] (indexPath) in
+            self?.itemDeselected(indexPath: indexPath)
         })
         .build()
 

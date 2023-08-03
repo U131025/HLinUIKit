@@ -257,15 +257,7 @@ open class HLTextFieldCell: HLTableViewCell {
     public var line: UIView?
 
     override open func layoutConfig() {
-        
-        contentView.snp.remakeConstraints { make in
-//            make.center.equalToSuperview()
-//            make.height.equalTo(50)
-//            make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
-//            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
-            make.edges.equalToSuperview()
-        }
-
+       
         contentView.addSubview(textField)
         textField.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()

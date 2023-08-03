@@ -22,10 +22,24 @@ open class HLViewController: UIViewController {
             bindConfig()
         }
     }
-
-    open var statusBarStyle: UIBarStyle {
-        return .default
+    
+    deinit {
+        viewModel?.release()
+        viewModel = nil
     }
+    
+    public var barStyle: UIStatusBarStyle = .default {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return barStyle
+    }
+
+//    open var statusBarStyle: UIBarStyle {
+//        return .default
+//    }
 
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -60,14 +74,11 @@ open class HLViewController: UIViewController {
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        self.navigationController?.navigationBar.barStyle = statusBarStyle
     }
 
     override open func viewDidLoad() {
         super.viewDidLoad()
-        setNeedsStatusBarAppearanceUpdate()
-//        view.backgroundColor = .white
+
     }
 }
 

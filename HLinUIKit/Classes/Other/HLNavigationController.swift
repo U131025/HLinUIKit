@@ -113,7 +113,7 @@ open class HLNavigationController: UINavigationController {
 
     // 是否支持侧滑手势
     fileprivate var isEnableEdegePan = false
-
+        
     override open func viewDidLoad() {
         super.viewDidLoad()
         
@@ -184,9 +184,13 @@ open class HLNavigationController: UINavigationController {
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
-    
+    // 状态栏
     open override var childForStatusBarStyle: UIViewController? {
-        return self.topViewController
+        return visibleViewController
+    }
+    
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return visibleViewController?.preferredStatusBarStyle ?? .default
     }
 
 }

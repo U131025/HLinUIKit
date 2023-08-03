@@ -48,8 +48,8 @@ extension HLTableViewCellType: HLCellType {
             return HLListTableViewCell.calculateCellHeight(datas)
         case .text(let config, _):
             return config?.height ?? 57
-        case .textFiled:
-            return 56
+        case .textFiled(let config):
+            return config.height ?? 56
         case .separator(_, let height):
             return height
         case .attrText(let text):            

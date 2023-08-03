@@ -28,7 +28,7 @@ public typealias HLErrorBlock = (String?) -> Void
 
 public protocol Wireframe {
     func open(url: URL?) -> Bool
-    func promptFor<Action: CustomStringConvertible>(_ title: String, _ message: String, cancelAction: Action, actions: [Action]) -> Observable<Action>
+    func promptFor<Action: CustomStringConvertible>(_ title: String, _ message: String, cancelAction: Action, actions: [Action], viewController: UIViewController?) -> Observable<Action>
 }
 
 open class DefaultWireframe: NSObject, Wireframe {
@@ -102,7 +102,7 @@ open class DefaultWireframe: NSObject, Wireframe {
         #endif
     }
 
-    public func promptFor<Action: CustomStringConvertible>(_ title: String, _ message: String, cancelAction: Action, actions: [Action]) -> Observable<Action> {
+    public func promptFor<Action: CustomStringConvertible>(_ title: String, _ message: String, cancelAction: Action, actions: [Action], viewController: UIViewController? = nil) -> Observable<Action> {
         #if os(iOS)
         return Observable.create { observer in
             let alertView = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -116,7 +116,8 @@ open class DefaultWireframe: NSObject, Wireframe {
                 })
             }
 
-            DefaultWireframe.rootViewController()?.present(alertView, animated: true, completion: nil)
+            let vc = viewController ?? DefaultWireframe.rootViewController()
+            vc?.present(alertView, animated: true, completion: nil)
 
             return Disposables.create {
                 alertView.dismiss(animated: false, completion: nil)
@@ -130,7 +131,7 @@ open class DefaultWireframe: NSObject, Wireframe {
 
 extension DefaultWireframe {
 
-    public func showMessageJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime, in view: UIView? = nil, completeBlock: CompleteBlock? = nil) {
+    public func showMessageJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime, position: JGProgressHUDPosition = .center, in view: UIView? = nil, completeBlock: CompleteBlock? = nil) {
         
         if message == nil { return }
 
@@ -141,12 +142,13 @@ extension DefaultWireframe {
             }
 
             let juhua = JGProgressHUD.init(style: .dark)
+            juhua.position = position
             juhua.interactionType = .blockNoTouches
             juhua.indicatorView = nil
             juhua.textLabel.text = message ?? ""
             juhua.show(in: window)
             juhua.dismiss(afterDelay: hideAfter)
-
+                        
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+hideAfter, execute: {
                 completeBlock?()
             })
@@ -160,47 +162,49 @@ extension DefaultWireframe {
             guard let window: UIWindow = self.getKeyWindow() else {
                 return
             }
-
-            let juhua = JGProgressHUD.init(style: style)
+            let juhua = JGProgressHUD.init(style: .dark)
+            juhua.position = .center
+            juhua.style = style
             juhua.interactionType = .blockNoTouches
             juhua.indicatorView = image != nil ? JGProgressHUDImageIndicatorView(image: image!) : nil
             juhua.textLabel.text = message ?? ""
             juhua.show(in: window)
             juhua.contentView.backgroundColor = backgroundColor
             juhua.dismiss(afterDelay: hideAfter)
-
+            
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+hideAfter, execute: {
                 completeBlock?()
             })
         }
     }
 
-    public func showErrorJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime) {
+    public func showErrorJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime, position: JGProgressHUDPosition = .center) {
 
         dismissJuhua()
         DispatchQueue.main.async {
             guard let window: UIWindow = self.getKeyWindow() else {
                 return
             }
-
             let juhua = JGProgressHUD.init(style: .dark)
+            juhua.position = position
             juhua.interactionType = .blockNoTouches
             juhua.indicatorView = JGProgressHUDErrorIndicatorView.init()
             juhua.textLabel.text = message ?? ""
             juhua.show(in: window)
             juhua.dismiss(afterDelay: hideAfter)
+            
         }
     }
 
-    public func showSuccessJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime) {
+    public func showSuccessJuhua(message: String?, hideAfter: TimeInterval = defaultHUDShowTime, position: JGProgressHUDPosition = .center) {
 
         dismissJuhua()
         DispatchQueue.main.async {
             guard let window: UIWindow = self.getKeyWindow() else {
                 return
             }
-
             let juhua = JGProgressHUD.init(style: .dark)
+            juhua.position = position
             juhua.interactionType = .blockNoTouches
             juhua.indicatorView = JGProgressHUDSuccessIndicatorView.init()
             juhua.textLabel.text = message ?? ""
@@ -225,6 +229,7 @@ extension DefaultWireframe {
             guard let window = view ?? self.getKeyWindow() else {
                 return
             }
+            self.juhua.position = .center
             self.juhua.indicatorView = JGProgressHUDIndeterminateIndicatorView.init()
             self.juhua.interactionType = interactionType
 

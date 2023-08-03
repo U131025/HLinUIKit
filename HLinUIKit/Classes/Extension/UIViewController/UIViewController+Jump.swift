@@ -138,4 +138,18 @@ extension UIViewController {
             }
         }
     }
+    
+    public func removeVCFromNav(filter aClass: AnyClass) {
+        guard let viewControllers = self.navigationController?.viewControllers else {
+            return
+        }
+
+        for (index, vc) in viewControllers.enumerated() {
+            if vc.classForCoder == aClass {
+                continue
+            } else {
+                self.navigationController?.viewControllers.remove(at: index)
+            }
+        }
+    }
 }

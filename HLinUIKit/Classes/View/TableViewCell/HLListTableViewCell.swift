@@ -22,14 +22,10 @@ open class HLListTableViewCell: HLTableViewCell {
         .selectedIndexPathAction(action: { ip in
             self.selectedIndexPathAction(ip)
         })
-        .setCellConfig(config: { (cell, indexPath) in
-            self.cellConfig(cell: cell, indexPath: indexPath)
-            self.cellConfigBlock?(cell, indexPath)
-        })
         .build()
     
     open func cellConfig(cell: HLTableViewCell, indexPath: IndexPath) {
-        
+
     }
     
     open func selectedAction(_ type: HLCellType) {
@@ -54,6 +50,11 @@ open class HLListTableViewCell: HLTableViewCell {
         super.bindConfig()
         
         listView.cellEvent.bind(to: event).disposed(by: disposeBag)
+        
+        listView.cellConfigSubject.subscribe(onNext: {[unowned self] (c, ip) in
+            self.cellConfig(cell: c, indexPath: ip)
+            self.cellConfigBlock?(c, ip)
+        }).disposed(by: disposeBag)
     }
 
     override open func updateData() {

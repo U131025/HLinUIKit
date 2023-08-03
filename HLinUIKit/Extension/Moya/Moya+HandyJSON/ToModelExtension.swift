@@ -43,7 +43,7 @@ public extension Response {
 
         let jsonString = String.init(data: data, encoding: .utf8)
 
-        guard JSONDeserializer<HLBaseModel>.deserializeFrom(json: jsonString) != nil  else {
+        guard JSONDeserializer<T>.deserializeFrom(json: jsonString) != nil else {
             return T()
         }
 
