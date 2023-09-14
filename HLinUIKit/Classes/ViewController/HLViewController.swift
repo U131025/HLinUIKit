@@ -117,3 +117,19 @@ extension HLViewController {
         return self
     }
 }
+
+open class HLScrollViewController: HLViewController {
+    
+    public let scrollView = UIScrollView()
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalTo(kScreenW)
+            make.height.greaterThanOrEqualTo(scrollView).offset(1)
+        }
+    }
+}

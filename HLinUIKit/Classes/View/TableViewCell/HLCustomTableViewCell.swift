@@ -41,6 +41,8 @@ open class HLCustomTableViewCell: HLTableViewCell {
     
     open override func updateData() {
         if let config = data as? HLCustomTableViewConfig {
+            tag = config.tag
+            
             if let color = config.backgroundColor {
                 backgroundColor = color
             }

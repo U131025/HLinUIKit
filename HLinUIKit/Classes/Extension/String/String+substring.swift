@@ -80,7 +80,7 @@ extension String {
         } else {
             start = 0
         }
-
+       
         return self.substring(from: start, to: to)
     }
 

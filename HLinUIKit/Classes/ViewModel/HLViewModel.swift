@@ -189,6 +189,55 @@ open class HLViewModel {
     open func calculateCellHeight(_ indexPath: IndexPath) -> CGFloat? {
         return nil
     }
+    
+    // 针对ScrollView
+    lazy var scrollViewItemDisposeBag = DisposeBag()
+    open func setupScrollViewItems(_ items: [HLCellType]) {
+        guard let vc = viewController as? HLScrollViewController else {
+            return
+        }
+        vc.scrollView.subviews.forEach { view in
+            view.removeFromSuperview()
+        }
+        scrollViewItemDisposeBag = DisposeBag()
+                        
+        var preView: UIView?
+        for (index, item) in items.enumerated() {
+            
+            let height = item.cellHeight
+            if let view = item.createView() {
+                
+                if let cell = view as? HLTableViewCell {
+                    cellConfig(cell, IndexPath(row: index, section: 0))
+                } else if let cell = view as? HLCollectionViewCell {
+                    cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                }
+                
+                view.rx.tapGesture().when(.recognized)
+                    .subscribe(onNext: {[weak self] _ in
+                        self?.itemSelected(item)
+                    })
+                    .disposed(by: scrollViewItemDisposeBag)
+                
+                vc.scrollView.addSubview(view)
+                view.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.width.equalToSuperview()
+                    make.height.equalTo(height)
+                    if let preView = preView {
+                        make.top.equalTo(preView.snp.bottom)
+                    } else {
+                        make.top.equalTo(0)
+                    }
+                    
+                    if index == (items.count - 1) {
+                        make.bottom.lessThanOrEqualTo(vc.scrollView.snp.bottom).offset(-10)
+                    }
+                }
+                preView = view
+            }
+        }
+    }
 }
 
 extension HLViewModel {

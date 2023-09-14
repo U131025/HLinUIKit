@@ -11,23 +11,26 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-var placeholderLabelKey = 100
-var wordLimitLabelKey   = 100
-var placeholderKey      = 100
-var placeholderColorKey = 100
-var wordLimitKey        = 100
-var disposeBagKey       = 100
+var placeholderLabelKey = 101
+var wordLimitLabelKey   = 102
+var placeholderKey      = 103
+var placeholderColorKey = 104
+var wordLimitKey        = 105
+var disposeBagKey       = 106
 
 extension UITextView {
 
     open override func layoutSubviews() {
         super.layoutSubviews()
-
+        setupPlacehoderViews()
+    }
+    
+    public func setupPlacehoderViews() {
         let placeholderSize = self.placeholderLabel?.sizeThatFits(CGSize(width: self.bounds.width - 10, height: 0))
         self.placeholderLabel?.frame = CGRect(x: 8, y: 8, width: bounds.width - 8, height: (placeholderSize?.height) ?? 0)
         
         self.placeholderLabel?.snp.remakeConstraints({ make in
-            make.left.equalTo(3)
+            make.left.equalTo(0)
             make.right.equalToSuperview()
             make.top.equalTo(3)
             make.height.equalTo(placeholderSize?.height ?? 0)
@@ -49,6 +52,7 @@ extension UITextView {
 
         self.placeholderLabel?.isHidden = text.count > 0 ? true : false
 
+        self.inputDisposeBag = DisposeBag()
         self.rx.text.orEmpty.asObservable().subscribe(onNext: { [weak self](text) in
 
             self?.placeholderLabel?.isHidden = text.count > 0 ? true : false
@@ -59,11 +63,12 @@ extension UITextView {
 
             }
 
-        }).disposed(by: self.disposeBag!)
+        })
+        .disposed(by: self.inputDisposeBag!)
     }
 
     // MARK: getter and setter
-    fileprivate var disposeBag: DisposeBag? {
+    fileprivate var inputDisposeBag: DisposeBag? {
         set {
             objc_setAssociatedObject(self, &disposeBagKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }

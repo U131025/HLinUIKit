@@ -32,6 +32,11 @@ public class HLTextView: UITextView {
         super.awakeFromNib()
         bindConfig()
     }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        self.setupPlacehoderViews()
+    }
 
     public func getText(with str: String?) -> String? {
         guard maxTextCount > 0, let s = str, s.count > maxTextCount else {
@@ -59,6 +64,7 @@ public class HLTextView: UITextView {
 }
 
 extension HLTextView: UITextViewDelegate {
+    
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         guard let primaryLanguage = textView.textInputMode?.primaryLanguage else {
             return false

@@ -10,12 +10,13 @@ import Foundation
 
 extension String {
 
-    public func toAttrText(_ color: UIColor = .black, _ font: UIFont = .systemFont(ofSize: 15), lineSpacing: CGFloat? = nil) -> NSMutableAttributedString {
+    public func toAttrText(_ color: UIColor = .black, _ font: UIFont = .systemFont(ofSize: 15), lineSpacing: CGFloat? = nil, alignment: NSTextAlignment = .left) -> NSMutableAttributedString {
         
         if let lineSpacing = lineSpacing {
             
             let paraph = NSMutableParagraphStyle().then({ (style) in
                 style.lineSpacing = lineSpacing
+                style.alignment = alignment
             })
             return toAttrText(attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paraph])
         }

@@ -116,7 +116,6 @@ open class HLNavigationController: UINavigationController {
         
     override open func viewDidLoad() {
         super.viewDidLoad()
-        
         // 手势代理
         self.interactivePopGestureRecognizer?.delegate = self
 

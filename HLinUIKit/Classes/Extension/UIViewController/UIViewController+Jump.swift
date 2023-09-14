@@ -95,7 +95,7 @@ extension UIViewController {
         self.present(nav, animated: true, completion: nil)
     }
 
-    public func dissmiss() {
+    public func dismiss() {
         DispatchQueue.main.async {
             if self.isPresentMode {
                 self.dismiss(animated: true, completion: nil)

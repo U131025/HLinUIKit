@@ -54,6 +54,15 @@ extension HLCellType {
     public var tag: Int { return 0 }
    
     public var isReuse: Bool { return true }
+    
+    public func createView() -> UIView? {
+        if let view = identifier.toHLCell() {
+            view.data = self
+            view.updateData()
+            return view
+        }
+        return nil
+    }
 }
 
 extension String: HLCellType {

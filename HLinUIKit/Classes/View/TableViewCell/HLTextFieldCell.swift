@@ -15,11 +15,11 @@ import RxSwift
 import RxCocoa
 
 extension UIColor {
-    open class var cellBorderColor: UIColor {
+    public class var cellBorderColor: UIColor {
         return .init(hex: "FFFFFF")
     }
 
-    open class var cellPlaceHolderColor: UIColor {
+    public class var cellPlaceHolderColor: UIColor {
         return .init(hex: "FFFFFF")
     }
 }
@@ -104,6 +104,9 @@ public class HLTextCellConfig: NSObject {
     public var backgroundColor: UIColor?
     public var inputBackgroundColor: UIColor? /// 输入框背景色
     public var cornerRadius: CGFloat?
+    
+    /// 工具条
+    public var inputAccessoryView: UIView?
 
     public var font: UIFont?
     /// 缩进
@@ -117,6 +120,7 @@ public class HLTextCellConfig: NSObject {
     public var maxInputCount = 100
     /// 是否显示分隔线
     public var isShowSeparatedLine: Bool = false
+    public var separatedLineColor: UIColor?
 
     /// 图标
     public var icon: UIImage?
@@ -271,8 +275,13 @@ open class HLTextFieldCell: HLTableViewCell {
             make.bottom.equalToSuperview()
         }
         
-        line = textField.addBorderLine(direction: .bottom, color: .systemGray)
+        line = contentView.addBorderLine(direction: .bottom, color: .init(hex: "#F6F6F6"))
         line?.isHidden = true
+        line?.snp.makeConstraints { make in
+            make.left.right.equalTo(tipLabel)
+            make.height.equalTo(1)
+            make.bottom.equalTo(textField)
+        }
     }
     
     public func updateConfigValue(_ value: String?) {
@@ -332,6 +341,9 @@ open class HLTextFieldCell: HLTableViewCell {
             }
 
             line?.isHidden = !config.isShowSeparatedLine
+            if let color = config.separatedLineColor {
+                line?.backgroundColor = color
+            }
             
             if let icon = config.icon {
                 textField.leftView = UIImageView(image: icon)
@@ -344,6 +356,14 @@ open class HLTextFieldCell: HLTableViewCell {
             if let tip = config.tip {
                 tipLabel.text = tip
             }
+        }
+    }
+    
+    open func removeVerificationCode() {
+        verificationCodeButton.removeFromSuperview()
+        textField.snp.remakeConstraints { make in
+            make.left.top.bottom.equalToSuperview()
+            make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
         }
     }
     
