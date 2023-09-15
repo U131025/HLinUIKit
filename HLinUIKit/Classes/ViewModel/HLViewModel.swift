@@ -10,6 +10,7 @@ import Foundation
 import RxDataSources
 import RxCocoa
 import RxSwift
+import SnapKit
 
 /// 刷新类型
 public enum HLRefreshType {
@@ -193,49 +194,98 @@ open class HLViewModel {
     // 针对ScrollView
     lazy var scrollViewItemDisposeBag = DisposeBag()
     open func setupScrollViewItems(_ items: [HLCellType]) {
-        guard let vc = viewController as? HLScrollViewController else {
-            return
-        }
-        vc.scrollView.subviews.forEach { view in
-            view.removeFromSuperview()
-        }
-        scrollViewItemDisposeBag = DisposeBag()
-                        
-        var preView: UIView?
-        for (index, item) in items.enumerated() {
+        
+        DispatchQueue.main.async {
+            guard let vc = self.viewController as? HLScrollViewController else {
+                return
+            }
             
-            let height = item.cellHeight
-            if let view = item.createView() {
-                
+            vc.scrollView.subviews.forEach { view in
                 if let cell = view as? HLTableViewCell {
-                    cellConfig(cell, IndexPath(row: index, section: 0))
-                } else if let cell = view as? HLCollectionViewCell {
-                    cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                    cell.disposeBag = DisposeBag()
                 }
+                view.removeFromSuperview()
+            }
+            self.scrollViewItemDisposeBag = DisposeBag()
+                            
+            var preView: UIView?
+            for (index, item) in items.enumerated() {
                 
-                view.rx.tapGesture().when(.recognized)
-                    .subscribe(onNext: {[weak self] _ in
-                        self?.itemSelected(item)
-                    })
-                    .disposed(by: scrollViewItemDisposeBag)
-                
-                vc.scrollView.addSubview(view)
-                view.snp.makeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.width.equalToSuperview()
-                    make.height.equalTo(height)
-                    if let preView = preView {
-                        make.top.equalTo(preView.snp.bottom)
-                    } else {
-                        make.top.equalTo(0)
+                let height = item.cellHeight
+                if let view = item.createView() {
+                    
+                    if let cell = view as? HLTableViewCell {
+                        self.cellConfig(cell, IndexPath(row: index, section: 0))
+                    } else if let cell = view as? HLCollectionViewCell {
+                        self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
                     }
                     
-                    if index == (items.count - 1) {
-                        make.bottom.lessThanOrEqualTo(vc.scrollView.snp.bottom).offset(-10)
+                    view.rx.tapGesture().when(.recognized)
+                        .subscribe(onNext: {[weak self] _ in
+                            self?.itemSelected(item)
+                        })
+                        .disposed(by: self.scrollViewItemDisposeBag)
+                    
+                    var offsetY: CGFloat = 0
+                    if let preView = preView {
+                        offsetY = preView.frame.maxY
                     }
+                    
+                    view.frame = CGRect(x: 0, y: offsetY, width: kScreenW, height: height)
+                    
+                    vc.scrollView.addSubview(view)
+                    vc.scrollView.contentSize = CGSize(width: kScreenW, height: view.frame.maxY)
+                    
+//                    view.snp.remakeConstraints { make in
+//                        make.left.right.equalToSuperview()
+//                        make.width.equalTo(kScreenW)
+//                        make.height.equalTo(height)
+//                        if let preView = preView {
+//                            make.top.equalTo(preView.snp.bottom)
+//                        } else {
+//                            make.top.equalTo(0)
+//                        }
+//
+//                        if index == (items.count - 1) {
+//                            make.bottom.lessThanOrEqualTo(vc.scrollView.snp.bottom).offset(-10)
+//                        }
+//                    }
+                    preView = view
                 }
+            }
+            
+            vc.view.layoutIfNeeded()
+        }
+    }
+    
+    public func updateScrollViewLayout() {
+        
+        DispatchQueue.main.async {
+            guard let vc = self.viewController as? HLScrollViewController else {
+                return
+            }
+            
+            let oldOffset = vc.scrollView.contentOffset
+            
+            var preView: UIView?
+            for view in vc.scrollView.subviews {
+                
+                guard let cell = view as? HLTableViewCell, let config = cell.data as? HLCellType else {
+                    continue
+                }
+                
+                var offsetY: CGFloat = 0
+                if let preView = preView {
+                    offsetY = preView.frame.maxY
+                }
+                
+                view.frame = CGRect(x: 0, y: offsetY, width: kScreenW, height: config.cellHeight)
+                vc.scrollView.contentSize = CGSize(width: kScreenW, height: view.frame.maxY)
+                                    
                 preView = view
             }
+            vc.scrollView.contentOffset = oldOffset
+            vc.view.layoutIfNeeded()
         }
     }
 }

@@ -128,8 +128,15 @@ open class HLScrollViewController: HLViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-            make.width.equalTo(kScreenW)
-            make.height.greaterThanOrEqualTo(scrollView).offset(1)
+            make.height.equalToSuperview()
+            make.width.equalToSuperview()
         }
+        
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.scrollsToTop = false
+        scrollView.contentSize = CGSize(width: kScreenW, height:kScreenH)
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.isScrollEnabled = true
     }
 }

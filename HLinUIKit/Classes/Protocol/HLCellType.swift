@@ -57,6 +57,7 @@ extension HLCellType {
     
     public func createView() -> UIView? {
         if let view = identifier.toHLCell() {
+            view.tag = tag
             view.data = self
             view.updateData()
             return view
