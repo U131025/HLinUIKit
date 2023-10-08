@@ -219,7 +219,7 @@ open class HLViewModel {
                     } else if let cell = view as? HLCollectionViewCell {
                         self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
                     }
-                    
+
                     view.rx.tapGesture().when(.recognized)
                         .subscribe(onNext: {[weak self] _ in
                             self?.itemSelected(item)
@@ -230,7 +230,7 @@ open class HLViewModel {
                     if let preView = preView {
                         offsetY = preView.frame.maxY
                     }
-                    
+
                     view.frame = CGRect(x: 0, y: offsetY, width: kScreenW, height: height)
                     
                     vc.scrollView.addSubview(view)
