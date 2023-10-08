@@ -123,6 +123,8 @@ extension UIViewController {
                 break
             }
         }
+        
+        
     }
     
     public func removeVCFromNav(_ aClass: AnyClass) {
@@ -139,17 +141,20 @@ extension UIViewController {
         }
     }
     
-    public func removeVCFromNav(filter aClass: AnyClass) {
-        guard let viewControllers = self.navigationController?.viewControllers else {
+    public func removeVCFromNav(aClasses: [AnyClass]) {
+        
+        guard var viewControllers = self.navigationController?.viewControllers else {
             return
         }
 
-        for (index, vc) in viewControllers.enumerated() {
-            if vc.classForCoder == aClass {
-                continue
-            } else {
-                self.navigationController?.viewControllers.remove(at: index)
+        for aClass in aClasses {
+            for (index, vc) in viewControllers.enumerated() {
+                if vc.classForCoder == aClass {
+                    viewControllers.remove(at: index)
+                    break
+                }
             }
         }
+        self.navigationController?.viewControllers = viewControllers
     }
 }
