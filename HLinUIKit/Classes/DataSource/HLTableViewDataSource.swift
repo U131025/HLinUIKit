@@ -39,6 +39,7 @@ class HLTableViewDataSource {
                     return UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: item.identifier)
                 }
                 if cell.isKind(of: HLTableViewCell.self) {
+                    cell.cellType = item
                     cell.data = item.cellData
                     eventBlock?(cell, indexPath)
                 } else {

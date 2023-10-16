@@ -151,8 +151,8 @@ public class HLBluetoothKitService {
                 guard let `self` = self else {
                     return Observable.empty()
                 }
-
-                return self.centralManager.scanForPeripherals(withServices: serviceUUIDs, options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+                return self.centralManager.scanForPeripherals(withServices: serviceUUIDs, options: nil)
+//                return self.centralManager.scanForPeripherals(withServices: serviceUUIDs, options: [CBCentralManagerScanOptionAllowDuplicatesKey: false])
             })
             .subscribe(onNext: { [weak self] scannedPeripheral in
                 guard let `self` = self else {

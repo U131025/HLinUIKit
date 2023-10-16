@@ -213,19 +213,33 @@ open class HLViewModel {
                 
                 let height = item.cellHeight
                 if let view = item.createView() {
-                    
+                                        
                     if let cell = view as? HLTableViewCell {
                         self.cellConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                        
+                       
+                        if let _ = cell as? HLCollectionsTableViewCell {
+                            
+                        } else if let _ = cell as? HLListTableViewCell {
+                            
+                        } else if let _ = cell as? HLCustomTableViewCell {
+                            
+                        } else if let _ = cell as? HLVerticalViewsCell {
+                            
+                        } else {
+                            view.rx.tapGesture().when(.recognized)
+                                .subscribe(onNext: {[weak self] _ in
+                                    self?.itemSelected(item)
+                                })
+                                .disposed(by: cell.disposeBag)
+                        }
+                                                
                     } else if let cell = view as? HLCollectionViewCell {
                         self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
                     }
-
-                    view.rx.tapGesture().when(.recognized)
-                        .subscribe(onNext: {[weak self] _ in
-                            self?.itemSelected(item)
-                        })
-                        .disposed(by: self.scrollViewItemDisposeBag)
-                    
+                                                            
                     var offsetY: CGFloat = 0
                     if let preView = preView {
                         offsetY = preView.frame.maxY
@@ -270,7 +284,7 @@ open class HLViewModel {
             var preView: UIView?
             for view in vc.scrollView.subviews {
                 
-                guard let cell = view as? HLTableViewCell, let config = cell.data as? HLCellType else {
+                guard let cell = view as? HLTableViewCell, let config = cell.cellType else {
                     continue
                 }
                 
@@ -298,6 +312,10 @@ extension HLViewModel {
 
     public func setItems(_ datas: [HLCellType]) -> Self {
         items.accept([SectionModel(model: "list", items: datas)])
+        
+        if let _ = self.viewController as? HLScrollViewController {
+            setupScrollViewItems(datas)
+        }        
         return self
     }
 

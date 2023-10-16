@@ -20,6 +20,8 @@ public enum HLTableViewStyle {
 }
 
 public typealias HLTableViewCellConfigBlock = (HLTableViewCell, IndexPath) -> Void
+public typealias HLCollectionViewCellConfigBlock = (HLCollectionViewCell, IndexPath) -> Void
+
 public typealias HLTableViewViewInSectionConfigBlock = (Int) -> UIView?
 public typealias HLTableViewHeightInSectionConfigBlock = (Int) -> CGFloat
 

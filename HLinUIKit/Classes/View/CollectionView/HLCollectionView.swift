@@ -224,13 +224,13 @@ extension HLCollectionView {
         return self
     }
     
-    public func selectItem(_ ip: IndexPath) {
+    public func selectItem(_ ip: IndexPath, scrollPosition: UICollectionView.ScrollPosition = .top) {
         
         DispatchQueue.main.async {
             if self.items.value[safe: ip.section]?.items[safe: ip.row] == nil {
                 return
             }            
-            self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .top)
+            self.collectionView.selectItem(at: ip, animated: true, scrollPosition: scrollPosition)
         }
     }
 

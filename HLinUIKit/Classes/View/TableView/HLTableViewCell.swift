@@ -18,6 +18,8 @@ open class HLTableViewCell: UITableViewCell {
     public static var defaultCellMarginValue: CGFloat = 30
 
     public var disposeBag = DisposeBag()
+    
+    public var cellType: HLCellType?
     public var data: Any? {
         didSet {
             updateData()
