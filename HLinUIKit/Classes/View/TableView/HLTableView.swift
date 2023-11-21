@@ -37,11 +37,11 @@ open class HLTableView: UITableView, UITableViewDelegate {
     public var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
     public var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
 
-    var itemSelectedBlock: HLItemSelectedBlock?
-    var itemSelectedIndexPathBlock: HLItemSelectedIndexPathBlock?
+    public var itemSelectedBlock: HLItemSelectedBlock?
+    public var itemSelectedIndexPathBlock: HLItemSelectedIndexPathBlock?
     
-    var itemDeselectedBlock: HLItemSelectedBlock?
-    var itemDeselectedIndexPathBlock: HLItemSelectedIndexPathBlock?
+    public var itemDeselectedBlock: HLItemSelectedBlock?
+    public var itemDeselectedIndexPathBlock: HLItemSelectedIndexPathBlock?
 
     var cellConfigBlock: HLTableViewCellConfigBlock?
 
@@ -170,7 +170,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
     func initDefaultConfig() {
 
         _ = items.asObservable()
-            .do(onNext: {[unowned self] (_) in
+            .do(onNext: {[weak self] (_) in
+                guard let self = self else { return }
                 self.endRefreshing()
             })
             .take(until: rx.deallocated)
@@ -186,8 +187,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
         _ = rx
             .itemSelected
             .take(until: self.rx.deallocated)
-            .subscribe(onNext: {[unowned self] (indexPath) in
-
+            .subscribe(onNext: {[weak self] (indexPath) in
+                guard let self = self else { return }
                 let type = self.hlDataSource[indexPath]
                 self.itemSelectedBlock?(type)
 
@@ -197,8 +198,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
         _ = rx
             .itemDeselected
             .take(until: self.rx.deallocated)
-            .subscribe(onNext: {[unowned self] (indexPath) in
-
+            .subscribe(onNext: {[weak self] (indexPath) in
+                guard let self = self else { return }
                 let type = self.hlDataSource[indexPath]
                 self.itemDeselectedBlock?(type)
                 self.itemDeselectedIndexPathBlock?(indexPath)

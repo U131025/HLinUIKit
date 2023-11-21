@@ -263,7 +263,44 @@ open class HLTextField: UITextField {
                 }
 
             }).disposed(by: disposeBag)
+        
+        // 键盘事件
+        NotificationCenter.default.rx
+            .notification(UIResponder.keyboardWillShowNotification)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if self.isFirstResponder == true {
+                    
+                    var height: CGFloat = 350
+                    if let userInfo  = notification.userInfo as NSDictionary?,
+                       let keyboardEndFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect  {
+                        height = keyboardEndFrame.height + 1
+                    }
+                    
+                    let rect = self.convert(self.bounds, to: nil)
+                    
+                    let keybordY = kScreenH - height
+                    let offset = rect.maxY - keybordY
+                                        
+                    self.keybordEvent.onNext((self, offset, true))
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx
+            .notification(UIResponder.keyboardWillHideNotification)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] notification in
+                guard let self = self else { return }
+                if self.isFirstResponder == true {
+                    self.keybordEvent.onNext((self, 0, false))
+                }
+            })
+            .disposed(by: disposeBag)
     }
+    
+    public let keybordEvent = PublishSubject<(HLTextField, CGFloat, Bool)>()
 
     /// 禁用编辑手势
     @available(iOS 13.0, *)

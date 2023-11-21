@@ -45,7 +45,7 @@ public enum HLThemeType {
         case .blue:
             return .white
         case .clear:
-            return .white
+            return .clear
         case .custom(let config):
             return config.textColor
         }

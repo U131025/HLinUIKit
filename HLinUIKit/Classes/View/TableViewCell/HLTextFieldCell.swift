@@ -258,11 +258,16 @@ open class HLTextFieldCell: HLTableViewCell {
     }
     
     // 分割线
-    public var line: UIView?
+    public var line: UIView?    
+    public let bodyView = UIView()
 
     override open func layoutConfig() {
-       
-        contentView.addSubview(textField)
+        contentView.addSubview(bodyView)
+        bodyView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        bodyView.addSubview(textField)
         textField.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -275,7 +280,7 @@ open class HLTextFieldCell: HLTableViewCell {
             make.bottom.equalToSuperview()
         }
         
-        line = contentView.addBorderLine(direction: .bottom, color: .init(hex: "#F6F6F6"))
+        line = bodyView.addBorderLine(direction: .bottom, color: .init(hex: "#F6F6F6"))
         line?.isHidden = true
         line?.snp.makeConstraints { make in
             make.left.right.equalTo(tipLabel)

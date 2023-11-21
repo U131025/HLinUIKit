@@ -92,16 +92,6 @@ open class HLViewModel {
 
     }
     
-//    public func setSelectedCell(_ ip: IndexPath) {
-//        guard let vc = viewController as? HLTableViewController else {
-//            return
-//        }
-//
-//        DispatchQueue.main.async {
-//            vc.listView.selectRow(at: ip, animated: false, scrollPosition: .none)
-//        }
-//    }
-
     /// 刷新
     public let refreshEvent = PublishSubject<HLRefreshType>()
     open func refresh() {
@@ -192,7 +182,6 @@ open class HLViewModel {
     }
     
     // 针对ScrollView
-    lazy var scrollViewItemDisposeBag = DisposeBag()
     open func setupScrollViewItems(_ items: [HLCellType]) {
         
         DispatchQueue.main.async {
@@ -200,75 +189,34 @@ open class HLViewModel {
                 return
             }
             
-            vc.scrollView.subviews.forEach { view in
-                if let cell = view as? HLTableViewCell {
-                    cell.disposeBag = DisposeBag()
-                }
-                view.removeFromSuperview()
-            }
-            self.scrollViewItemDisposeBag = DisposeBag()
-                            
-            var preView: UIView?
-            for (index, item) in items.enumerated() {
+            vc.scrollView.setupItems(items, config: { view, index, item in
                 
-                let height = item.cellHeight
-                if let view = item.createView() {
-                                        
-                    if let cell = view as? HLTableViewCell {
-                        self.cellConfig(cell, IndexPath(row: index, section: 0))
-                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                if let cell = view as? HLTableViewCell {
+                    self.cellConfig(cell, IndexPath(row: index, section: 0))
+                    cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                    
+                   
+                    if let _ = cell as? HLCollectionsTableViewCell {
                         
-                       
-                        if let _ = cell as? HLCollectionsTableViewCell {
-                            
-                        } else if let _ = cell as? HLListTableViewCell {
-                            
-                        } else if let _ = cell as? HLCustomTableViewCell {
-                            
-                        } else if let _ = cell as? HLVerticalViewsCell {
-                            
-                        } else {
-                            view.rx.tapGesture().when(.recognized)
-                                .subscribe(onNext: {[weak self] _ in
-                                    self?.itemSelected(item)
-                                })
-                                .disposed(by: cell.disposeBag)
-                        }
-                                                
-                    } else if let cell = view as? HLCollectionViewCell {
-                        self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
-                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                    } else if let _ = cell as? HLListTableViewCell {
+                        
+                    } else if let _ = cell as? HLCustomTableViewCell {
+                        
+                    } else if let _ = cell as? HLVerticalViewsCell {
+                        
+                    } else {
+                        view.rx.tapGesture().when(.recognized)
+                            .subscribe(onNext: {[weak self] _ in
+                                self?.itemSelected(item)
+                            })
+                            .disposed(by: cell.disposeBag)
                     }
-                                                            
-                    var offsetY: CGFloat = 0
-                    if let preView = preView {
-                        offsetY = preView.frame.maxY
-                    }
-
-                    view.frame = CGRect(x: 0, y: offsetY, width: kScreenW, height: height)
-                    
-                    vc.scrollView.addSubview(view)
-                    vc.scrollView.contentSize = CGSize(width: kScreenW, height: view.frame.maxY)
-                    
-//                    view.snp.remakeConstraints { make in
-//                        make.left.right.equalToSuperview()
-//                        make.width.equalTo(kScreenW)
-//                        make.height.equalTo(height)
-//                        if let preView = preView {
-//                            make.top.equalTo(preView.snp.bottom)
-//                        } else {
-//                            make.top.equalTo(0)
-//                        }
-//
-//                        if index == (items.count - 1) {
-//                            make.bottom.lessThanOrEqualTo(vc.scrollView.snp.bottom).offset(-10)
-//                        }
-//                    }
-                    preView = view
+                                            
+                } else if let cell = view as? HLCollectionViewCell {
+                    self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                    cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
                 }
-            }
-            
-            vc.view.layoutIfNeeded()
+            })
         }
     }
     
@@ -279,27 +227,8 @@ open class HLViewModel {
                 return
             }
             
-            let oldOffset = vc.scrollView.contentOffset
+            vc.scrollView.updateLayout()
             
-            var preView: UIView?
-            for view in vc.scrollView.subviews {
-                
-                guard let cell = view as? HLTableViewCell, let config = cell.cellType else {
-                    continue
-                }
-                
-                var offsetY: CGFloat = 0
-                if let preView = preView {
-                    offsetY = preView.frame.maxY
-                }
-                
-                view.frame = CGRect(x: 0, y: offsetY, width: kScreenW, height: config.cellHeight)
-                vc.scrollView.contentSize = CGSize(width: kScreenW, height: view.frame.maxY)
-                                    
-                preView = view
-            }
-            vc.scrollView.contentOffset = oldOffset
-            vc.view.layoutIfNeeded()
         }
     }
 }
@@ -385,6 +314,69 @@ extension HLViewModel {
             vc.listView.beginUpdates()
             vc.listView.reloadRows(at: indexPaths, with: .none)
             vc.listView.endUpdates()
+        }
+    }
+}
+
+public extension UIScrollView {
+    
+    func setupItems(_ items: [HLCellType], config:((UIView, Int, HLCellType) -> Void)? = nil, width: CGFloat = kScreenW) {
+        DispatchQueue.main.async {
+            self.subviews.forEach { view in
+                if let cell = view as? HLTableViewCell {
+                    cell.disposeBag = DisposeBag()
+                }
+                view.removeFromSuperview()
+            }
+            
+            var preView: UIView?
+            for (index, item) in items.enumerated() {
+                
+                let height = item.cellHeight
+                if let view = item.createView() {
+                    
+                    config?(view, index, item)
+                       
+                    var offsetY: CGFloat = 0
+                    if let preView = preView {
+                        offsetY = preView.frame.maxY
+                    }
+
+                    view.frame = CGRect(x: 0, y: offsetY, width: width, height: height)
+                    
+                    self.addSubview(view)
+                    self.contentSize = CGSize(width: width, height: view.frame.maxY)
+                   
+                    preView = view
+                }
+            }
+            
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    
+    func updateLayout(width: CGFloat = kScreenW) {
+        DispatchQueue.main.async {
+            let oldOffset = self.contentOffset
+            
+            var preView: UIView?
+            for view in self.subviews {
+                guard let cell = view as? HLTableViewCell, let config = cell.cellType else {
+                    continue
+                }
+                
+                var offsetY: CGFloat = 0
+                if let preView = preView {
+                    offsetY = preView.frame.maxY
+                }
+                
+                view.frame = CGRect(x: 0, y: offsetY, width: width, height: config.cellHeight)
+                self.contentSize = CGSize(width: kScreenW, height: view.frame.maxY)
+                                    
+                preView = view
+            }
+            self.contentOffset = oldOffset
+            self.superview?.layoutIfNeeded()
         }
     }
 }

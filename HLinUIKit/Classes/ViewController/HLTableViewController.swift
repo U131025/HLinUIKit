@@ -61,7 +61,7 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
 
         self.view.addSubview(self.listView)
         self.listView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.edges.equalToSuperview().inset(view.safeAreaInsets)
         }
     }
 
@@ -174,18 +174,27 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
         emptyViewDisposable = viewModel
             .items
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {[unowned self] (sections) in
-                
+            .subscribe(onNext: {[weak self] (sections) in
+                guard let self = self else { return }
                 emptyView.removeFromSuperview()
                 if sections.count == 0 || (sections.count == 1 && sections[0].items.count == 0) {
+                    
+                    self.emptyDataEvent(isEmpty: true)
     
                     self.view.insertSubview(emptyView, aboveSubview: self.listView)
                     emptyView.snp.remakeConstraints { (make) in
-                        make.edges.equalTo(self.listView).inset(emptyInset)
+                        make.edges.equalTo(self.listView).inset(self.emptyInset)
                     }
+                } else {
+                    self.emptyDataEvent(isEmpty: false)
                 }
             })
     }
+    
+    open func emptyDataEvent(isEmpty: Bool) {
+        
+    }
+    
     // 添加刷新
     public func addRefresh(isFooterEnable: Bool = true) {
         _ = listView.setRefreshHeader(block: {[weak self] in

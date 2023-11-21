@@ -20,6 +20,7 @@ public class HLButtonCellConfig: NSObject {
     public var icon: UIImage?
     public var iconLayoutType: UPButtonEdgeInsetsStyle = .left
     public var isEnable: Bool = true
+    public var showLoading: Bool?
     
     public var font: UIFont = .pingfang(ofSize: 15)
     public var borderColor: UIColor = .clear
@@ -44,19 +45,26 @@ extension HLButtonCellConfig: HLCellType {
 }
 
 open class ButtonStyleTableViewCell: HLTableViewCell {
+    
+    public lazy var loadingView = UIActivityIndicatorView().then { view in
+        view.hidesWhenStopped = true
+    }
+        
     public var customView: UIView?
     public var marginValue: CGFloat = 16 {
         didSet {
-            commitButton.snp.remakeConstraints { (make) in
-                make.center.equalToSuperview()
-                make.left.equalTo(marginValue)
-                make.right.equalTo(-marginValue)
-                make.height.equalToSuperview()
+            DispatchQueue.main.async {
+                self.commitButton.snp.remakeConstraints { (make) in
+                    make.center.equalToSuperview()
+                    make.left.right.equalToSuperview().inset(self.marginValue)
+                    make.height.equalToSuperview()
+                }
             }
+            
         }
     }
 
-    public let commitButton = UIButton().then { (button) in
+    public var commitButton = UIButton().then { (button) in
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
     }
@@ -65,14 +73,14 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
         super.initConfig()
 
         backgroundColor = .clear
-
+         
         contentView.addSubview(commitButton)
         commitButton.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
             make.left.equalTo(marginValue)
             make.right.equalTo(-marginValue)
             make.height.equalToSuperview()
-        }
+        }        
     }
 
     open override func updateData() {
@@ -82,7 +90,7 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
             tag = config.tag
 
             if let color = config.backgroundColor {
-                _ = commitButton.setBackgroundImage(color.image, .normal)
+                commitButton.backgroundColor = color
             }
             
             commitButton.isEnabled = config.isEnable
@@ -134,6 +142,30 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
 
             commitButton.layer.borderColor = config.borderColor.cgColor
             commitButton.layer.borderWidth = 1
+            
+            loadingView.removeFromSuperview()
+            if let isShow = config.showLoading {
+                loadingView.isHidden = false
+                
+                loadingView.color = config.titleColor
+                if isShow == false {
+                    loadingView.stopAnimating()
+                } else {
+                    loadingView.startAnimating()
+                }
+                
+                let textSize = commitButton.sizeThatFits(CGSize(width: kScreenW, height: 50))
+                let offset = textSize.width / 2 + 10
+                contentView.addSubview(loadingView)
+                loadingView.snp.makeConstraints { make in
+                    make.right.equalTo(commitButton.snp.centerX).offset(-offset)
+                    make.centerY.equalTo(commitButton)
+                    make.width.height.equalTo(20)
+                }
+                                
+            } else {
+                loadingView.isHidden = true
+            }
         }
     }
 

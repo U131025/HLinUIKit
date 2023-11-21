@@ -249,11 +249,10 @@ extension String {
         }
         return self
     }
-
 }
 
 extension CGFloat {
-    public func format(_ minDigits: Int = 0, _ style: NumberFormatter.Style = NumberFormatter.Style.currency) -> String? {
+    public func format(minDigits: Int = 0, style: NumberFormatter.Style = NumberFormatter.Style.currency) -> String? {
         let formatter = NumberFormatter()
         formatter.numberStyle = style
         formatter.positivePrefix = ""   //去掉前缀

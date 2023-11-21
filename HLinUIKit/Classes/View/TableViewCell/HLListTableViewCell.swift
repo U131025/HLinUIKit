@@ -35,12 +35,19 @@ open class HLListTableViewCell: HLTableViewCell {
     open func selectedIndexPathAction(_ ip: IndexPath) {
         
     }
+    
+    public let bgView = UIView()
 
     override open func initConfig() {
         super.initConfig()
+        
+        contentView.addSubview(bgView)
+        bgView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
 
         listView.bounces = false
-        contentView.addSubview(listView)
+        bgView.addSubview(listView)
         listView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

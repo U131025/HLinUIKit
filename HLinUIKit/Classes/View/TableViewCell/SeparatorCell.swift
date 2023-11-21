@@ -25,17 +25,22 @@ public struct HLSeparatorConfig {
         self.offset = offset
     }
     
-    public init(offset: CGFloat, color: UIColor, height: CGFloat) {
+    public init(offset: CGFloat, color: UIColor, height: CGFloat, bgColor: UIColor = .clear) {
         self.init()
         self.offset = offset
         self.color = color
         self.height = height
+        self.backgroundColor = bgColor
     }
 }
 
 open class HLSeparatorCell: HLTableViewCell {
 
     public var separatorView = UIView().then { (view) in
+        view.backgroundColor = UIColor.clear
+    }
+    
+    public var bgView = UIView().then { (view) in
         view.backgroundColor = UIColor.clear
     }
 
@@ -45,20 +50,27 @@ open class HLSeparatorCell: HLTableViewCell {
     }
 
     override open func layoutConfig() {
-        addSubview(separatorView)
+        contentView.addSubview(bgView)
+        bgView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        bgView.addSubview(separatorView)
         separatorView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+        
     }
 
     override open func updateData() {
 
         if let color = data as? UIColor {
             separatorView.backgroundColor = color
-            backgroundColor = color
+            
         } else if let config = data as? HLSeparatorConfig {
             separatorView.backgroundColor = config.color
-            backgroundColor = config.backgroundColor
+            bgView.backgroundColor = config.backgroundColor
 
             separatorView.snp.remakeConstraints { (make) in
                 make.center.equalToSuperview()

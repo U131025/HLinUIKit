@@ -58,10 +58,9 @@ public class HLRealmHelper {
         return Observable.create { (obs) -> Disposable in
             
             if let finder = query(type, predicate: predicate) {
-                obs.onNext(finder)
-                obs.onCompleted()
+                obs.onNext(finder)                
             }
-            
+            obs.onCompleted()
             return Disposables.create()
         }
     }
@@ -199,5 +198,5 @@ extension Object {
 
     public func save() {
         HLRealmHelper.update([self])
-    }
+    }    
 }

@@ -124,7 +124,7 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
         return self
     }
     
-    func getTitle() {
+    open func getTitle() {
         if autoGetWebViewTitle == false { return }
         self.webView.evaluateJavaScript("document.title") { (result, error) -> Void in
             if error == nil, let string = result as? String {
