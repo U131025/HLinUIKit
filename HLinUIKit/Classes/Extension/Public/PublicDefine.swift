@@ -30,6 +30,9 @@ public let scaleRate = 1 / 414.0 * kScreenW
 //适配因子，以6为准 6逻辑分辨率: 375 * 667
 public let scaleRateIphone6 = 1 / 375.0 * kScreenW
 
+//适配因子，以6为准 6逻辑分辨率: 375 * 667
+public let scaleRateHIphone13 = 1 / 844 * kScreenH
+
 /// 屏幕尺寸大于 375 * 667
 public let kMoreIphone6Size = scaleRateIphone6 > 1.0 ? true : false
 
