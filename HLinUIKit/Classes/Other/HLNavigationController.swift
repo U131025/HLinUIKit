@@ -125,7 +125,7 @@ open class HLNavigationController: UINavigationController {
         self.navigationBar.isTranslucent = false
         self.navigationBar.barTintColor = UIColor.white
 
-//        self.navigationBar.setBackgroundImage(createImageWithColor(color: UIColor.init(hex: "257BFB")), for: .default)
+//        self.navigationBar.setBackgroundImage(createImageWithColor(color: UIColor.init(hexStr:"257BFB")), for: .default)
 
         self.navigationBar.shadowImage = UIImage()
 

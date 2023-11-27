@@ -79,7 +79,7 @@ open class HLPopView: HLView {
         
         if isClickBackgoundClose == true {
             let bgView = UIView()
-            bgView.backgroundColor = UIColor.init(hex: "101312", alpha: 0.3)
+            bgView.backgroundColor = UIColor.init(hexStr: "101312", alpha: 0.3)
             window.addSubview(bgView)
             bgView.center = window.center
             bgView.frame = window.bounds

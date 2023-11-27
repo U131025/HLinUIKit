@@ -16,11 +16,11 @@ import RxCocoa
 
 extension UIColor {
     public class var cellBorderColor: UIColor {
-        return .init(hex: "FFFFFF")
+        return .init(hexStr: "FFFFFF")
     }
 
     public class var cellPlaceHolderColor: UIColor {
-        return .init(hex: "FFFFFF")
+        return .init(hexStr: "FFFFFF")
     }
 }
 
@@ -280,7 +280,7 @@ open class HLTextFieldCell: HLTableViewCell {
             make.bottom.equalToSuperview()
         }
         
-        line = bodyView.addBorderLine(direction: .bottom, color: .init(hex: "#F6F6F6"))
+        line = bodyView.addBorderLine(direction: .bottom, color: .init(hexStr: "#F6F6F6"))
         line?.isHidden = true
         line?.snp.makeConstraints { make in
             make.left.right.equalTo(tipLabel)

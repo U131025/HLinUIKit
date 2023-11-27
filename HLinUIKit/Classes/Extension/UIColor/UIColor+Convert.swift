@@ -59,9 +59,9 @@ extension UIColor {
         )
     }
 
-    convenience public init(hex: String) {
+    public convenience init(hexStr: String) {
                 
-        let scanner = Scanner(string: hex.pregReplace(pattern: "#", with: ""))
+        let scanner = Scanner(string: hexStr.pregReplace(pattern: "#", with: ""))
         scanner.scanLocation = 0
         var rgbValue: UInt64 = 0
 
@@ -101,11 +101,11 @@ extension UIColor {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: alpha)
     }
 
-    public convenience init?(hex: String, alpha: CGFloat = 1.0) {
-        guard hex.count >= 6 else {
+    public convenience init?(hexStr: String, alpha: CGFloat) {
+        guard hexStr.count >= 6 else {
             return nil
         }
-        var hexString = hex.uppercased()
+        var hexString = hexStr.uppercased()
         if hexString.hasPrefix("##") || hexString.hasPrefix("0x") {
             hexString = (hexString as NSString).substring(from: 2)
         } else if hexString.hasPrefix("#") {

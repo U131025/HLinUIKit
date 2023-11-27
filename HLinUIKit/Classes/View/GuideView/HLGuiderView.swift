@@ -37,9 +37,9 @@ public class HLGuiderView: HLPopView {
     public let pageCtrl = TAPageControl()
 //        .then { (pageCtrl) in
 //
-//        let dotGray = UIColor(hex: "D8D8D8")?.image.reSizeImage(reSize: CGSize(width: 11, height: 4)).byRoundCornerRadius(2)
+//        let dotGray = UIColor(hexStr:"D8D8D8")?.image.reSizeImage(reSize: CGSize(width: 11, height: 4)).byRoundCornerRadius(2)
 //
-//        let dot = UIColor(hex: "3378FD").image.reSizeImage(reSize: CGSize(width: 11, height: 4)).byRoundCornerRadius(2)
+//        let dot = UIColor(hexStr:"3378FD").image.reSizeImage(reSize: CGSize(width: 11, height: 4)).byRoundCornerRadius(2)
 //
 //        pageCtrl.dotImage = dotGray
 //        pageCtrl.currentDotImage = dot
