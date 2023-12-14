@@ -46,13 +46,13 @@ Pod::Spec.new do |s|
     ss.dependency 'SDCycleScrollView'
   end
 
-  s.subspec 'HLinBluetooth' do |ss|
+  s.subspec 'Bluetooth' do |ss|
     ss.source_files = 'HLinUIKit/Extension/Bluetooth/**/*'
     ss.dependency 'RxBluetoothKit'
     ss.dependency 'QMUIKit/QMUILog'
   end
 
-  s.subspec 'HLinMoya' do |ss|
+  s.subspec 'Moya' do |ss|
     ss.source_files = 'HLinUIKit/Extension/Moya/**/*'
     ss.dependency 'Moya/RxSwift'
     ss.dependency 'Alamofire'
@@ -63,14 +63,14 @@ Pod::Spec.new do |s|
     ss.dependency 'Result'
   end
 
-  s.subspec 'HLinHandyJSON' do |ss|
+  s.subspec 'HandyJSON' do |ss|
     ss.source_files = 'HLinUIKit/Extension/Moya/Model+HandyJSON/*'
     ss.dependency 'HandyJSON'
     ss.dependency 'RxSwift'
     ss.dependency 'RxCocoa'
   end
 
-  s.subspec 'HLinRealm' do |ss|
+  s.subspec 'Realm' do |ss|
     ss.source_files = 'HLinUIKit/Extension/RealmHelper/**/*'
     ss.dependency 'RealmSwift'
     ss.dependency 'RxSwift'
