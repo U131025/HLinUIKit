@@ -34,15 +34,10 @@ open class HLVerticalViewsCell: HLTableViewCell {
     
     public var tableViewCellConfigBlock: HLTableViewCellConfigBlock?
     public var collectionViewCellConfigBlock: HLCollectionViewCellConfigBlock?
-
-    public var bodyView = UIView()
-    
+ 
     open override func initConfig() {
         super.initConfig()
-        contentView.addSubview(bodyView)
-        bodyView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        
     }
         
     open override func updateData() {

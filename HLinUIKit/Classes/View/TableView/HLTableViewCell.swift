@@ -15,7 +15,7 @@ public typealias HLTableViewCellActionBlock = (HLCellType) -> Void
 
 open class HLTableViewCell: UITableViewCell {
     
-    public static var defaultCellMarginValue: CGFloat = 30
+    public static var defaultCellMarginValue: CGFloat = 16
 
     public var disposeBag = DisposeBag()
     
@@ -77,9 +77,14 @@ open class HLTableViewCell: UITableViewCell {
         disposeBag = DisposeBag()
         bindConfig()
     }
+    
+    public lazy var bodyView = UIView()
 
     open func initConfig() {
-
+        contentView.addSubview(bodyView)
+        bodyView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     open func layoutConfig() {

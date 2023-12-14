@@ -15,6 +15,8 @@ open class HLAttrStringTextCell: HLTableViewCell {
         label.textColor = UIColor.black
         label.numberOfLines = 0
     }
+    
+    
     override open func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -27,7 +29,7 @@ open class HLAttrStringTextCell: HLTableViewCell {
     }
     override open func initConfig() {
         super.initConfig()
-        contentView.addSubview(label)
+        bodyView.addSubview(label)
         label.snp.makeConstraints { (make) in
             make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
             make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
@@ -53,8 +55,15 @@ open class HLAttrStringTextCell: HLTableViewCell {
             label.textAlignment = config.textAlignment
             
             if let bgColor = config.backgroundColor {
-                contentView.backgroundColor = bgColor
-            }            
+                bodyView.backgroundColor = bgColor
+            }   
+            
+            if let offsetX = config.offsetX {
+                label.snp.remakeConstraints { (make) in
+                    make.left.right.equalToSuperview().inset(offsetX)
+                    make.top.bottom.equalToSuperview()
+                }
+            }
             
         } else if let text = data as? String {
             label.text = text

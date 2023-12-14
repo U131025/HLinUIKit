@@ -27,14 +27,14 @@ extension UITextView {
     
     public func setupPlacehoderViews() {
         let placeholderSize = self.placeholderLabel?.sizeThatFits(CGSize(width: self.bounds.width - 10, height: 0))
-        self.placeholderLabel?.frame = CGRect(x: 8, y: 8, width: bounds.width - 8, height: (placeholderSize?.height) ?? 0)
+        self.placeholderLabel?.frame = CGRect(x: 5, y: 8, width: bounds.width - 5, height: (placeholderSize?.height) ?? 0)
         
-        self.placeholderLabel?.snp.remakeConstraints({ make in
-            make.left.equalTo(0)
-            make.right.equalToSuperview()
-            make.top.equalTo(3)
-            make.height.equalTo(placeholderSize?.height ?? 0)
-        })
+//        self.placeholderLabel?.snp.remakeConstraints({ make in
+//            make.left.equalTo(0)
+//            make.right.equalToSuperview()
+//            make.top.equalTo(8)
+//            make.height.equalTo(placeholderSize?.height ?? 0)
+//        })
 
         self.wordLimitLabel?.bounds = CGRect(x: 0, y: 0, width: self.bounds.width - 10, height: (placeholderSize?.height) ?? 0)
         self.wordLimitLabel?.left = 5

@@ -9,8 +9,11 @@
 import Foundation
 
 public enum PingFangSCFontType {
+    // 400
     case regular
+    // 600
     case bold
+    // 500
     case medium
     case light
     case ultralight

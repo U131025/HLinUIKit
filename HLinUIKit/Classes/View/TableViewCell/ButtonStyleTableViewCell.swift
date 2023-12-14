@@ -22,13 +22,13 @@ public class HLButtonCellConfig: NSObject {
     public var isEnable: Bool = true
     public var showLoading: Bool?
     
-    public var font: UIFont = .pingfang(ofSize: 15)
+    public var font: UIFont = .pingfang(ofSize: 15, .medium)
     public var borderColor: UIColor = .clear
     public var tag: Int = 0
     
     public var height: CGFloat = 44
     public var width: CGFloat?
-    public var marginValue: CGFloat?
+    public var marginValue: CGFloat = 16
     
 //    public init() {
 //    }
@@ -74,13 +74,10 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
 
         backgroundColor = .clear
          
-        contentView.addSubview(commitButton)
+        bodyView.addSubview(commitButton)
         commitButton.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-            make.left.equalTo(marginValue)
-            make.right.equalTo(-marginValue)
-            make.height.equalToSuperview()
-        }        
+            make.edges.equalToSuperview()
+        }
     }
 
     open override func updateData() {
@@ -108,9 +105,9 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
                     
                     switch config.alignment {
                     case .left:
-                        make.left.equalToSuperview().offset(marginValue)
+                        make.left.equalToSuperview().offset(config.marginValue)
                     case .right:
-                        make.right.equalToSuperview().offset(-marginValue)
+                        make.right.equalToSuperview().offset(-config.marginValue)
                     default:
                         make.centerX.equalToSuperview()
                     }
@@ -118,13 +115,18 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
                     make.width.equalTo(width)
                     make.height.equalToSuperview()
                 }
+            } else {
+                commitButton.snp.remakeConstraints { (make) in
+                    make.left.right.equalToSuperview().inset(config.marginValue)
+                    make.top.bottom.equalToSuperview()
+                }
             }
 
             if let image = config.icon {
                 commitButton.frame = CGRect(origin: .zero, size: CGSize(width: width, height: 44))
-                commitButton.setImage(image).layoutButton(with: config.iconLayoutType, imageTitleSpace: 10)
+                commitButton.setImage(image).layoutButton(with: config.iconLayoutType, imageTitleSpace: 4)
             } else {
-                commitButton.setImage(nil).layoutButton(with: config.iconLayoutType, imageTitleSpace: 10)
+                commitButton.setImage(nil).layoutButton(with: config.iconLayoutType, imageTitleSpace: 4)
             }
             
             if let bgImage = config.backgroundImage {
@@ -136,10 +138,6 @@ open class ButtonStyleTableViewCell: HLTableViewCell {
                 commitButton.layer.masksToBounds = true
             }
             
-            if let margin = config.marginValue {
-                self.marginValue = margin
-            }
-
             commitButton.layer.borderColor = config.borderColor.cgColor
             commitButton.layer.borderWidth = 1
             

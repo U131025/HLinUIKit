@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct HLSeparatorConfig {
+public struct HLSeparatorConfig: HLCellType {
 
     public var backgroundColor: UIColor = .clear
     public var color: UIColor = .lightGray
@@ -32,6 +32,14 @@ public struct HLSeparatorConfig {
         self.height = height
         self.backgroundColor = bgColor
     }
+    
+    public var cellClass: AnyClass {
+        return HLSeparatorCell.self
+    }
+    
+    public var cellHeight: CGFloat {
+        return height
+    }
 }
 
 open class HLSeparatorCell: HLTableViewCell {
@@ -39,28 +47,18 @@ open class HLSeparatorCell: HLTableViewCell {
     public var separatorView = UIView().then { (view) in
         view.backgroundColor = UIColor.clear
     }
-    
-    public var bgView = UIView().then { (view) in
-        view.backgroundColor = UIColor.clear
-    }
-
+   
     override open func initConfig() {
         super.initConfig()
         backgroundColor = .clear
     }
 
     override open func layoutConfig() {
-        contentView.addSubview(bgView)
-        bgView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        bgView.addSubview(separatorView)
+       
+        bodyView.addSubview(separatorView)
         separatorView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        
     }
 
     override open func updateData() {
@@ -70,7 +68,7 @@ open class HLSeparatorCell: HLTableViewCell {
             
         } else if let config = data as? HLSeparatorConfig {
             separatorView.backgroundColor = config.color
-            bgView.backgroundColor = config.backgroundColor
+            bodyView.backgroundColor = config.backgroundColor
 
             separatorView.snp.remakeConstraints { (make) in
                 make.center.equalToSuperview()

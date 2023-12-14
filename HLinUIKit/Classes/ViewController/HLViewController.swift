@@ -119,7 +119,7 @@ extension HLViewController {
 }
 
 open class HLScrollViewController: HLViewController {
-    
+        
     public let scrollView = UIScrollView()
     open override func viewDidLoad() {
         super.viewDidLoad()

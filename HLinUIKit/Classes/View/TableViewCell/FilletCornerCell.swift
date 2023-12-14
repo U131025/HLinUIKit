@@ -27,30 +27,33 @@ public class HLFilletCornerConfig: NSObject, HLCellType {
 
 open class HLFilletCornerCell: HLTableViewCell {
     
-    let view = UIView()
-    
+    let cornerView = UIView()
+   
     open override func initConfig() {
         super.initConfig()
-        
-        contentView.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(16)
-            make.top.bottom.equalToSuperview()
-        }
+        backgroundColor = .clear
+        bodyView.layer.masksToBounds = true
+        bodyView.addSubview(cornerView)
     }
     
     open override func updateData() {
         if let config = data as? HLFilletCornerConfig {
-            view.backgroundColor = config.backgroundColor
             
-            view.frame = CGRect(origin: .zero, size: CGSize(width: kScreenW - (config.offset * 2), height: config.height))
-            view.snp.remakeConstraints { make in
-                make.height.equalTo(config.height)
-                make.center.equalToSuperview()
+            cornerView.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.height.equalTo(44)
                 make.left.right.equalToSuperview().inset(config.offset)
+                
+                if config.type.contains(.bottomLeft) || config.type.contains(.bottomRight) {
+                    make.bottom.equalToSuperview()
+                } else {
+                    make.top.equalToSuperview()
+                }
             }
             
-            view.createRoundCorner(type: config.type, cornerRadii: config.cornerRadii)
+            cornerView.backgroundColor = config.backgroundColor
+            cornerView.frame = CGRect(origin: .zero, size: CGSize(width: kScreenW - (config.offset * 2), height: 44))
+            cornerView.createRoundCorner(type: config.type, cornerRadii: config.cornerRadii)
         }
     }
 }

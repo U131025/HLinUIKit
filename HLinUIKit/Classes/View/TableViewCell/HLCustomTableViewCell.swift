@@ -31,7 +31,6 @@ public class HLCustomTableViewConfig: NSObject, HLCellType {
 open class HLCustomTableViewCell: HLTableViewCell {
     
     public var customView: UIView?
-    public var bodyView = UIView()
     
     open override func prepareForReuse() {
         super.prepareForReuse()
@@ -42,11 +41,7 @@ open class HLCustomTableViewCell: HLTableViewCell {
     
     open override func initConfig() {
         super.initConfig()
-        
-        contentView.addSubview(bodyView)
-        bodyView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
+       
     }
     
     open override func updateData() {

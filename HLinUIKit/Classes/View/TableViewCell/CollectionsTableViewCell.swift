@@ -60,7 +60,7 @@ open class HLCollectionsTableViewCell: HLTableViewCell {
     override open func initConfig() {
         super.initConfig()
 
-        contentView.addSubview(listView)
+        bodyView.addSubview(listView)
         listView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

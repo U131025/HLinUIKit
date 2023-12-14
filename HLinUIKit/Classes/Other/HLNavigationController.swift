@@ -11,6 +11,7 @@ import UIKit
 public struct HLThemeConfig {
     public var navBarColor: UIColor = .white
     public var textColor: UIColor = .black
+    public var font: UIFont = .pingfang(ofSize: 17, .medium)
             
     public init(navBarColor: UIColor = .white, textColor: UIColor = .black) {
         // This initializer intentionally left empty
@@ -57,6 +58,16 @@ public enum HLThemeType {
         }
         return false
     }
+    
+    var font: UIFont {
+        switch self {
+        case .white, .blue, .clear:
+            return .pingfang(ofSize: 17, .medium)
+        case .custom(let config):
+            return config.font
+        }
+        
+    }
 }
 
 extension UIViewController {
@@ -79,7 +90,7 @@ extension UIViewController {
             appearance.backgroundImage = bgImage
             appearance.shadowColor = .clear
             appearance.titleTextAttributes = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
+                NSAttributedString.Key.font: themeType.font,
                 NSAttributedString.Key.foregroundColor: textColor
             ]
 
@@ -88,7 +99,7 @@ extension UIViewController {
         } else {
             self.navigationController?.navigationBar.setBackgroundImage(bgImage, for: .default)
             self.navigationController?.navigationBar.titleTextAttributes = [
-                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
+                NSAttributedString.Key.font: themeType.font,
                 NSAttributedString.Key.foregroundColor: textColor
             ]
         }

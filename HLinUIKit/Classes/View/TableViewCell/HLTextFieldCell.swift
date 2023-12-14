@@ -162,7 +162,7 @@ open class HLTextFieldCell: HLTableViewCell {
     public var inputBackgroundColor: UIColor? {
         didSet {
             if let color = inputBackgroundColor {
-                contentView.backgroundColor = color
+                bodyView.backgroundColor = color
                 textField.backgroundColor = color
             }
         }
@@ -253,26 +253,21 @@ open class HLTextFieldCell: HLTableViewCell {
     }
 
     override open func initConfig() {
-        contentView.backgroundColor = .white
-//        contentView.layer.cornerRadius = 4
+        super.initConfig()
+        bodyView.backgroundColor = .white
     }
     
     // 分割线
     public var line: UIView?    
-    public let bodyView = UIView()
-
+    
     override open func layoutConfig() {
-        contentView.addSubview(bodyView)
-        bodyView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         bodyView.addSubview(textField)
         textField.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
-        addSubview(tipLabel)
+        bodyView.addSubview(tipLabel)
         tipLabel.snp.makeConstraints { (make) in
             make.left.equalTo(HLTableViewCell.defaultCellMarginValue)
             make.right.equalTo(-HLTableViewCell.defaultCellMarginValue)
@@ -338,7 +333,7 @@ open class HLTextFieldCell: HLTableViewCell {
             }
 
             if let backgroudColor = config.backgroundColor {
-                contentView.backgroundColor = backgroudColor
+                bodyView.backgroundColor = backgroudColor
             }
             
             if let color = config.inputBackgroundColor {
@@ -375,11 +370,11 @@ open class HLTextFieldCell: HLTableViewCell {
     open func setupVerificationCode() {
         
         verificationCodeButton.removeFromSuperview()
-        contentView.addSubview(verificationCodeButton)
+        bodyView.addSubview(verificationCodeButton)
         verificationCodeButton.snp.makeConstraints { make in
             make.right.equalToSuperview()
             make.top.bottom.equalToSuperview()
-            make.width.equalTo(100)
+            make.width.equalTo(120)
         }
         
         textField.snp.remakeConstraints { make in

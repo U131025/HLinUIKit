@@ -154,6 +154,7 @@ open class HLViewModel {
         
         refreshEvent
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[weak self] type in
                 self?.refreshAction(type: type)
             }).disposed(by: disposeBag)

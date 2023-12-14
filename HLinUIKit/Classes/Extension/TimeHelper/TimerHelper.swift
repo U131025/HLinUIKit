@@ -60,7 +60,7 @@ public class TimerHelper {
     }
 
     var maxRepeatValue: Int = Int.max
-    public func startTimer(_ maxValue: Int = Int.max, _ interval: Double = 1.0) -> Observable<Int> {
+    public func startTimer(_ maxValue: Int = Int.max, _ interval: Double = 1.0, isReverse: Bool = false) -> Observable<Int> {
 
         if maxValue <= 0 {
             return Observable.error(RxError.overflow)
@@ -68,7 +68,7 @@ public class TimerHelper {
         
         stopTimer()
         maxRepeatValue = maxValue
-        countDownValue = 0
+        countDownValue = isReverse ? maxValue : 0
         isRuning = true
 
         // 在global线程里创建一个定时器
@@ -78,8 +78,16 @@ public class TimerHelper {
         // 定时器执行的事件
         timer?.setEventHandler { [unowned self] in
 
-            self.countDownValue += 1
-            if self.countDownValue > self.maxRepeatValue {
+            var isFinish: Bool = false
+            if isReverse {
+                self.countDownValue -= 1
+                isFinish = self.countDownValue < 0
+            } else {
+                self.countDownValue += 1
+                isFinish = self.countDownValue > self.maxRepeatValue
+            }
+            
+            if isFinish {
                 self.stopTimer()
                 self.countDownOutput.onNext(-1)
                 return

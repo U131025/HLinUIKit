@@ -30,21 +30,55 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '12.0'
 
-  s.source_files = 'HLinUIKit/Classes/**/*'
-  s.framework    = "UIKit"
+  s.subspec 'HLinUICore' do |ss|
+    ss.source_files = 'HLinUIKit/Classes/**/*'
+    ss.framework    = "UIKit"
+    ss.dependency 'SnapKit'
+    ss.dependency 'MYTableViewIndex'
+    ss.dependency 'Then'
+    ss.dependency 'MJRefresh'
+    ss.dependency 'JGProgressHUD'
+
+    ss.dependency 'RxDataSources'
+    ss.dependency 'RxSwift'
+    ss.dependency 'RxCocoa'
+    ss.dependency 'RxGesture'
+    ss.dependency 'SDCycleScrollView'
+  end
+
+  s.subspec 'HLinBluetooth' do |ss|
+    ss.source_files = 'HLinUIKit/Extension/Bluetooth/**/*'
+    ss.dependency 'RxBluetoothKit'
+    ss.dependency 'QMUIKit/QMUILog'
+  end
+
+  s.subspec 'HLinMoya' do |ss|
+    ss.source_files = 'HLinUIKit/Extension/Moya/**/*'
+    ss.dependency 'Moya/RxSwift'
+    ss.dependency 'Alamofire'
+    ss.dependency 'HandyJSON'
+    ss.dependency 'RxSwift'
+    ss.dependency 'RxCocoa'
+    ss.dependency 'Cache'
+    ss.dependency 'Result'
+  end
+
+  s.subspec 'HLinHandyJSON' do |ss|
+    ss.source_files = 'HLinUIKit/Extension/Moya/Model+HandyJSON/*'
+    ss.dependency 'HandyJSON'
+    ss.dependency 'RxSwift'
+    ss.dependency 'RxCocoa'
+  end
+
+  s.subspec 'HLinRealm' do |ss|
+    ss.source_files = 'HLinUIKit/Extension/RealmHelper/**/*'
+    ss.dependency 'RealmSwift'
+    ss.dependency 'RxSwift'
+    ss.dependency 'RxCocoa'
+  end
+
   s.requires_arc = true
   s.swift_version = '5.0'
-
-  s.dependency 'SnapKit'
-  s.dependency 'MYTableViewIndex'
-  s.dependency 'Then'
-  s.dependency 'MJRefresh'
-  s.dependency 'JGProgressHUD'
-
-  s.dependency 'RxDataSources'
-  s.dependency 'RxSwift'
-  s.dependency 'RxCocoa'
-  s.dependency 'RxGesture'
-  s.dependency 'SDCycleScrollView'
+  s.default_subspec = 'HLinUICore'
 
 end
