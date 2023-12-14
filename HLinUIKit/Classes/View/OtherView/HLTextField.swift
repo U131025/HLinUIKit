@@ -270,7 +270,7 @@ open class HLTextField: UITextField {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] notification in
                 guard let self = self else { return }
-                if self.isFirstResponder == true {
+                if self.isFirstResponder == true, self.keybordVisible == false {
                     
                     var height: CGFloat = 350
                     if let userInfo  = notification.userInfo as NSDictionary?,
@@ -285,6 +285,7 @@ open class HLTextField: UITextField {
                                         
                     self.keybordEvent.onNext((self, offset, true))
                 }
+                self.keybordVisible = true
             })
             .disposed(by: disposeBag)
         
@@ -296,10 +297,12 @@ open class HLTextField: UITextField {
                 if self.isFirstResponder == true {
                     self.keybordEvent.onNext((self, 0, false))
                 }
+                self.keybordVisible = false
             })
             .disposed(by: disposeBag)
     }
     
+    var keybordVisible: Bool = false
     public let keybordEvent = PublishSubject<(HLTextField, CGFloat, Bool)>()
 
     /// 禁用编辑手势
