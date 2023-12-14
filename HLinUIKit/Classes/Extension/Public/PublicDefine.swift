@@ -24,6 +24,9 @@ public let kScreenW = UIScreen.main.bounds.width
 
 public let kScreenSize = UIScreen.main.bounds
 
+// 底部安全距离
+public let kBottomSafeAreaHeight = UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0.0
+
 //适配因子，以6P为准 6P逻辑分辨率: 414x736
 public let scaleRate = 1 / 414.0 * kScreenW
 

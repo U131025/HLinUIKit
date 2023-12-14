@@ -34,6 +34,19 @@ extension UIColor {
     public var image: UIImage {
         return createImageWithColor(color: self)
     }
+    
+    public func opacity(_ value: CGFloat) -> UIColor {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return self
+        }
+
+        return UIColor.init(red: red, green: green, blue: blue, alpha: value)
+    }
 }
 
 extension UIColor {
