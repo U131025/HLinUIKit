@@ -75,6 +75,10 @@ extension UIColor {
     public convenience init(hex: String) {
         self.init(hexStr: hex)
     }
+    
+    public convenience init?(hex: String, alpha: CGFloat) {
+        self.init(hexStr: hex, alpha: alpha)
+    }
 
     public convenience init(hexStr: String) {
                 
