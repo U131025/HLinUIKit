@@ -71,6 +71,10 @@ extension UIColor {
             Int(b * 0xff)
         )
     }
+    
+    public convenience init(hex: String) {
+        self.init(hexStr: hex)
+    }
 
     public convenience init(hexStr: String) {
                 
