@@ -136,7 +136,7 @@ open class HLWebViewController: HLViewController, WKUIDelegate {
     }
     
     // 弹窗
-    public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+    open func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         
         DispatchQueue.main.async {
             let alert = UIAlertController.init(title: nil, message: message, preferredStyle: .alert)
