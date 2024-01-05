@@ -69,7 +69,26 @@ open class HLTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func updateForegroundColor(color: UIColor, for state: UIControl.State) {
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: state)
+        
+        if #available(iOS 13.0, *) {
+            if state == .selected {
+                tabBar.tintColor = color
+            } else {
+                tabBar.unselectedItemTintColor = color
+            }
+            
+        } else {
+            UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: color], for: state)
+        }
+    }
+    
+    public func updateFont(font: UIFont) {
+        updateFont(font: font, for: .normal)
+        updateFont(font: font, for: .selected)
+    }
+    
+    public func updateFont(font: UIFont, for state: UIControl.State) {
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: font], for: state)
     }
     
     public func clearShadow() -> Self {

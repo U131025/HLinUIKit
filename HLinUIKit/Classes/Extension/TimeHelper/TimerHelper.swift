@@ -60,7 +60,7 @@ public class TimerHelper {
     }
 
     var maxRepeatValue: Int = Int.max
-    public func startTimer(_ maxValue: Int = Int.max, _ interval: Double = 1.0, isReverse: Bool = false) -> Observable<Int> {
+    public func startTimer(_ maxValue: Int = Int.max, _ interval: Double = 1.0, isReverse: Bool = true) -> Observable<Int> {
 
         if maxValue <= 0 {
             return Observable.error(RxError.overflow)

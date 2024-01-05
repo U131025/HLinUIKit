@@ -9,7 +9,8 @@ import Foundation
 
 public class HLFilletCornerConfig: NSObject, HLCellType {
     public var height: CGFloat = 16
-    public var backgroundColor: UIColor = .white
+    public var color: UIColor = .white
+    public var backgroundColor: UIColor = .clear
     public var offset: CGFloat = 16
     public var type: UIRectCorner = [.topLeft, .topRight]
     public var cornerRadii: CGSize = CGSize(width: 8, height: 8)
@@ -51,9 +52,11 @@ open class HLFilletCornerCell: HLTableViewCell {
                 }
             }
             
-            cornerView.backgroundColor = config.backgroundColor
+            cornerView.backgroundColor = config.color
             cornerView.frame = CGRect(origin: .zero, size: CGSize(width: kScreenW - (config.offset * 2), height: 44))
             cornerView.createRoundCorner(type: config.type, cornerRadii: config.cornerRadii)
+            
+            backgroundColor = config.backgroundColor
         }
     }
 }
