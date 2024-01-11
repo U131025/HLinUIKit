@@ -57,6 +57,8 @@ public class HLBluetoothKitService {
     private let sendQueue = OperationQueue().then { (queue) in
         queue.maxConcurrentOperationCount = 1
     }
+    // 发送间隔
+    public static var sendInterval: TimeInterval = 0.01
 
     public typealias Disconnection = (Peripheral, DisconnectionReason?)
 
@@ -299,8 +301,8 @@ public class HLBluetoothKitService {
         }).disposed(by: disposeBag)
     }
 
-    public func writeValueTo(characteristic: Characteristic, data: Data) {
-        guard let writeType = characteristic.determineWriteType() else {
+    public func writeValueTo(characteristic: Characteristic, data: Data, writeType: CBCharacteristicWriteType? = nil) {
+        guard let writeType = writeType ?? characteristic.determineWriteType() else {
             return
         }
 
@@ -360,18 +362,18 @@ public class HLBluetoothKitService {
 extension HLBluetoothKitService {
 
     // 发送数据
-    public func send(data: Data, for peripheral: Peripheral) -> Self {
+    public func send(data: Data, for peripheral: Peripheral, writeType: CBCharacteristicWriteType? = nil) -> Self {
 
         guard let config = peripheralCharacteristics[peripheral], let chr = config.writeChr else {
             return self
         }
 
-        writeValueTo(characteristic: chr, data: data)
+        writeValueTo(characteristic: chr, data: data, writeType: writeType)
 
         return self
     }
     // 批量发送
-    public func send(datas: [Data], for peripheral: Peripheral) -> Self {
+    public func send(datas: [Data], for peripheral: Peripheral, writeType: CBCharacteristicWriteType? = nil) -> Self {
 
         guard let config = peripheralCharacteristics[peripheral], let chr = config.writeChr else {
             return self
@@ -380,8 +382,8 @@ extension HLBluetoothKitService {
         for data in datas {
 
             sendQueue.addOperation { [unowned self] in
-                self.writeValueTo(characteristic: chr, data: data)
-                Thread.sleep(forTimeInterval: 0.10)
+                self.writeValueTo(characteristic: chr, data: data, writeType: writeType)
+                Thread.sleep(forTimeInterval: HLBluetoothKitService.sendInterval)
             }
         }
 
@@ -389,7 +391,7 @@ extension HLBluetoothKitService {
     }
     
     /// 分包发送
-    public func sendBySplit(data: NSData, for peripheral: Peripheral) {
+    public func sendBySplit(data: NSData, for peripheral: Peripheral, writeType: CBCharacteristicWriteType? = nil) {
         
         guard let config = peripheralCharacteristics[peripheral],
               let chr = config.writeChr else {
@@ -405,16 +407,16 @@ extension HLBluetoothKitService {
             
             self.sendQueue.addOperation {
                 let tempData: Data = senddata as Data
-                self.writeValueTo(characteristic: chr, data: tempData)
-                Thread.sleep(forTimeInterval: 0.1)
-            }       
+                self.writeValueTo(characteristic: chr, data: tempData, writeType: writeType)
+                Thread.sleep(forTimeInterval: HLBluetoothKitService.sendInterval)
+            }
             self.sendBySplit(data: lastdata as NSData, for: peripheral)
             
         } else {
             self.sendQueue.addOperation {
                 let tempData: Data = data as Data
-                self.writeValueTo(characteristic: chr, data: tempData)
-                Thread.sleep(forTimeInterval: 0.1)
+                self.writeValueTo(characteristic: chr, data: tempData, writeType: writeType)
+                Thread.sleep(forTimeInterval: HLBluetoothKitService.sendInterval)
             }
         }
     }
