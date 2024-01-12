@@ -158,3 +158,10 @@ extension UIColor {
         return (red * 255, green * 255, blue * 255)
     }
 }
+
+extension String {
+    public func hexColor(alpha: CGFloat = 1) -> UIColor? {
+        let hexString = self.pregReplace(pattern: "#", with: "")
+        return UIColor.init(hexStr: hexString, alpha: alpha)
+    }
+}
