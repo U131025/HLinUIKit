@@ -99,53 +99,6 @@ open class HLTableView: UITableView, UITableViewDelegate {
         self.cellConfigSubject.onNext((cell, indexPath))
     }
 
-    func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
-
-        let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
-
-            if (self?.mj_footer) != nil {
-                self?.mj_footer?.resetNoMoreData()
-            }
-
-            self?.mj_footer?.resetNoMoreData()
-            block?()
-
-        }).then {
-
-            $0.lastUpdatedTimeLabel?.isHidden = true
-            $0.stateLabel?.isHidden = false
-
-            $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
-            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
-
-//            let images = UIImage.getLoadingImages()
-//            $0.setImages(images, duration: 1, for: .refreshing)
-//            $0.setImages(images, duration: 1, for: .pulling)
-        }
-
-        return header
-    }
-
-    func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
-
-        return MJRefreshAutoNormalFooter.init(refreshingBlock: {
-            block?()
-        }).then {
-
-            $0.stateLabel?.textColor = config?.textColor ?? .lightGray
-            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
-            $0.isRefreshingTitleHidden = false
-            $0.isAutomaticallyRefresh = false
-            $0.setTitle("没有更多内容了", for: .noMoreData)
-            
-//            $0.setTitle(LocalizedString(""), for: .idle)
-//            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
-//            $0.setTitle(LocalizedString("正在加载更多数据"), for: .refreshing)
-//            $0.setTitle(LocalizedString("暂无更多数据"), for: .noMoreData)
-
-        }
-    }
-
     //cell内部控件绑定扩展        
     open func initConfig() {
         
@@ -178,13 +131,6 @@ open class HLTableView: UITableView, UITableViewDelegate {
             .take(until: rx.deallocated)
             .bind(to: rx.items(dataSource: hlDataSource))
 
-//        _ = tableView.rx
-//            .modelSelected(RxBaseCellType.self)
-//            .take(until:self.rx.deallocated)
-//            .subscribe(onNext: {[unowned self] (type) in
-//                self.itemSelectedBlock?(type)
-//            })
-//
         _ = rx
             .itemSelected
             .take(until: self.rx.deallocated)
@@ -205,11 +151,6 @@ open class HLTableView: UITableView, UITableViewDelegate {
                 self.itemDeselectedBlock?(type)
                 self.itemDeselectedIndexPathBlock?(indexPath)
             })
-    }
-
-    func endRefreshing() {
-        self.mj_header?.endRefreshing()
-        self.mj_footer?.endRefreshing()
     }
 
 //    public func updateCell(_ indexPath: IndexPath, value: HLCellType) {
@@ -358,18 +299,6 @@ extension HLTableView {
         self.itemDeselectedIndexPathBlock = action
         return self
     }
-
-    /// 设置刷新头部
-    public func setRefreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
-        self.mj_header = refreshHeader(block: block, config: config)
-        return self
-    }
-    // 设置加载更多footer
-    public func setLoardMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
-
-        self.mj_footer = loadMoreFooter(block: block, config: config)
-        return self
-    }
     
     /// 预加载设置
     public func setPreloadConfig(block: HLPreloadConfigBlock?) -> Self {
@@ -474,5 +403,78 @@ extension HLTableView {
                 self.deselectRow(at: indexPath, animated: false)
             }
         }
+    }
+}
+
+extension UIScrollView {
+    
+    /// 设置刷新头部
+    public func setRefreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
+        self.mj_header = refreshHeader(block: block, config: config)
+        return self
+    }
+    // 设置加载更多footer
+    public func setLoardMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> Self {
+
+        self.mj_footer = loadMoreFooter(block: block, config: config)
+        return self
+    }
+    
+    func refreshHeader(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshStateHeader {
+
+        let header = MJRefreshNormalHeader.init(refreshingBlock: {[weak self] in
+
+            if (self?.mj_footer) != nil {
+                self?.mj_footer?.resetNoMoreData()
+            }
+
+            self?.mj_footer?.resetNoMoreData()
+            block?()
+
+        }).then {
+
+            $0.lastUpdatedTimeLabel?.isHidden = true
+            $0.stateLabel?.isHidden = false
+
+            $0.stateLabel?.textColor = config?.textColor ?? UIColor.lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+
+//            let images = UIImage.getLoadingImages()
+//            $0.setImages(images, duration: 1, for: .refreshing)
+//            $0.setImages(images, duration: 1, for: .pulling)
+        }
+
+        return header
+    }
+
+    func loadMoreFooter(block: CompleteBlock?, config: HLTextCellConfig? = nil) -> MJRefreshAutoFooter {
+
+        return MJRefreshAutoNormalFooter.init(refreshingBlock: {
+            block?()
+        }).then {
+
+            $0.stateLabel?.textColor = config?.textColor ?? .lightGray
+            $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
+            $0.isRefreshingTitleHidden = false
+            $0.isAutomaticallyRefresh = false
+            $0.setTitle("没有更多内容了", for: .noMoreData)
+            
+//            $0.setTitle(LocalizedString(""), for: .idle)
+//            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
+//            $0.setTitle(LocalizedString("正在加载更多数据"), for: .refreshing)
+//            $0.setTitle(LocalizedString("暂无更多数据"), for: .noMoreData)
+
+        }
+    }
+    
+    public func beginRefreshing() {
+        if mj_header?.isRefreshing == false {
+            mj_header?.beginRefreshing()
+        }
+    }
+    
+    public func endRefreshing() {
+        mj_header?.endRefreshing()
+        mj_footer?.endRefreshing()
     }
 }

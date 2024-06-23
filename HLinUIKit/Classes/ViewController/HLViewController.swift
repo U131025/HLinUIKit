@@ -10,6 +10,7 @@ import UIKit
 import RxDataSources
 import RxSwift
 import RxCocoa
+import MJRefresh
 
 open class HLViewController: UIViewController {
     public var eventDisposeBag = DisposeBag()
@@ -138,5 +139,24 @@ open class HLScrollViewController: HLViewController {
         scrollView.contentSize = CGSize(width: kScreenW, height:kScreenH)
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.isScrollEnabled = true
+    }
+    
+    public var backgroundColor: UIColor? {
+        didSet {
+            view.backgroundColor = backgroundColor
+            scrollView.backgroundColor = backgroundColor
+        }
+    }
+    
+    public func addRefresh(isFooterEnable: Bool = true) {
+        _ = scrollView.setRefreshHeader(block: {[weak self] in
+            self?.viewModel?.refresh(type: .reload)
+        })
+        
+        if isFooterEnable {
+            _ = scrollView.setLoardMoreFooter(block: { [weak self] in
+                self?.viewModel?.refresh(type: .loadMore)
+            })
+        }
     }
 }

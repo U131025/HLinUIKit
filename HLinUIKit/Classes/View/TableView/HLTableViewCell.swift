@@ -25,6 +25,11 @@ open class HLTableViewCell: UITableViewCell {
             updateData()
         }
     }
+    
+    public func syncCellType(_ type: HLCellType) {
+        cellType = type
+        data = type.cellData
+    }
 
     public var event: Binder<(tag: Int, value: Any?)> {
         return Binder(self) { cell, value in

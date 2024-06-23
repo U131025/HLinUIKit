@@ -233,7 +233,11 @@ extension HLCollectionView {
             self.collectionView.selectItem(at: ip, animated: true, scrollPosition: scrollPosition)
         }
     }
-
+    public func deselectItem(at indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.collectionView.deselectItem(at: indexPath, animated: false)
+        }
+    }
 }
 
 extension HLCollectionView {

@@ -326,8 +326,8 @@ public extension UIScrollView {
             self.subviews.forEach { view in
                 if let cell = view as? HLTableViewCell {
                     cell.disposeBag = DisposeBag()
-                }
-                view.removeFromSuperview()
+                    view.removeFromSuperview()
+                }                
             }
             
             var preView: UIView?

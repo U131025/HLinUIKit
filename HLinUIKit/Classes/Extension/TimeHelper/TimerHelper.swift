@@ -33,6 +33,7 @@ public class TimerHelper {
         // 重新进入前台
         NotificationCenter.default.rx
             .notification(UIApplication.willEnterForegroundNotification)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[weak self] _ in
                 // 唤醒
                 if let preTime = self?.tempDate {
@@ -52,6 +53,7 @@ public class TimerHelper {
         // 进入后台
         _ = NotificationCenter.default.rx
             .notification(UIApplication.didEnterBackgroundNotification)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[weak self] _ in
                 self?.tempDate = Date()
             })

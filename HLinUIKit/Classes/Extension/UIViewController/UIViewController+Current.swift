@@ -23,5 +23,14 @@ extension UIViewController {
         }
         return base
     }
+}
 
+extension UITabBarController {
+    public class var current: UITabBarController? {
+        let window = UIApplication.shared.keyWindow
+        if let root = window?.rootViewController as? UITabBarController {
+            return root
+        }
+        return nil
+    }
 }

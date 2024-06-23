@@ -42,11 +42,7 @@ open class IconStyleCollectionViewCell: HLCollectionViewCell {
 
         titleLabel.isHidden = true
         contentView.addSubview(titleLabel)
-//        titleLabel.snp.makeConstraints { (make) in
-//            make.left.right.equalTo(iconImageView)
-//            make.top.equalTo(iconImageView.snp.bottom).offset(5)
-//            make.bottom.equalTo(-5)
-//        }
+
     }
 
     open override func updateData() {
