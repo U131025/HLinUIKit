@@ -27,6 +27,7 @@ public typealias HLTableViewHeightInSectionConfigBlock = (Int) -> CGFloat
 
 public typealias HLTableViewEditingStyleConfigBlock = (IndexPath) -> UITableViewCell.EditingStyle?
 public typealias HLTableViewEditingActionsConfigBlock = (IndexPath) -> [UITableViewRowAction]?
+public typealias HLTableViewSwipeActionsConfigBlock = (IndexPath) -> UISwipeActionsConfiguration?
 
 public typealias HLCellCalculateHeightBlock = (IndexPath) -> CGFloat?
 public typealias HLPreloadConfigBlock = (IndexPath) -> Void
@@ -52,6 +53,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
 
     var editingStyeBlock: HLTableViewEditingStyleConfigBlock?
     var editingActionsBlock: HLTableViewEditingActionsConfigBlock?
+    var swipeActionsBlock: HLTableViewSwipeActionsConfigBlock?
+    
     /// 自定义计算Cell高度
     var calculateCellHeightBlock: HLCellCalculateHeightBlock?
     /// 预加载
@@ -230,6 +233,10 @@ open class HLTableView: UITableView, UITableViewDelegate {
     open func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return self.editingActionsBlock?(indexPath)
     }
+    
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        return self.swipeActionsBlock?(indexPath)
+    }
 }
 
 extension HLTableView {
@@ -374,6 +381,11 @@ extension HLTableView {
     }
     public func setEditingActions(_ block: HLTableViewEditingActionsConfigBlock?) -> Self {
         editingActionsBlock = block
+        return self
+    }
+    
+    public func setSwipeActions(_ block: HLTableViewSwipeActionsConfigBlock?) -> Self {
+        swipeActionsBlock = block
         return self
     }
     
