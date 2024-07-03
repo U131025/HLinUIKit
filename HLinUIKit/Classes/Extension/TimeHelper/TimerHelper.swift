@@ -90,8 +90,8 @@ public class TimerHelper {
             }
             
             if isFinish {
-                self.stopTimer()
                 self.countDownOutput.onNext(-1)
+                self.stopTimer()
                 return
             }
 
