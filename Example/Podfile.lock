@@ -7,7 +7,6 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
-  - HandyJSON (5.0.2)
   - HLinUIKit (1.1.0):
     - HLinUIKit/HLinUICore (= 1.1.0)
   - HLinUIKit/Bluetooth (1.1.0):
@@ -27,11 +26,11 @@ PODS:
   - HLinUIKit/Moya (1.1.0):
     - Alamofire
     - Cache
-    - HandyJSON
     - Moya/RxSwift
     - Result
     - RxCocoa
     - RxSwift
+    - SmartCodable
   - HLinUIKit/Realm (1.1.0):
     - RealmSwift
     - RxCocoa
@@ -44,6 +43,7 @@ PODS:
     - Moya/Core
     - RxSwift (~> 6.0)
   - MYTableViewIndex (0.8.0)
+  - ObjectMapper (4.4.2)
   - QMUIKit/QMUILog (4.6.0)
   - Realm (10.50.1):
     - Realm/Headers (= 10.50.1)
@@ -71,6 +71,7 @@ PODS:
   - SDWebImage (5.19.2):
     - SDWebImage/Core (= 5.19.2)
   - SDWebImage/Core (5.19.2)
+  - SmartCodable (3.4.5)
   - SnapKit (5.7.1)
   - Then (3.0.0)
 
@@ -80,6 +81,7 @@ DEPENDENCIES:
   - HLinUIKit/Bluetooth (from `../`)
   - HLinUIKit/Moya (from `../`)
   - HLinUIKit/Realm (from `../`)
+  - ObjectMapper
   - RxBluetoothKit (from `https://github.com/U131025/RxBluetoothKit.git`)
 
 SPEC REPOS:
@@ -88,11 +90,11 @@ SPEC REPOS:
     - Cache
     - Differentiator
     - FBSnapshotTestCase
-    - HandyJSON
     - JGProgressHUD
     - MJRefresh
     - Moya
     - MYTableViewIndex
+    - ObjectMapper
     - QMUIKit
     - Realm
     - RealmSwift
@@ -104,6 +106,7 @@ SPEC REPOS:
     - RxSwift
     - SDCycleScrollView
     - SDWebImage
+    - SmartCodable
     - SnapKit
     - Then
 
@@ -123,12 +126,12 @@ SPEC CHECKSUMS:
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
-  HLinUIKit: f76e6eedc25416cb773aa352dc645db9599125e9
+  HLinUIKit: 4f20834326a0efebce8195511a02ac81c8b8bccf
   JGProgressHUD: d83d7a981b85d11205e19ff8ad5bb9c40571c847
   MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   MYTableViewIndex: 55d5d8557b3f2a4de270d8c0260b41f3918ba4e3
+  ObjectMapper: e6e4d91ff7f2861df7aecc536c92d8363f4c9677
   QMUIKit: 6321cf1124623d686a9ec0a79a7cc59d0d64a52c
   Realm: 36bc9fe2681d7cf234aa487e7990821c772206a2
   RealmSwift: 84a370d3d4f191d327a9f8ade1f064a274f79847
@@ -141,9 +144,10 @@ SPEC CHECKSUMS:
   RxSwift: b9a93a26031785159e11abd40d1a55bcb8057e52
   SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
   SDWebImage: dfe95b2466a9823cf9f0c6d01217c06550d7b29a
+  SmartCodable: 935b8b3d83133cb07286b0780f614bc739c1e116
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 1edf3cbb14a193115c156a69aa51d9c4edbfa017
+PODFILE CHECKSUM: 94360cd979cadb98049cbc7a934e45eb7b0088a9
 
 COCOAPODS: 1.13.0

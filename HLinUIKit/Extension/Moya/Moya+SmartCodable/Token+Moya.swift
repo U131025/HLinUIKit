@@ -9,7 +9,6 @@
 import Foundation
 import RxSwift
 import Moya
-import HandyJSON
 
 let authorizationInvalidate = "AuthorizationInvalidate"
 

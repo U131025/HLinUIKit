@@ -9,6 +9,9 @@ target 'HLUIKit_Example' do
   pod 'HLinUIKit/Bluetooth', :path => '../'
   pod 'HLinUIKit/Realm', :path => '../'
   pod 'RxBluetoothKit', :git => 'https://github.com/U131025/RxBluetoothKit.git'
+  
+#  pod 'SmartCodable'
+  pod 'ObjectMapper'
 
   target 'HLUIKit_Tests' do
     inherit! :search_paths

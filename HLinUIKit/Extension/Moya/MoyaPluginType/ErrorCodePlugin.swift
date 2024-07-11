@@ -10,21 +10,6 @@ import Foundation
 import Moya
 import Result
 import RxSwift
-import HandyJSON
-
-//extension ObservableType {
-//
-//    public func filterErrorCode<T: Any>(_ type: T.Type, errorCode: Int = 8) -> RxSwift.Observable<Self.E> {
-//
-//        // filter 过滤，true 通过，false 不通过
-//        return filter({ (base) -> Bool in
-//            if let model = base as? RespondModel<T>, let code = model.code {
-//                return code != errorCode
-//            }
-//            return true
-//        })
-//    }
-//}
 
 class ErrorCodePlugin: PluginType {
 

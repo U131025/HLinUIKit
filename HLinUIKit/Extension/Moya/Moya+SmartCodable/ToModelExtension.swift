@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 import Moya
-import HandyJSON
+import SmartCodable
 
 extension ObservableType where Element: TargetType {
 
@@ -20,7 +20,6 @@ extension ObservableType where Element: TargetType {
             let source = target.request().storeCachedResponse(for: target).asObservable()
             if let response = target.cachedResponse {
                 return Observable.just(response)
-//                return source.startWith(response)
             }
             return source
         }
@@ -29,7 +28,7 @@ extension ObservableType where Element: TargetType {
 
 extension ObservableType where Element == Response {
 
-    public func mapModel<T: HandyJSON>(_ type: T.Type, handleError: Bool = true) -> Observable<T> {
+    public func mapModel<T: SmartCodable>(_ type: T.Type, handleError: Bool = true) -> Observable<T> {
         return flatMap { response -> Observable<T> in
 
             return Observable.just(response.mapModel(T.self, handleError))
@@ -39,15 +38,15 @@ extension ObservableType where Element == Response {
 
 public extension Response {
 
-    func mapModel<T: HandyJSON>(_ type: T.Type, _ handleError: Bool) -> T {
+    func mapModel<T: SmartCodable>(_ type: T.Type, _ handleError: Bool) -> T {
 
         let jsonString = String.init(data: data, encoding: .utf8)
 
-        guard JSONDeserializer<T>.deserializeFrom(json: jsonString) != nil else {
+        guard T.deserialize(from: jsonString) != nil else {
             return T()
         }
 
-        if let model = JSONDeserializer<T>.deserializeFrom(json: jsonString) {
+        if let model = T.deserialize(from: jsonString) {
             return model
         }
 

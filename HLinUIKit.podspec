@@ -56,16 +56,16 @@ Pod::Spec.new do |s|
     ss.source_files = 'HLinUIKit/Extension/Moya/**/*'
     ss.dependency 'Moya/RxSwift'
     ss.dependency 'Alamofire'
-    ss.dependency 'HandyJSON'
+    ss.dependency 'SmartCodable'
     ss.dependency 'RxSwift'
     ss.dependency 'RxCocoa'
     ss.dependency 'Cache'
     ss.dependency 'Result'
   end
 
-  s.subspec 'HandyJSON' do |ss|
-    ss.source_files = 'HLinUIKit/Extension/Moya/Model+HandyJSON/*'
-    ss.dependency 'HandyJSON'
+  s.subspec 'Model' do |ss|
+    ss.source_files = 'HLinUIKit/Extension/Moya/Model+SmartCodable/*'
+    ss.dependency 'SmartCodable'
     ss.dependency 'RxSwift'
     ss.dependency 'RxCocoa'
   end
