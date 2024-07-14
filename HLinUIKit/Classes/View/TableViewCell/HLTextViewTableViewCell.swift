@@ -116,7 +116,7 @@ open class HLTextViewTableViewCell: HLTableViewCell {
 
             if config.textColor != nil { textView.textColor = config.textColor }
             if config.font != nil { textView.font = config.font }
-            if config.placeholder != nil { textView.placeholder = config.placeholder }
+            if config.placeholder != nil { textView.hl_placeholder = config.placeholder }
 
             constraint = config.constraint
             textView.tag = config.tag

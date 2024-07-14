@@ -98,7 +98,7 @@ extension UITextView {
         }
     }
 
-    public var placeholder: String? {
+    public var hl_placeholder: String? {
         set {
             objc_setAssociatedObject(self, &placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             self.placeholderLabel?.text = newValue
@@ -112,7 +112,7 @@ extension UITextView {
         }
     }
 
-    public var placeholderColor: UIColor? {
+    public var hl_placeholderColor: UIColor? {
         set {
             objc_setAssociatedObject(self, &placeholderColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             self.placeholderLabel?.textColor = newValue

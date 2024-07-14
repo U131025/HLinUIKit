@@ -13,7 +13,7 @@ var placeholderTextColorKey = 100
 
 extension UITextField {
 
-    public var placeholderTextColor: UIColor? {
+    public var hl_placeholderTextColor: UIColor? {
         set {
             objc_setAssociatedObject(self, &placeholderTextColorKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY_NONATOMIC)
 
@@ -36,7 +36,7 @@ extension UITextField {
 
         self.placeholder = value
 
-        if let string = value, let color = self.placeholderTextColor {
+        if let string = value, let color = self.hl_placeholderTextColor {
             self.attributedPlaceholder = NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: color])
         }
     }

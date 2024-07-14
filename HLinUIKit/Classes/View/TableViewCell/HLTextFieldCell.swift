@@ -170,7 +170,7 @@ open class HLTextFieldCell: HLTableViewCell {
 
     public let textField = HLTextField().then { (textField) in
         textField.textColor = UIColor.white
-        textField.placeholderTextColor = UIColor.systemGray
+        textField.hl_placeholderTextColor = UIColor.systemGray
         textField.clearButtonMode = .whileEditing
         textField.textOffset = 15
     }
@@ -301,7 +301,7 @@ open class HLTextFieldCell: HLTableViewCell {
             textField.clearButtonMode = config.clearButtonModel
 
             textField.placeholder = config.placeholder
-            textField.placeholderTextColor = config.placeholderColor
+            textField.hl_placeholderTextColor = config.placeholderColor
 
             textField.textAlignment = config.textAlignment
             textField.textColor = config.textColor
