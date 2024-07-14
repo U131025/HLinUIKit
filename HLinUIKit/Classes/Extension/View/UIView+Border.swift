@@ -68,4 +68,22 @@ extension UIView {
 
         return label
     }
+    
+    /// 添加虚线边框
+    /// - Parameters:
+    ///   - color: 颜色
+    ///   - cornerRadius: 圆角
+    ///   - frame: 视图Rect
+    public func setDashiedBorder(color: UIColor, cornerRadius: CGFloat = 4, frame: CGRect? = nil) {
+        let borderLayer = CAShapeLayer()
+        borderLayer.bounds = frame ?? self.bounds
+        borderLayer.position = CGPoint(x: self.bounds.size.width/2, y: self.bounds.size.height/2)
+        borderLayer.path = UIBezierPath(roundedRect: borderLayer.bounds, cornerRadius: 0).cgPath
+        borderLayer.lineWidth = 0.5
+        borderLayer.lineDashPattern = [2, 2]
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = color.cgColor
+        borderLayer.cornerRadius = cornerRadius
+        self.layer.addSublayer(borderLayer)
+    }
 }
