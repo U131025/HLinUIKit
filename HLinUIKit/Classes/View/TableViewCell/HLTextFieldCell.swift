@@ -89,7 +89,7 @@ public class HLTextCellConfig: NSObject {
     public var text: String?
     public var attributedText: NSAttributedString?
     public var placeholder: String?
-    public var constraint: HLTextFieldConstraint = .text(maxLen: 50) // 默认支持中英特殊字符
+    public var constraint: HLTextFieldConstraint = .text(maxLen: 50, regular: "") // 默认支持中英特殊字符
     public var keyboardType: UIKeyboardType = .default
     public var textAlignment = NSTextAlignment.left
     public var clearButtonModel = UITextField.ViewMode.whileEditing

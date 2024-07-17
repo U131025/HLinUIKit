@@ -41,7 +41,7 @@ public enum HLTextFieldConstraint {
 
     case chinesePhone
     case sellerPartnerAccount
-    case text(maxLen: Int)
+    case text(maxLen: Int, regular: String)
     case chineseName(maxLen: Int)
 
     public var regularExpressions: String {
@@ -85,8 +85,8 @@ public enum HLTextFieldConstraint {
         case .branchBank,
              .bankName:
             return "[^(\\u4E00-\\u9FA5)|(a-zA-Z0-9_~!@$%&,;?\\-\\.\\*\\#)]"
-        case .text:
-            return ""
+        case .text(_, let regular):
+            return regular
         }
     }
 
@@ -136,7 +136,7 @@ public enum HLTextFieldConstraint {
              .money,
              .coinNumber:
             return -1
-        case .text(let maxLen):
+        case .text(let maxLen, _):
             return maxLen
         case let .chineseName(maxLen):
             return maxLen
