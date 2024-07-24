@@ -36,18 +36,11 @@ open class HLListTableViewCell: HLTableViewCell {
         
     }
     
-    public let bgView = UIView()
-
     override open func initConfig() {
         super.initConfig()
         
-        contentView.addSubview(bgView)
-        bgView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-
         listView.bounces = false
-        bgView.addSubview(listView)
+        bodyView.addSubview(listView)
         listView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
