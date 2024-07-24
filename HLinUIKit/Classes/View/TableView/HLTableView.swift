@@ -469,7 +469,7 @@ extension UIScrollView {
             $0.stateLabel?.font = config?.font ?? .pingfang(ofSize: 13)
             $0.isRefreshingTitleHidden = false
             $0.isAutomaticallyRefresh = false
-            $0.setTitle("没有更多内容了", for: .noMoreData)
+//            $0.setTitle("没有更多内容了", for: .noMoreData)
             
 //            $0.setTitle(LocalizedString(""), for: .idle)
 //            $0.setTitle(LocalizedString("释放即可刷新"), for: .pulling)
