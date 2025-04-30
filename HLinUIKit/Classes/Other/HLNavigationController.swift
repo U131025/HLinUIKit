@@ -121,6 +121,7 @@ open class HLNavigationController: UINavigationController {
 
     @IBInspectable public var backImage: UIImage?
     static public var backArrowImage: UIImage?
+    static public var font: UIFont?
 
     // 是否支持侧滑手势
     fileprivate var isEnableEdegePan = false
@@ -130,7 +131,7 @@ open class HLNavigationController: UINavigationController {
         // 手势代理
         self.interactivePopGestureRecognizer?.delegate = self
 
-        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20),
+        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: HLNavigationController.font ?? UIFont.systemFont(ofSize: 20),
                                                   NSAttributedString.Key.foregroundColor: UIColor.black]
 
         self.navigationBar.isTranslucent = false
