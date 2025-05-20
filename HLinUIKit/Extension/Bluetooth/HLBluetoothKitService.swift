@@ -20,6 +20,7 @@ extension String {
 }
 
 public class HLPeripheralCharacteristicConfig: NSObject {
+    public var serviceUUIDStr: String?
     public var writeChrUUIDStr: String?
     public var readChrUUIDStr: String?
     public var notifyChrUUIDStr: String?
@@ -206,6 +207,11 @@ public class HLBluetoothKitService {
 
                     var disposabels = [Disposable]()
                     for service in services {
+                        
+                        if let uuidStr = characteristicConfig?.serviceUUIDStr?.uppercased(),
+                           uuidStr != service.uuid.uuidString.uppercased() {
+                            continue
+                        }
 
                         let disposabel = service
                             .discoverCharacteristics(nil)
@@ -360,6 +366,14 @@ public class HLBluetoothKitService {
 }
 
 extension HLBluetoothKitService {
+    
+    public func getCharacteristicConfig(_ peripheral: Peripheral) -> HLPeripheralCharacteristicConfig? {
+        
+        guard let config = peripheralCharacteristics[peripheral] else {
+            return nil
+        }
+        return config
+    }
 
     // 发送数据
     public func send(data: Data, for peripheral: Peripheral, writeType: CBCharacteristicWriteType? = nil) -> Self {

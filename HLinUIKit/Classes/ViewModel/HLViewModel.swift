@@ -323,6 +323,7 @@ public extension UIScrollView {
     
     func setupItems(_ items: [HLCellType], config:((UIView, Int, HLCellType) -> Void)? = nil, width: CGFloat = kScreenW) {
         DispatchQueue.main.async {
+            
             self.subviews.forEach { view in
                 if let cell = view as? HLTableViewCell {
                     cell.disposeBag = DisposeBag()

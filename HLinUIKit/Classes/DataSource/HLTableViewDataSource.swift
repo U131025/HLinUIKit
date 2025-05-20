@@ -25,6 +25,7 @@ class HLTableViewDataSource {
         
         return RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>>(
             configureCell: { _, tableView, indexPath, item in
+                                
                 let identifier = style == .normal ? item.identifier : "\(item.identifier)_\(indexPath.section)_\(indexPath.row)"
                 
                 var cell: HLTableViewCell?
@@ -39,9 +40,13 @@ class HLTableViewDataSource {
                     return UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: item.identifier)
                 }
                 if cell.isKind(of: HLTableViewCell.self) {
+                    tableView.beginUpdates()
+                    
                     cell.cellType = item
                     cell.data = item.cellData
                     eventBlock?(cell, indexPath)
+                    
+                    tableView.endUpdates()
                 } else {
                     print("Not BaseCellType")
                 }

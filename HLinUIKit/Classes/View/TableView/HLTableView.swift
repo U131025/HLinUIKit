@@ -369,7 +369,7 @@ extension HLTableView {
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {
 
         register(sections: sections, complete: {
-            self.items.accept(sections)
+            self.items.accept(sections)            
         })
         
         return self

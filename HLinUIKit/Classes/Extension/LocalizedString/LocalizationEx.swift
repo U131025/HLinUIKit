@@ -18,7 +18,11 @@ extension String {
 
 //本地化字符串
 public func localizedString(_ key: String) -> String {
-    return NSLocalizedString(key, comment: "")
+    if HLLanguageHelper.isEnable {
+        return HLLanguageHelper.getString(key)
+    } else {
+        return NSLocalizedString(key, comment: "")
+    }
 }
 
 // MARK: 本地化
