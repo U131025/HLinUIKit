@@ -14,7 +14,7 @@ open class HLObject: NSObject {
     public var disposable: Disposable?
     public var disposeBag = DisposeBag()
     
-    public override init() {
+    required public override init() {
         super.init()
         self.initConfig()
         self.bindConfig()
