@@ -239,9 +239,17 @@ open class HLTextField: UITextField {
         self.rx.controlEvent(UIControl.Event.editingChanged)
             .asObservable()
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: {[unowned self] (_) in
-
-                let toBeString = self.text
+            .subscribe(onNext: {[weak self] (_) in
+                guard let self = self else { return }
+                var toBeString = self.text
+                switch self.constraint {
+                case .decimal:
+                    toBeString = self.text?.formatCoinNumberString(decimalLen: 8)
+                case .money:
+                    toBeString = self.text?.formatPriceString()
+                default:
+                    break
+                }
 
                 let lang = self.textInputMode?.primaryLanguage
                 if lang == "zh-Hans" || lang == "zh-Hant" {
