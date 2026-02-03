@@ -12,9 +12,24 @@ extension UIImage {
     public func compress(maxSize: Int = 1024 * 2) -> Data? {
         return HLImageHelper.compressImageSize(image: self, maxSize: maxSize)
     }
+    
+    public func hl_resize(_ sizeChange: CGSize) -> UIImage {
+        UIGraphicsBeginImageContext(sizeChange)
+        
+        //draw resized image on Context
+        self.draw(in: CGRect.init(x: 0, y: 0, width: sizeChange.width, height: sizeChange.height))
+        
+        //create UIImage
+        let resizedImg = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        
+        return resizedImg!
+    }
 }
 
 public class HLImageHelper: NSObject {
+    
 
     //图片压缩 1000kb以下的图片控制在100kb-200kb之间
     public class func compressImageSize(image: UIImage, maxSize: Int = 1024 * 3) -> Data? {

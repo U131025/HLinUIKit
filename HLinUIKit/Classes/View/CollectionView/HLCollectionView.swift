@@ -238,6 +238,22 @@ extension HLCollectionView {
             self.collectionView.deselectItem(at: indexPath, animated: false)
         }
     }
+    
+    public func getSelectedRows() -> [HLCellType] {
+        
+        guard let array = self.collectionView.indexPathsForSelectedItems else {
+            return []
+            
+        }
+        var selItems = [HLCellType]()
+        for ip in array {
+            if let item = self.items.value[safe: ip.section]?.items[safe: ip.row] {
+                selItems.append(item)
+            }
+        }
+        
+        return selItems
+    }
 }
 
 extension HLCollectionView {
