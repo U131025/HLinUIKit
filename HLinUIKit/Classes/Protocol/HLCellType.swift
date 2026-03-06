@@ -26,14 +26,13 @@ public protocol HLCellType {
     var tag: Int { get }
     
     // cell 是否支持重用
-    var isReuse: Bool { get }    
+    var isReuse: Bool { get }
+    
+    // 是否支持选中
+    var isSeleteEnable: Bool { get }
 }
 
 extension HLCellType {
-    
-//    public var classType: AnyClass {
-//        return RxBaseTableViewCell.self
-//    }
     
     public var identifier: String {
         return "\(cellClass)"
@@ -54,6 +53,8 @@ extension HLCellType {
     public var tag: Int { return 0 }
    
     public var isReuse: Bool { return true }
+    
+    public var isSeleteEnable: Bool { return true }
     
     public func createView() -> UIView? {
         if let view = identifier.toHLCell() {

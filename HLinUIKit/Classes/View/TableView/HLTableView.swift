@@ -218,7 +218,7 @@ open class HLTableView: UITableView, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return self.footerHeightInSectionBlock?(section) ?? 0.01
     }
-    
+        
     /// MARK: 预加载
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
@@ -236,6 +236,12 @@ open class HLTableView: UITableView, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         return self.swipeActionsBlock?(indexPath)
+    }
+    
+    public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        
+        let item = self.items.value[safe: indexPath.section]?.items[safe: indexPath.row]
+        return item?.isSeleteEnable == false ? nil : indexPath
     }
 }
 
@@ -364,6 +370,10 @@ extension HLTableView {
     
     public func getItem(with ip: IndexPath) -> HLCellType? {
         return items.value[safe: ip.section]?.items[safe: ip.row]
+    }
+    
+    public func getItems(section: Int = 0) -> [HLCellType] {
+        return items.value[safe: section]?.items ?? []
     }
 
     public func setSections(sections: [SectionModel<String, HLCellType>]) -> Self {
