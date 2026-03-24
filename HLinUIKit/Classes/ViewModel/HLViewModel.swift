@@ -327,7 +327,7 @@ public extension UIScrollView {
     
     func setupItems(_ items: [HLCellType], config:((UIView, Int, HLCellType) -> Void)? = nil, width: CGFloat = kScreenW) {
         DispatchQueue.main.async {
-            
+            let oldOffset = self.contentOffset
             self.subviews.forEach { view in
                 if let cell = view as? HLTableViewCell {
                     cell.disposeBag = DisposeBag()
@@ -356,7 +356,7 @@ public extension UIScrollView {
                     preView = view
                 }
             }
-            
+            self.contentOffset = oldOffset
             self.superview?.layoutIfNeeded()
         }
     }

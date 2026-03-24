@@ -81,6 +81,16 @@ extension String {
 
         return rect.size
     }
+    
+    public func calculateLabelSize(_ font: UIFont?, _ maxWidth: CGFloat = CGFloat(MAXFLOAT)) -> CGSize {
+        
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = self
+        label.font = font ?? .pingfang(ofSize: 15)
+        let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat(MAXFLOAT)))
+        return size
+    }
 }
 
 public class HLTextCellConfig: NSObject {
