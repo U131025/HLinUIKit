@@ -31,7 +31,7 @@ public enum HLTextFieldConstraint {
     case integal
     case decimal
 
-    case money
+    case money(maxLen: Int)
     case coinNumber
 
     case wechatAccount
@@ -245,8 +245,8 @@ open class HLTextField: UITextField {
                 switch self.constraint {
                 case .decimal:
                     toBeString = self.text?.formatCoinNumberString(decimalLen: 8)
-                case .money:
-                    toBeString = self.text?.formatPriceString()
+                case let .money(maxLen):
+                    toBeString = self.text?.formatPriceString(maxLen)
                 default:
                     break
                 }
