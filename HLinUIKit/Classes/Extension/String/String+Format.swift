@@ -103,6 +103,9 @@ extension String {
         if values.count > 0 {
             
             if values.count == 1, input.count > 0 {
+                if values[0].count > maxLen {
+                    return input.substring(to: maxLen - 1)
+                }
                 return "\(input.decimalValue)"
             }
             
