@@ -21,7 +21,7 @@ extension String {
 
 class HLTableViewDataSource {
     typealias CellEventBlock = (HLTableViewCell, IndexPath) -> Void
-    static func generateDataSource(style: HLTableViewStyle, eventBlock: CellEventBlock? = nil) -> RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>> {
+    static func generateDataSource(style: HLTableViewStyle, eventBlock: CellEventBlock? = nil, canEditBlock: HLTableViewCanEditBlock? = nil) -> RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>> {
         
         return RxTableViewSectionedReloadDataSource<SectionModel<String, HLCellType>>(
             configureCell: { _, tableView, indexPath, item in
@@ -52,8 +52,8 @@ class HLTableViewDataSource {
                 }
                 return cell
         },
-            canEditRowAtIndexPath: { (_, _) in
-                return true
+            canEditRowAtIndexPath: { (_, indexPath) in
+                return canEditBlock?(indexPath) ?? true
         })
     }
 }

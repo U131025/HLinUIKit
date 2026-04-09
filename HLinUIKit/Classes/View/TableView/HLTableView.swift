@@ -28,13 +28,14 @@ public typealias HLTableViewHeightInSectionConfigBlock = (Int) -> CGFloat
 public typealias HLTableViewEditingStyleConfigBlock = (IndexPath) -> UITableViewCell.EditingStyle?
 public typealias HLTableViewEditingActionsConfigBlock = (IndexPath) -> [UITableViewRowAction]?
 public typealias HLTableViewSwipeActionsConfigBlock = (IndexPath) -> UISwipeActionsConfiguration?
+public typealias HLTableViewCanEditBlock = (IndexPath) -> Bool
 
 public typealias HLCellCalculateHeightBlock = (IndexPath) -> CGFloat?
 public typealias HLPreloadConfigBlock = (IndexPath) -> Void
 
 open class HLTableView: UITableView, UITableViewDelegate {
 
-    var hlStyle: HLTableViewStyle = .normal
+    public var hlStyle: HLTableViewStyle = .normal
     public var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
     public var items = BehaviorRelay<[SectionModel<String, HLCellType>]>(value: [])
 
@@ -44,21 +45,22 @@ open class HLTableView: UITableView, UITableViewDelegate {
     public var itemDeselectedBlock: HLItemSelectedBlock?
     public var itemDeselectedIndexPathBlock: HLItemSelectedIndexPathBlock?
 
-    var cellConfigBlock: HLTableViewCellConfigBlock?
+    public var cellConfigBlock: HLTableViewCellConfigBlock?
 
-    var headerInSectionBlock: HLTableViewViewInSectionConfigBlock?
-    var headerHeightInSectionBlock: HLTableViewHeightInSectionConfigBlock?
-    var footerInSectionBlock: HLTableViewViewInSectionConfigBlock?
-    var footerHeightInSectionBlock: HLTableViewHeightInSectionConfigBlock?
+    public var headerInSectionBlock: HLTableViewViewInSectionConfigBlock?
+    public var headerHeightInSectionBlock: HLTableViewHeightInSectionConfigBlock?
+    public var footerInSectionBlock: HLTableViewViewInSectionConfigBlock?
+    public var footerHeightInSectionBlock: HLTableViewHeightInSectionConfigBlock?
 
-    var editingStyeBlock: HLTableViewEditingStyleConfigBlock?
-    var editingActionsBlock: HLTableViewEditingActionsConfigBlock?
-    var swipeActionsBlock: HLTableViewSwipeActionsConfigBlock?
+    public var editingStyeBlock: HLTableViewEditingStyleConfigBlock?
+    public var editingActionsBlock: HLTableViewEditingActionsConfigBlock?
+    public var swipeActionsBlock: HLTableViewSwipeActionsConfigBlock?
+    public var canEditBlock: HLTableViewCanEditBlock?
     
     /// 自定义计算Cell高度
-    var calculateCellHeightBlock: HLCellCalculateHeightBlock?
+    public var calculateCellHeightBlock: HLCellCalculateHeightBlock?
     /// 预加载
-    var preloadBlock: HLPreloadConfigBlock?
+    public var preloadBlock: HLPreloadConfigBlock?
     
     public var disposeBag = DisposeBag()
     
@@ -94,6 +96,8 @@ open class HLTableView: UITableView, UITableViewDelegate {
                 .subscribe(onNext: {[unowned self] (info) in
                     self.cellEvent.onNext(info)
                 }).disposed(by: cell.disposeBag)
+        }, canEditBlock: {[unowned self] indexPath in
+            return self.canEditBlock?(indexPath) ?? true
         })
     }()
     
@@ -396,6 +400,11 @@ extension HLTableView {
     
     public func setSwipeActions(_ block: HLTableViewSwipeActionsConfigBlock?) -> Self {
         swipeActionsBlock = block
+        return self
+    }
+    
+    public func setCanEditBlock(_ block: HLTableViewCanEditBlock?) -> Self {
+        canEditBlock = block
         return self
     }
     
