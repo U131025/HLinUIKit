@@ -91,10 +91,11 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
 
             viewModel.items
                 .subscribe(onNext: {[weak self] (sections) in
-                    self?.listView.beginUpdates()
-                    _ = self?.listView.setSections(sections: sections)
-                    
-                    self?.listView.endUpdates()
+                    DispatchQueue.main.async {
+                        self?.listView.beginUpdates()
+                        _ = self?.listView.setSections(sections: sections)
+                        self?.listView.endUpdates()
+                    }
                 })
                 .disposed(by: vmDisposeBag)
         }
