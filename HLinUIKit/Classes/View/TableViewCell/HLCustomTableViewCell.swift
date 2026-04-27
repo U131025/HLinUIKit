@@ -52,6 +52,9 @@ open class HLCustomTableViewCell: HLTableViewCell {
                 bodyView.backgroundColor = color
             }
             if let view = config.customView {
+                if let customView = customView {
+                    customView.removeFromSuperview()
+                }
                 customView = view
                 bodyView.addSubview(view)
                 view.snp.remakeConstraints { make in
