@@ -370,7 +370,7 @@ public extension UIScrollView {
                 guard let cell = view as? HLTableViewCell, let config = cell.cellType else {
                     continue
                 }
-                
+                cell.updateData()
                 var offsetY: CGFloat = 0
                 if let preView = preView {
                     offsetY = preView.frame.maxY
