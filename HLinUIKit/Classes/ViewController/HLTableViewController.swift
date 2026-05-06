@@ -200,7 +200,7 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
     }
     
     // 添加刷新
-    public func addRefresh(isFooterEnable: Bool = true) {
+    open func addRefresh(isFooterEnable: Bool = true) {
         _ = listView.setRefreshHeader(block: {[weak self] in
             self?.viewModel?.refresh(type: .reload)
         })
