@@ -14,9 +14,11 @@ import RxSwift
 var placeholderLabelKey = 101
 var wordLimitLabelKey   = 102
 var placeholderKey      = 103
+
 var placeholderColorKey = 104
 var wordLimitKey        = 105
 var disposeBagKey       = 106
+var placeholderArrtStringKey      = 107
 
 extension UITextView {
 
@@ -26,8 +28,8 @@ extension UITextView {
     }
     
     public func setupPlacehoderViews() {
-        let placeholderSize = self.placeholderLabel?.sizeThatFits(CGSize(width: self.bounds.width - 10, height: 0))
-        self.placeholderLabel?.frame = CGRect(x: 5, y: 8, width: bounds.width - 5, height: (placeholderSize?.height) ?? 0)
+        let placeholderSize = self.hl_placeholderLabel?.sizeThatFits(CGSize(width: self.bounds.width - 10, height: 0))
+        self.hl_placeholderLabel?.frame = CGRect(x: 5, y: 8, width: bounds.width - 5, height: (placeholderSize?.height) ?? 0)
         
 //        self.placeholderLabel?.snp.remakeConstraints({ make in
 //            make.left.equalTo(0)
@@ -50,12 +52,12 @@ extension UITextView {
             self.wordLimitLabel?.isHidden = false
         }
 
-        self.placeholderLabel?.isHidden = text.count > 0 ? true : false
+        self.hl_placeholderLabel?.isHidden = text.count > 0 ? true : false
 
         self.inputDisposeBag = DisposeBag()
         self.rx.text.orEmpty.asObservable().subscribe(onNext: { [weak self](text) in
 
-            self?.placeholderLabel?.isHidden = text.count > 0 ? true : false
+            self?.hl_placeholderLabel?.isHidden = text.count > 0 ? true : false
 
             if self?.wordLimit != nil && (self?.wordLimit)! > 1 {
 
@@ -101,7 +103,7 @@ extension UITextView {
     public var hl_placeholder: String? {
         set {
             objc_setAssociatedObject(self, &placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            self.placeholderLabel?.text = newValue
+            self.hl_placeholderLabel?.text = newValue
             self.setNeedsLayout()
 
         }
@@ -111,11 +113,23 @@ extension UITextView {
             return objc_getAssociatedObject(self, &placeholderKey) as? String
         }
     }
+    
+    public var hl_placeholderAttrString: NSAttributedString? {
+        set {
+            objc_setAssociatedObject(self, &placeholderArrtStringKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            self.hl_placeholderLabel?.attributedText = newValue
+            self.setNeedsLayout()
+        }
+
+        get {
+            return objc_getAssociatedObject(self, &placeholderArrtStringKey) as? NSAttributedString
+        }
+    }
 
     public var hl_placeholderColor: UIColor? {
         set {
             objc_setAssociatedObject(self, &placeholderColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            self.placeholderLabel?.textColor = newValue
+            self.hl_placeholderLabel?.textColor = newValue
             self.setNeedsLayout()
 
         }
@@ -126,7 +140,7 @@ extension UITextView {
         }
     }
 
-    fileprivate var placeholderLabel: UILabel? {
+    public var hl_placeholderLabel: UILabel? {
         set {
             objc_setAssociatedObject(self, &placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
