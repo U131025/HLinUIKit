@@ -132,7 +132,7 @@ open class HLViewModel {
     
     public lazy var isLoadFinish: Bool = false {
         didSet {
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: {
                 if self.isLoadFinish == true {
                     if let vc = self.viewController as? HLTableViewController {
                         vc.listView.mj_footer?.endRefreshingWithNoMoreData()
@@ -140,7 +140,7 @@ open class HLViewModel {
                         vc.listView.collectionView.mj_footer?.endRefreshingWithNoMoreData()
                     }
                 }
-            }            
+            })
         }
     }
     /// 预加载处理
