@@ -169,7 +169,6 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
     open func initNoDataView() {
 
         _emptyView?.removeFromSuperview()
-        guard let emptyView = _emptyView else { return }
         guard let viewModel = viewModel else {
             return
         }
@@ -180,14 +179,16 @@ open class HLTableViewController: HLViewController, UITableViewDelegate {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: {[weak self] (sections) in
                 guard let self = self else { return }
-                emptyView.removeFromSuperview()
+                self._emptyView?.removeFromSuperview()
                 if sections.count == 0 || (sections.count == 1 && sections[0].items.count == 0) {
                     
                     self.emptyDataEvent(isEmpty: true)
     
-                    self.view.insertSubview(emptyView, aboveSubview: self.listView)
-                    emptyView.snp.remakeConstraints { (make) in
-                        make.edges.equalTo(self.listView).inset(self.emptyInset)
+                    if let emptyView = self._emptyView {
+                        self.view.insertSubview(emptyView, aboveSubview: self.listView)
+                        emptyView.snp.remakeConstraints { (make) in
+                            make.edges.equalTo(self.listView).inset(self.emptyInset)
+                        }
                     }
                 } else {
                     self.emptyDataEvent(isEmpty: false)
