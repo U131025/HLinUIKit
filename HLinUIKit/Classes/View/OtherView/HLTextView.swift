@@ -12,7 +12,7 @@ import UIKit.UITextView
 import RxSwift
 import RxCocoa
 
-public class HLTextView: UITextView {
+open class HLTextView: UITextView {
 //    open var expression = "[<>\"”“/]"
     open var expression = ""
     open var maxTextCount: Int = 0  /// 备注内容的最大值
@@ -24,7 +24,7 @@ public class HLTextView: UITextView {
         super.init(frame: CGRect.zero, textContainer: nil)
         bindConfig()
     }
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -33,19 +33,19 @@ public class HLTextView: UITextView {
         bindConfig()
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         self.setupPlacehoderViews()
     }
 
-    public func getText(with str: String?) -> String? {
+    open func getText(with str: String?) -> String? {
         guard maxTextCount > 0, let s = str, s.count > maxTextCount else {
             return str
         }
         return s.substring(to: maxTextCount-1)
     }
 
-    public func setText(_ text: String?) {
+    open func setText(_ text: String?) {
         guard let text = text else { return }
 
         var result = text
@@ -57,7 +57,7 @@ public class HLTextView: UITextView {
         self.textSubject.onNext(result)
     }
 
-    func bindConfig() {
+    open func bindConfig() {
         disposeBag = DisposeBag()
 //        self.delegate = self
     }
