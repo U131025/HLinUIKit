@@ -136,8 +136,10 @@ open class HLViewModel {
                 if self.isLoadFinish == true {
                     if let vc = self.viewController as? HLTableViewController {
                         vc.listView.mj_footer?.endRefreshingWithNoMoreData()
+                        vc.listView.mj_footer?.isHidden = self.refreshType == .reload
                     } else if let vc = self.viewController as? HLCollectionViewController {
                         vc.listView.collectionView.mj_footer?.endRefreshingWithNoMoreData()
+                        vc.listView.collectionView.mj_footer?.isHidden = self.refreshType == .reload
                     }
                 }
             })
