@@ -120,6 +120,26 @@ extension HLViewController {
 }
 
 open class HLScrollViewController: HLViewController {
+    
+    public var isUsedStackView: Bool = false {
+        didSet {
+            if isUsedStackView == true, hl_stackView.superview == nil {
+                scrollView.addSubview(hl_stackView)
+                hl_stackView.snp.makeConstraints { make in
+                    make.left.right.top.bottom.equalToSuperview()
+                    make.width.equalToSuperview()
+                }
+            } else if hl_stackView.superview != nil {
+                hl_stackView.removeFromSuperview()
+            }
+        }
+    }
+    public lazy var hl_stackView = UIStackView().then { view in
+        view.axis = .vertical
+        view.spacing = 0
+        view.distribution = .fillProportionally
+        view.alignment = .leading
+    }
         
     public let scrollView = UIScrollView()
     open override func viewDidLoad() {
@@ -157,6 +177,34 @@ open class HLScrollViewController: HLViewController {
             _ = scrollView.setLoardMoreFooter(block: { [weak self] in
                 self?.viewModel?.refresh(type: .loadMore)
             })
+        }
+    }
+    
+    open func setupItems(_ items: [HLCellType], config:((UIView, Int, HLCellType) -> Void)? = nil, width: CGFloat = kScreenW) {
+        
+        for view in hl_stackView.subviews {
+            hl_stackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
+        for (index, item) in items.enumerated() {
+           
+            if let c = item as? HLCustomTableViewConfig, let view = c.customView {
+                
+                hl_stackView.addArrangedSubview(view)
+                view.snp.makeConstraints { make in
+                    make.width.equalTo(c.cellSize.width)
+                    make.height.equalTo(c.cellSize.height)
+                }
+                config?(view, index, item)
+                
+            } else if let view = item.createView() {
+                hl_stackView.addArrangedSubview(view)
+                view.snp.makeConstraints { make in
+                    make.height.equalTo(item.cellHeight)
+                }
+                config?(view, index, item)
+            }
         }
     }
 }

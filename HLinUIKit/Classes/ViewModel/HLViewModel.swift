@@ -192,34 +192,48 @@ open class HLViewModel {
                 return
             }
             
-            vc.scrollView.setupItems(items, config: { view, index, item in
-                
-                if let cell = view as? HLTableViewCell {
-                    self.cellConfig(cell, IndexPath(row: index, section: 0))
-                    cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
-                    
-                   
-                    if let _ = cell as? HLCollectionsTableViewCell {
+            if vc.isUsedStackView {
+                vc.setupItems(items) { view, index, item in
+                    if let cell = view as? HLTableViewCell {
+                        self.cellConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
                         
-                    } else if let _ = cell as? HLListTableViewCell {
-                        
-                    } else if let _ = cell as? HLCustomTableViewCell {
-                        
-                    } else if let _ = cell as? HLVerticalViewsCell {
-                        
-                    } else {
-                        view.rx.tapGesture().when(.recognized)
-                            .subscribe(onNext: {[weak self] _ in
-                                self?.itemSelected(item)
-                            })
-                            .disposed(by: cell.disposeBag)
+                    } else if let cell = view as? HLCollectionViewCell {
+                        self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
                     }
-                                            
-                } else if let cell = view as? HLCollectionViewCell {
-                    self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
-                    cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
                 }
-            })
+                
+            } else {
+                vc.scrollView.setupItems(items, config: { view, index, item in
+                    
+                    if let cell = view as? HLTableViewCell {
+                        self.cellConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                        
+                       
+                        if let _ = cell as? HLCollectionsTableViewCell {
+                            
+                        } else if let _ = cell as? HLListTableViewCell {
+                            
+                        } else if let _ = cell as? HLCustomTableViewCell {
+                            
+                        } else if let _ = cell as? HLVerticalViewsCell {
+                            
+                        } else {
+                            view.rx.tapGesture().when(.recognized)
+                                .subscribe(onNext: {[weak self] _ in
+                                    self?.itemSelected(item)
+                                })
+                                .disposed(by: cell.disposeBag)
+                        }
+                                                
+                    } else if let cell = view as? HLCollectionViewCell {
+                        self.cellControlBindConfig(cell, IndexPath(row: index, section: 0))
+                        cell.cellEvent.bind(to: self.event).disposed(by: cell.disposeBag)
+                    }
+                })
+            }
         }
     }
     

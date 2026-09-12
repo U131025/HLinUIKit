@@ -160,8 +160,7 @@ extension UIColor {
 }
 
 extension String {
-    public func hexColor(alpha: CGFloat = 1) -> UIColor? {
-        let hexString = self.pregReplace(pattern: "#", with: "")
-        return UIColor.init(hexStr: hexString, alpha: alpha)
+    public func hexColor(alpha: CGFloat = 1) -> UIColor {
+        return UIColor.init(hex: self).opacity(alpha)
     }
 }
