@@ -43,10 +43,28 @@ public let kMoreIphone6Size = scaleRateIphone6 > 1.0 ? true : false
 public let safeAreaBottom: CGFloat = isIPhoneX ? 34.0 : 0.0
 
 /// 获取statusBar的高度
-public let kStatusBarHeight = UIApplication.shared.statusBarFrame.height
+public let kStatusBarHeight: CGFloat = UIApplication.shared.hl_activeStatusBarHeight
+
+//public let kStatusBarHeight: CGFloat = UIApplication.shared.statusBarFrame.height
 
 /// Navigation bar height.
 public let kNavigationBarHeight: CGFloat = 44 + kStatusBarHeight
 
 /// Tabbar height.
 public let kTabbarHeight: CGFloat = isIphoneXSeries() ? (49+34) : 49
+
+extension UIApplication {
+    var hl_activeStatusBarFrame: CGRect {
+        guard let windowScene = connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let manager = windowScene.statusBarManager
+        else {
+            return .zero
+        }
+        return manager.statusBarFrame
+    }
+
+    var hl_activeStatusBarHeight: CGFloat {
+        hl_activeStatusBarFrame.height
+    }
+}

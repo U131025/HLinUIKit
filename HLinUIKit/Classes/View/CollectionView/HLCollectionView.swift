@@ -32,12 +32,12 @@ open class HLCollectionView: HLView, UICollectionViewDelegateFlowLayout, UIColle
 
     public var cellEvent = PublishSubject<(tag: Int, value: Any?)>()
 
-    fileprivate var cellConfigBlock: HLCollectionCellConfigBlock?
-    fileprivate var itemSelectedBlock: HLItemSelectedBlock?
-    fileprivate var itemSelectedIndexPathBlock: HLItemSelectedIndexPathBlock?
+    public var cellConfigBlock: HLCollectionCellConfigBlock?
+    public var itemSelectedBlock: HLItemSelectedBlock?
+    public var itemSelectedIndexPathBlock: HLItemSelectedIndexPathBlock?
     
-    fileprivate var itemDeselectedIndexPathBlock: HLItemSelectedIndexPathBlock?
-    fileprivate var preloadBlock: HLPreloadConfigBlock?
+    public var itemDeselectedIndexPathBlock: HLItemSelectedIndexPathBlock?
+    public var preloadBlock: HLPreloadConfigBlock?
 
     // section header/footer config
     var headerHeightInSectionBlock: HLCollectionViewSizeInSectionConfigBlock?

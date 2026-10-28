@@ -121,7 +121,7 @@ extension HLViewController {
 
 open class HLScrollViewController: HLViewController {
     
-    public var isUsedStackView: Bool = false {
+    public lazy var isUsedStackView: Bool = false {
         didSet {
             if isUsedStackView == true, hl_stackView.superview == nil {
                 scrollView.addSubview(hl_stackView)
@@ -137,8 +137,9 @@ open class HLScrollViewController: HLViewController {
     public lazy var hl_stackView = UIStackView().then { view in
         view.axis = .vertical
         view.spacing = 0
-        view.distribution = .fillProportionally
-        view.alignment = .leading
+        view.distribution = .fill
+        view.alignment = .center
+        view.translatesAutoresizingMaskIntoConstraints = false
     }
         
     public let scrollView = UIScrollView()
@@ -193,8 +194,10 @@ open class HLScrollViewController: HLViewController {
                 
                 hl_stackView.addArrangedSubview(view)
                 view.snp.makeConstraints { make in
-                    make.width.equalTo(c.cellSize.width)
-                    make.height.equalTo(c.cellSize.height)
+                    if let w = c.viewSize?.width {
+                        make.width.equalTo(w)
+                    }
+                    make.height.equalTo(c.height)
                 }
                 config?(view, index, item)
                 
@@ -206,5 +209,10 @@ open class HLScrollViewController: HLViewController {
                 config?(view, index, item)
             }
         }
+        
+        let spaceView = UIView()
+        spaceView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        spaceView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        hl_stackView.addArrangedSubview(spaceView)
     }
 }
